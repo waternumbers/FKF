@@ -74,10 +74,10 @@ respectively, and \eqn{\alpha_t}{alpha(t)} denotes the state
 variable. The parameters admit the following dimensions:
 
 \tabular{lll}{
-\eqn{a_t in R^m} \tab \eqn{d_t in R^m} \tab \eqn{eta_t in R^m} \cr
-\eqn{T_t \in R^{m \times m}}{d[t] in R^(m * m)} \tab \eqn{H_t \in R^{m \times m}}{d[t] in R^(m * m)} \tab \cr
-\eqn{y_t \in R^d}{y[t] in R^d} \tab \eqn{c_t \in R^d}{c[t] in R^d} \tab \eqn{\epsilon_t \in R^d}{epsilon[t] in R^d} \cr
-\eqn{Z_t \in R^{d \times m}}{Z[t] in R^(d * m)} \tab \eqn{G_t \in R^{d \times d}}{G[t] in R^(d * d)} \tab 
+\eqn{a_t \in R^m} \tab \eqn{d_t \in R^m} \tab \eqn{eta_t \in R^m} \cr
+\eqn{T_t \in R^{m \times m}}{d[t] \in R^(m * m)} \tab \eqn{H_t \in R^{m \times m}}{d[t] \in R^(m * m)} \tab \cr
+\eqn{y_t \in R^d}{y[t] in R^d} \tab \eqn{c_t \in R^d}{c[t] \in R^d} \tab \eqn{\epsilon_t \in R^d}{epsilon[t] \in R^d} \cr
+\eqn{Z_t \in R^{d \times m}}{Z[t] \in R^(d * m)} \tab \eqn{G_t \in R^{d \times d}}{G[t] \in R^(d * d)} \tab 
 }
 
 Note that \code{fkf} takes as input \code{HHt} and \code{GGt} which
