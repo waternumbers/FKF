@@ -1,0 +1,27 @@
+Package: FKF
+Type: Package
+Version: 0.1.4
+Date: 2012-03-20
+Title: Fast Kalman Filter
+Author: David Luethi, Philipp Erb, Simon Otziger
+Maintainer: Paul Smith <paul@waternumbers.co.uk>
+Depends: R(>= 2.8), RUnit
+Description: This is a fast and flexible implementation of the Kalman
+        filter, which can deal with NAs. It is entirely written in C
+        and relies fully on linear algebra subroutines contained in
+        BLAS and LAPACK. Due to the speed of the filter, the fitting of
+        high-dimensional linear state space models to large datasets
+        becomes possible. This package also contains a plot function
+        for the visualization of the state vector and graphical
+        diagnostics of the residuals.
+Imports: graphics
+License: GPL (>= 2)
+Encoding: latin1
+Packaged: 2018-06-13 16:17:06 UTC; paul
+Repository: CRAN
+Date/Publication: 2014-02-10 18:15:21
+NeedsCompilation: yes
+X-CRAN-Original-Maintainer: Marc Weibel <marc.weibel@zhaw.ch>
+X-CRAN-Comment: Orphaned on 2018-02-11 as email address bounced when
+        asked for correction.
+RoxygenNote: 6.0.1
