@@ -16,7 +16,7 @@ Description: This is a fast and flexible implementation of the Kalman
         diagnostics of the residuals.
 Imports: graphics
 License: GPL (>= 2)
-Encoding: latin1
+Encoding: UTF-8
 Packaged: 2018-06-13 16:17:06 UTC; paul
 Repository: CRAN
 Date/Publication: 2014-02-10 18:15:21
