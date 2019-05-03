@@ -3,7 +3,6 @@
 S3method(plot,fkf)
 export(fkf)
 exportClasses(fkf)
-import(RUnit)
 import(graphics)
 importFrom(grDevices,rainbow)
 importFrom(stats,acf)

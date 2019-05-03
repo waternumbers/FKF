@@ -5,7 +5,8 @@ Date: 3333-33-33
 Title: Fast Kalman Filter
 Author: David Luethi, Philipp Erb, Simon Otziger
 Maintainer: Paul Smith <paul@waternumbers.co.uk>
-Depends: R(>= 2.8), RUnit
+Depends: R(>= 2.8)
+Suggests: RUnit
 Description: This is a fast and flexible implementation of the Kalman
         filter, which can deal with NAs. It is entirely written in C
         and relies fully on linear algebra subroutines contained in
@@ -24,4 +25,4 @@ NeedsCompilation: yes
 X-CRAN-Original-Maintainer: Marc Weibel <marc.weibel@zhaw.ch>
 X-CRAN-Comment: Orphaned on 2018-02-11 as email address bounced when
         asked for correction.
-RoxygenNote: 6.1.0
+RoxygenNote: 6.1.1

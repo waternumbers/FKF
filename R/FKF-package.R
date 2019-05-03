@@ -1,6 +1,6 @@
 #' @useDynLib FKF
 #' @import graphics
-#' @import RUnit
+# #' @import RUnit
 #' @importFrom grDevices rainbow
 #' @importFrom stats acf ccf ppoints qchisq qnorm qqnorm qqplot
 #' @exportClass fkf
