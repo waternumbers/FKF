@@ -4,8 +4,14 @@
 \alias{plot.fkf}
 \title{Plotting fkf objects}
 \usage{
-\method{plot}{fkf}(x, type = c("state", "resid.qq", "qqchisq", "acf"),
-  CI = 0.95, at.idx = 1:nrow(x$at), att.idx = 1:nrow(x$att), ...)
+\method{plot}{fkf}(
+  x,
+  type = c("state", "resid.qq", "qqchisq", "acf"),
+  CI = 0.95,
+  at.idx = 1:nrow(x$at),
+  att.idx = 1:nrow(x$att),
+  ...
+)
 }
 \arguments{
 \item{x}{The output of \code{\link{fkf}}.}

@@ -1,12 +1,14 @@
 Package: FKF
-Type: Package
-Version: 0.1.6
-Date: 3333-33-33
 Title: Fast Kalman Filter
-Author: David Luethi, Philipp Erb, Simon Otziger
-Maintainer: Paul Smith <paul@waternumbers.co.uk>
-Depends: R(>= 2.8)
-Suggests: RUnit
+Version: 0.1.6
+Authors@R: c(person(given = "David", family="Luethi", role=c("aut")),
+	    person(given = "Philipp", family="Erb", role=c("aut")),
+	    person(given = "Simon", family="Otziger", role=c("aut")),
+	    person(given = "Paul",
+           	family = "Smith",
+           	role = c("cre"),
+           	email = "paul@waternumbers.co.uk",
+           	comment = c(ORCID = "0000-0002-0034-3412")))
 Description: This is a fast and flexible implementation of the Kalman
         filter, which can deal with NAs. It is entirely written in C
         and relies fully on linear algebra subroutines contained in
@@ -15,14 +17,16 @@ Description: This is a fast and flexible implementation of the Kalman
         becomes possible. This package also contains a plot function
         for the visualization of the state vector and graphical
         diagnostics of the residuals.
-Imports: graphics
 License: GPL (>= 2)
 Encoding: UTF-8
-Packaged: 2018-06-13 16:17:06 UTC; paul
-Repository: CRAN
-Date/Publication: 2014-02-10 18:15:21
+Imports: graphics
+Suggests: RUnit, knitr, rmarkdown, covr, bookdown
+Depends: R(>= 2.8)
+BugReports: https://github.com/waternumbers/fkf/issues
+URL: https://waternumbers.github.io/fkf/, https://github.com/waternumbers/fkf
 NeedsCompilation: yes
+RoxygenNote: 7.0.2
+VignetteBuilder: knitr
 X-CRAN-Original-Maintainer: Marc Weibel <marc.weibel@zhaw.ch>
 X-CRAN-Comment: Orphaned on 2018-02-11 as email address bounced when
         asked for correction.
-RoxygenNote: 6.1.1
