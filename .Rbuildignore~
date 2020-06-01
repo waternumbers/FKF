@@ -1,9 +1,0 @@
-$.git$
-.Rhistory
-^docs$
-^inst/extdata$
-^cran-comments\.md$ # Comments for CRAN submission
-^\.travis\.yml$
-^appveyor\.yml$
-make_dynatop.R
-^prebuilt$
