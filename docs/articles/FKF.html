@@ -52,7 +52,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/waternumbers/fkf/">
+  <a href="https://github.com/waternumbers/FKF/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -73,7 +73,7 @@
       <h1 data-toc-skip>Fast Kalman Filter</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/waternumbers/fkf/blob/master/../vignettes/FKF.Rmd"><code>../vignettes/FKF.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/waternumbers/FKF/blob/master/../vignettes/FKF.Rmd"><code>../vignettes/FKF.Rmd</code></a></small>
       <div class="hidden name"><code>FKF.Rmd</code></div>
 
     </div>
@@ -126,15 +126,15 @@
 <span class="no">fit</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/optim.html">optim</a></span>(<span class="no">theta</span>, <span class="no">objective</span>, <span class="kw">yt</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span>(<span class="no">a</span>), <span class="kw">hessian</span> <span class="kw">=</span> <span class="fl">TRUE</span>)
 <span class="no">fit</span>
 <span class="co">#&gt; $par</span>
-<span class="co">#&gt;        ar1        ar2        ma1      sigma </span>
-<span class="co">#&gt;  0.6003460  0.2152655 -0.1828381  0.4545893 </span>
+<span class="co">#&gt;         ar1         ar2         ma1       sigma </span>
+<span class="co">#&gt;  0.48852733  0.27012912 -0.09971514  0.46026394 </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $value</span>
-<span class="co">#&gt; [1] 638.3345</span>
+<span class="co">#&gt; [1] 650.1999</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $counts</span>
 <span class="co">#&gt; function gradient </span>
-<span class="co">#&gt;      459       NA </span>
+<span class="co">#&gt;      327       NA </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $convergence</span>
 <span class="co">#&gt; [1] 0</span>
@@ -143,17 +143,17 @@
 <span class="co">#&gt; NULL</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $hessian</span>
-<span class="co">#&gt;               ar1         ar2          ma1        sigma</span>
-<span class="co">#&gt; ar1   2536.401385 1942.245141 1134.7943326    3.4585628</span>
-<span class="co">#&gt; ar2   1942.245141 2536.336121  212.2483388    3.7383349</span>
-<span class="co">#&gt; ma1   1134.794333  212.248339 1056.0706567    0.9922729</span>
-<span class="co">#&gt; sigma    3.458563    3.738335    0.9922729 9685.1568918</span></pre></body></html></div>
+<span class="co">#&gt;                 ar1           ar2          ma1         sigma</span>
+<span class="co">#&gt; ar1   2041.32700574 1394.38180383 1.040784e+03   -0.04222321</span>
+<span class="co">#&gt; ar2   1394.38180383 2041.11174853 1.025926e+02   -0.02874523</span>
+<span class="co">#&gt; ma1   1040.78442965  102.59257300 9.842012e+02    0.08045072</span>
+<span class="co">#&gt; sigma   -0.04222321   -0.02874523 8.045072e-02 9432.84844774</span></pre></body></html></div>
 <div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="co">## Confidence intervals</span>
 <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span>(<span class="no">fit</span>$<span class="no">par</span> - <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">qnorm</a></span>(<span class="fl">0.975</span>) * <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/solve.html">solve</a></span>(<span class="no">fit</span>$<span class="no">hessian</span>))),
       <span class="no">fit</span>$<span class="no">par</span> + <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">qnorm</a></span>(<span class="fl">0.975</span>) * <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/solve.html">solve</a></span>(<span class="no">fit</span>$<span class="no">hessian</span>))))
-<span class="co">#&gt;            ar1        ar2         ma1     sigma</span>
-<span class="co">#&gt; [1,] 0.4339107 0.09431138 -0.35013547 0.4346736</span>
-<span class="co">#&gt; [2,] 0.7667814 0.33621966 -0.01554074 0.4745050</span>
+<span class="co">#&gt;            ar1       ar2         ma1     sigma</span>
+<span class="co">#&gt; [1,] 0.3141508 0.1514369 -0.28360268 0.4400837</span>
+<span class="co">#&gt; [2,] 0.6629038 0.3888213  0.08417241 0.4804442</span>
 
 <span class="co">## Filter the series with estimated parameter values</span>
 <span class="no">sp</span> <span class="kw">&lt;-</span> <span class="fu">arma21ss</span>(<span class="no">fit</span>$<span class="no">par</span>[<span class="st">"ar1"</span>], <span class="no">fit</span>$<span class="no">par</span>[<span class="st">"ar2"</span>], <span class="no">fit</span>$<span class="no">par</span>[<span class="st">"ma1"</span>], <span class="no">fit</span>$<span class="no">par</span>[<span class="st">"sigma"</span>])

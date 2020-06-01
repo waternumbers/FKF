@@ -1,6 +1,6 @@
 #' Fast Kalman filter
 #'
-#' This function allows for fast and flexible Kalman filtering. Both, the
+#' @description This function allows for fast and flexible Kalman filtering. Both, the
 #' measurement and transition equation may be multivariate and parameters
 #' are allowed to be time-varying. In addition \dQuote{NA}-values in the
 #' observations are supported. \code{fkf} wraps the \code{C}-function
