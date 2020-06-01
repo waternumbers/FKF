@@ -10,23 +10,27 @@
 
 
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -41,7 +45,6 @@ provides tools for graphical analysis of the Kalman filter output:
 Visualization of the state vector, QQ-plot of the individual
 residuals, QQ-plot of the Mahalanobis distance, auto- as well as
 crosscorrelation function of the residuals." />
-<meta name="twitter:card" content="summary" />
 
 
 
@@ -59,7 +62,7 @@ crosscorrelation function of the residuals." />
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -86,24 +89,15 @@ crosscorrelation function of the residuals." />
   </a>
 </li>
 <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="../articles/FKF.html">Get started</a>
 </li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="../articles/FKF-Ex.html">Fast Kalman Filter</a>
-    </li>
-  </ul>
+<li>
+  <a href="../reference/index.html">Reference</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/waternumbers/fkf">
+  <a href="https://github.com/waternumbers/fkf/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -135,7 +129,7 @@ crosscorrelation function of the residuals.</p>
     </div>
 
     <pre class="usage"><span class='co'># S3 method for fkf</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(
+<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(
   <span class='no'>x</span>,
   <span class='kw'>type</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"state"</span>, <span class='st'>"resid.qq"</span>, <span class='st'>"qqchisq"</span>, <span class='st'>"acf"</span>),
   <span class='kw'>CI</span> <span class='kw'>=</span> <span class='fl'>0.95</span>,
@@ -172,7 +166,7 @@ which shall be plotted if <code>type == "state"</code>.</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>Arguments passed to either <code><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></code>,
+      <td><p>Arguments passed to either <code><a href='https://rdrr.io/r/base/plot.html'>plot</a></code>,
 <code><a href='https://rdrr.io/r/stats/qqnorm.html'>qqnorm</a></code>, <code><a href='https://rdrr.io/r/stats/qqnorm.html'>qqplot</a></code> or <code><a href='https://rdrr.io/r/stats/acf.html'>acf</a></code>.</p></td>
     </tr>
     </table>
@@ -190,7 +184,7 @@ of observations.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>The argument <code>type</code> states what shall be plotted. <code>type</code>
-must partially match one of the following:</p><dl class='dl-horizontal'>
+must partially match one of the following:</p><dl'>
     <dt><code>state</code></dt><dd><p>The state variables are plotted. By the
       arguments <code>at.idx</code> and <code>att.idx</code>, the user can specify
       which of the predicted (\(a_{t}\)) and filtered
@@ -210,7 +204,7 @@ must partially match one of the following:</p><dl class='dl-horizontal'>
 
     
 
-<p><code><a href='https://rdrr.io/r/graphics/plot.html'>plot(x, type = c("state", "resid.qq", "qqchisq", "acf"),
+<p><code><a href='https://rdrr.io/r/base/plot.html'>plot(x, type = c("state", "resid.qq", "qqchisq", "acf"),
 CI = 0.95, at.idx = 1:nrow(x$at), att.idx = 1:nrow(x$att), ...)</a></code></p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
@@ -247,24 +241,17 @@ CI = 0.95, at.idx = 1:nrow(x$at), att.idx = 1:nrow(x$att), ...)</a></code></p>
                <span class='kw'>GGt</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/array.html'>array</a></span>(<span class='no'>fit.fkf</span>$<span class='no'>par</span>[<span class='fl'>2</span>],<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>1</span>)), <span class='kw'>yt</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span>(<span class='no'>y</span>))
 
 <span class='co'>## Plot the width together with fitted local levels:</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>y</span>, <span class='kw'>main</span> <span class='kw'>=</span> <span class='st'>"Treering data"</span>)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/ts.html'>ts</a></span>(<span class='no'>fkf.obj</span>$<span class='no'>att</span>[<span class='fl'>1</span>, ], <span class='kw'>start</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/start.html'>start</a></span>(<span class='no'>y</span>), <span class='kw'>frequency</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/time.html'>frequency</a></span>(<span class='no'>y</span>)), <span class='kw'>col</span> <span class='kw'>=</span> <span class='st'>"blue"</span>)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/legend.html'>legend</a></span>(<span class='st'>"top"</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Treering data"</span>, <span class='st'>"Local level"</span>), <span class='kw'>col</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"black"</span>, <span class='st'>"blue"</span>), <span class='kw'>lty</span> <span class='kw'>=</span> <span class='fl'>1</span>)</div><div class='img'><img src='plot.fkf-1.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>y</span>, <span class='kw'>main</span> <span class='kw'>=</span> <span class='st'>"Treering data"</span>)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/ts.html'>ts</a></span>(<span class='no'>fkf.obj</span>$<span class='no'>att</span>[<span class='fl'>1</span>, ], <span class='kw'>start</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/start.html'>start</a></span>(<span class='no'>y</span>), <span class='kw'>frequency</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/time.html'>frequency</a></span>(<span class='no'>y</span>)), <span class='kw'>col</span> <span class='kw'>=</span> <span class='st'>"blue"</span>)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/legend.html'>legend</a></span>(<span class='st'>"top"</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Treering data"</span>, <span class='st'>"Local level"</span>), <span class='kw'>col</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"black"</span>, <span class='st'>"blue"</span>), <span class='kw'>lty</span> <span class='kw'>=</span> <span class='fl'>1</span>)</div><div class='img'><img src='plot.fkf-1.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>## Check the residuals for normality:</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>fkf.obj</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"resid.qq"</span>)</div><div class='img'><img src='plot.fkf-2.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>fkf.obj</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"resid.qq"</span>)</div><div class='img'><img src='plot.fkf-2.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>## Test for autocorrelation:</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>fkf.obj</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"acf"</span>, <span class='kw'>na.action</span> <span class='kw'>=</span> <span class='no'>na.pass</span>)</div><div class='img'><img src='plot.fkf-3.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>fkf.obj</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"acf"</span>, <span class='kw'>na.action</span> <span class='kw'>=</span> <span class='no'>na.pass</span>)</div><div class='img'><img src='plot.fkf-3.png' alt='' width='700' height='433' /></div><div class='input'>
 </div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#value">Value</a></li>
-      <li><a href="#details">Details</a></li>
-      <li><a href="#usage">usage</a></li>
-      <li><a href="#see-also">See also</a></li>
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
@@ -275,7 +262,7 @@ CI = 0.95, at.idx = 1:nrow(x$at), att.idx = 1:nrow(x$att), ...)</a></code></p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>
