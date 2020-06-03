@@ -1,3 +1,15 @@
+2020-06-03 Paul Smith
+
+FKF v0.1.7
+  * Fixed ASAN error caused by error in Vignette example
+
+2020-06-01 Paul Smith
+
+FKF v0.1.6
+  * Tidying NAMESPACE to fix S4 class export warning with FKF v0.1.5 on
+	all linux R-devel
+  * Converted Vignettes to use knitr
+
 2018-07-16 Paul Smith
 
 FKF V0.1.5
@@ -6,7 +18,7 @@ FKF V0.1.5
   * Fixed simmilar ASAN and valgrind error in unit tests
   * Stopped RUnit tests writing files which caused CRAN build errors due
 	to directory permissions
-	
+
 2018-07-01 Paul Smith
 
 FKF V0.1.4
@@ -18,7 +30,7 @@ FKF V0.1.4
 2014-01-03 Aleksandar Spasojevic
 
 FKF V0.1.2
-  * sspir::kfilter reference removed because package 
+  * sspir::kfilter reference removed because package
   sspir has been archived
   * section Maintaner updated since ZHAW - Institute of Data Analysis
   and Process Design is maintaing FKF now

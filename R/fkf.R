@@ -303,6 +303,7 @@ fkf <- function(a0, P0, dt, ct, Tt, Zt, HHt, GGt, yt, check.input = TRUE) {
              "'HHt', 'GGt', and 'yt' must be missing.")
     }
 
+    
     ## 'check.input' should always be 'TRUE' unless the performance
     ## becomes crucial and correctness of the arguments concerning
     ## dimensions, class and storage.mode is ensured.
@@ -423,6 +424,7 @@ fkf <- function(a0, P0, dt, ct, Tt, Zt, HHt, GGt, yt, check.input = TRUE) {
 
     time.0 <- proc.time()
 
+    
     ans <-.Call("FKF", a0, P0, dt, ct, Tt, Zt, HHt, GGt, yt, PACKAGE = "FKF")
 
     ans$sys.time <- proc.time() - time.0
