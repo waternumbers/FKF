@@ -77,7 +77,7 @@
 #'                  fn = function(par, ...)
 #'                  -fkf(HHt = array(par[1],c(1,1,1)), GGt = array(par[2],c(1,1,1)), ...)$logLik,
 #'                  yt = rbind(y), a0 = a0, P0 = P0, dt = dt, ct = ct,
-#'                  Zt = Zt, Tt = Tt, check.input = FALSE)
+#'                  Zt = Zt, Tt = Tt)
 #'
 #' ## Filter tree ring data with estimated parameters:
 #' fkf.obj <- fkf(a0, P0, dt, ct, Tt, Zt, HHt = array(fit.fkf$par[1],c(1,1,1)),

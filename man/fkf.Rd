@@ -25,7 +25,7 @@ fkf(a0, P0, dt, ct, Tt, Zt, HHt, GGt, yt, check.input = TRUE)
 
 \item{yt}{A \code{matrix} containing the observations. \dQuote{NA}-values are allowed (see \bold{Details}).}
 
-\item{check.input}{A \code{logical} stating whether the input shall be checked for consistency (\dQuote{storage.mode}, \dQuote{class}, and dimensionality, see \bold{Details}). This should always be 'TRUE' unless the performance becomes crucial and correctness of the arguments concerning dimensions, class and storage.mode is ensured.}
+\item{check.input}{A \code{logical} stating whether the input shall be checked for consistency (\dQuote{storage.mode}, \dQuote{class}, and dimensionality, see \bold{Details}). This input is depreciated and will be removed in a future version, checks are always made.}
 }
 \value{
 An S3-object of class \dQuote{fkf}, which is a list with the following elements:
@@ -138,18 +138,6 @@ The parameters can either be constant or deterministic
     \code{yt} \tab a \eqn{d \times n}{d * n} matrix.
   }
 
-If \code{check.input} is \code{TRUE} each argument will be checked for
-  correctness of the dimensionality, storage mode, and
-  class. \code{check.input} should always be \code{TRUE} unless the
-  performance becomes crucial and correctness of the arguments
-  concerning dimensions, class, and storage.mode is ensured.\cr
-  Note that the class of the arguments if of importance. For instance,
-  to check whether a parameter is constant the \code{dim} attribute is
-  accessed. If, e.g., \code{Zt} is a constant, it could be a \eqn{d
-  \times d}{d * d}-matrix. But the third dimension
-  (i.e. \code{dim(Zt)[3]}) is needed to check for constancy. This
-  requires \code{Zt} to be an \eqn{d \times d \times 1}{d * d *
-  1}-array.
 
 % <------------------------------------->
   \strong{BLAS and LAPACK routines used:}

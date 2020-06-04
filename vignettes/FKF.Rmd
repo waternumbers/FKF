@@ -124,7 +124,7 @@ fit.fkf <- optim(c(HHt = var(y, na.rm = TRUE) * .5,
                  fn = function(par, ...)
                  -fkf(HHt = matrix(par[1]), GGt = matrix(par[2]), ...)$logLik,
                  yt = rbind(y), a0 = a0, P0 = P0, dt = dt, ct = ct,
-                 Zt = Zt, Tt = Tt, check.input = TRUE)
+                 Zt = Zt, Tt = Tt)
 
 ## Filter Nile data with estimated parameters:
 fkf.obj <- fkf(a0, P0, dt, ct, Tt, Zt, HHt = matrix(fit.fkf$par[1]),
@@ -162,16 +162,13 @@ Zt <- Tt <- matrix(1)
 a0 <- y[1]            # Estimation of the first width
 P0 <- matrix(100)     # Variance of 'a0'
 
-## Note that Zt and Tt have no third dimension but HHt and GGt do in the call below.
-## This will cause memory errors unless check.input is set to TRUE
-
 ## Estimate parameters:
 fit.fkf <- optim(c(HHt = var(y, na.rm = TRUE) * .5,
                    GGt = var(y, na.rm = TRUE) * .5),
                  fn = function(par, ...)
                    -fkf(HHt = array(par[1],c(1,1,1)), GGt = array(par[2],c(1,1,1)), ...)$logLik,
                  yt = rbind(y), a0 = a0, P0 = P0, dt = dt, ct = ct,
-                 Zt = Zt, Tt = Tt, check.input = TRUE)
+                 Zt = Zt, Tt = Tt)
 
 ## Filter tree ring data with estimated parameters:
 fkf.obj <- fkf(a0, P0, dt, ct, Tt, Zt, HHt = array(fit.fkf$par[1],c(1,1,1)),

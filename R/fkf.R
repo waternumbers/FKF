@@ -19,7 +19,7 @@
 #' @param HHt An \code{array} giving the variance of the innovations of the transition equation (see \bold{Details}).
 #' @param GGt An \code{array} giving the variance of the disturbances of the measurement equation (see \bold{Details}).
 #' @param yt A \code{matrix} containing the observations. \dQuote{NA}-values are allowed (see \bold{Details}).
-#' @param check.input A \code{logical} stating whether the input shall be checked for consistency (\dQuote{storage.mode}, \dQuote{class}, and dimensionality, see \bold{Details}). This should always be 'TRUE' unless the performance becomes crucial and correctness of the arguments concerning dimensions, class and storage.mode is ensured.
+#' @param check.input A \code{logical} stating whether the input shall be checked for consistency (\dQuote{storage.mode}, \dQuote{class}, and dimensionality, see \bold{Details}). This input is depreciated and will be removed in a future version, checks are always made.
 #'
 #' @details
 #' \strong{State space form}
@@ -102,18 +102,6 @@
 #'     \code{yt} \tab a \eqn{d \times n}{d * n} matrix.
 #'   }
 #'
-#' If \code{check.input} is \code{TRUE} each argument will be checked for
-#'   correctness of the dimensionality, storage mode, and
-#'   class. \code{check.input} should always be \code{TRUE} unless the
-#'   performance becomes crucial and correctness of the arguments
-#'   concerning dimensions, class, and storage.mode is ensured.\cr
-#'   Note that the class of the arguments if of importance. For instance,
-#'   to check whether a parameter is constant the \code{dim} attribute is
-#'   accessed. If, e.g., \code{Zt} is a constant, it could be a \eqn{d
-#'   \times d}{d * d}-matrix. But the third dimension
-#'   (i.e. \code{dim(Zt)[3]}) is needed to check for constancy. This
-#'   requires \code{Zt} to be an \eqn{d \times d \times 1}{d * d *
-#'   1}-array.
 #'
 #' % <------------------------------------->
 #'   \strong{BLAS and LAPACK routines used:}
@@ -303,132 +291,136 @@ fkf <- function(a0, P0, dt, ct, Tt, Zt, HHt, GGt, yt, check.input = TRUE) {
              "'HHt', 'GGt', and 'yt' must be missing.")
     }
 
+    ## Drop the check input, since this is a small overhead
+    if( check.input==FALSE ){
+        warning("All inputs are now checked. This flag will be depreciated in a later verion of FKF")
+    }
+    
     
     ## 'check.input' should always be 'TRUE' unless the performance
     ## becomes crucial and correctness of the arguments concerning
     ## dimensions, class and storage.mode is ensured.
-    if(check.input){
+    ##if(check.input){
 
-        ## Check the storage mode: Must be 'double' for all arguments
-        stor.mode <- c(storage.mode(a0), storage.mode(P0), storage.mode(dt),
-                       storage.mode(ct), storage.mode(Tt), storage.mode(Zt),
-                       storage.mode(HHt), storage.mode(GGt), storage.mode(yt))
-
-        names(stor.mode) <- c("a0", "P0", "dt", "ct", "Tt", "Zt",
-                              "HHt", "GGt", "yt")
-
-        if(any(stor.mode != "double")){
-            stop("storage mode of variable(s) '",
-                 paste(names(stor.mode)[stor.mode != "double"],
+    ## Check the storage mode: Must be 'double' for all arguments
+    stor.mode <- c(storage.mode(a0), storage.mode(P0), storage.mode(dt),
+                   storage.mode(ct), storage.mode(Tt), storage.mode(Zt),
+                   storage.mode(HHt), storage.mode(GGt), storage.mode(yt))
+    
+    names(stor.mode) <- c("a0", "P0", "dt", "ct", "Tt", "Zt",
+                          "HHt", "GGt", "yt")
+    
+    if(any(stor.mode != "double")){
+        stop("storage mode of variable(s) '",
+             paste(names(stor.mode)[stor.mode != "double"],
                        collapse = "', '"),
-                 "' is not 'double'!\n", sep = "")
-        }
-
-        ## Check classes of arguments
-        error.string <- ""
-        if(!is.vector(a0)){
+             "' is not 'double'!\n", sep = "")
+    }
+    
+    ## Check classes of arguments
+    error.string <- ""
+    if(!is.vector(a0)){
             error.string <- paste(error.string,
                                   "'a0' must be a vector!\n", sep = "")
-        }
-
-        if(!is.matrix(P0)){
-            error.string <- paste(error.string,
-                                  "'P0' must be of class 'matrix'!\n", sep = "")
-        }
-
-        if(!is.matrix(dt) && !is.vector(dt)){
-            error.string <- paste(error.string,
-                                  "'dt' must be of class 'vector' or 'matrix'!\n", sep = "")
-        }else if(is.vector(dt)){
-            dt <- as.matrix(dt)
-        }
-
-        if(!is.matrix(ct) && !is.vector(ct)){
-            error.string <- paste(error.string,
-                                  "'ct' must be of class 'vector' or 'matrix'!\n", sep = "")
-        }else if(is.vector(ct)){
-            ct <- as.matrix(ct)
-        }
-
-        if(!is.array(Tt)){
-            error.string <- paste(error.string,
-                                  "'Tt' must be of class 'matrix' or 'array'!\n", sep = "")
-        }else if(is.matrix(Tt)){
-            Tt <- array(Tt, c(dim(Tt), 1))
-        }
-
-        if(!is.array(Zt)){
-            error.string <- paste(error.string,
-                                  "'Zt' must be of class 'matrix' or 'array'!\n", sep = "")
-        }else if(is.matrix(Zt)){
-            Zt <- array(Zt, c(dim(Zt), 1))
-        }
-
-        if(!is.array(HHt)){
-            error.string <- paste(error.string,
-                                  "'HHt' must be of class 'matrix' or 'array'!\n", sep = "")
-        }else if(is.matrix(HHt)){
-            HHt <- array(HHt, c(dim(HHt), 1))
-        }
-
-        if(!is.array(GGt)){
-            error.string <- paste(error.string,
-                                  "'GGt' must be of class 'matrix' or 'array'!\n", sep = "")
-        }else if(is.matrix(GGt)){
-            GGt <- array(GGt, c(dim(GGt), 1))
-        }
-
-        if(!is.matrix(yt)){
-            error.string <- paste(error.string,
-                                  "'yt' must be of class 'matrix'!\n", sep = "")
-        }
-        if(error.string != ""){
-            stop(error.string)
-        }
-        ## Check compatibility of dimensions
-        n <- ncol(yt)
-        d <- nrow(yt)
-        m <- length(a0)
-
-        if(dim(P0)[2] != m | dim(P0)[1] != m | dim(dt)[1] != m |
-           dim(Zt)[2] != m | dim(HHt)[1] != m | dim(HHt)[2] != m  |
-           dim(Tt)[1] != m  | dim(Tt)[2] != m)
-        {
-            stop("Some of dim(P0)[2], dim(P0)[1], dim(dt)[1],\n",
-                 "dim(Zt)[2], dim(HHt)[1], dim(HHt)[2],\n",
-                 "dim(Tt)[1] or dim(Tt)[2] is/are not equal to 'm'!\n")
-        }
-
-        if((dim(dt)[2] != n && dim(dt)[2] != 1) |
-           (dim(ct)[2] != n && dim(ct)[2] != 1) |
-           (dim(Tt)[3] != n && dim(Tt)[3] != 1) |
-           (dim(Zt)[3] != n && dim(Zt)[3] != 1) |
-           (dim(HHt)[3] != n && dim(HHt)[3] != 1) |
-           (dim(GGt)[3] != n && dim(GGt)[3] != 1) |
-           dim(yt)[2]  != n)
-        {
-            stop("Some of dim(dt)[2], dim(ct)[2], dim(Tt)[3],\n",
-                 "dim(Zt)[3], dim(HHt)[3], dim(GGt)[3] or\n",
-                 "dim(yt)[2] is/are neither equal to 1 nor equal to 'n'!\n")
-        }
-
-        if(dim(ct)[1] != d | dim(Zt)[1] != d  |
-           dim(GGt)[1]!= d  | dim(GGt)[2] != d  | dim(yt)[1] != d)
-        {
-            stop("Some of dim(ct)[1], dim(Zt)[1], dim(GGt)[1],\n",
-                 "dim(GGt)[2] or dim(yt)[1] is/are not equal to 'd'!\n")
-
-        }
-
+    }
+    
+    if(!is.matrix(P0)){
+        error.string <- paste(error.string,
+                              "'P0' must be of class 'matrix'!\n", sep = "")
+    }
+    
+    if(!is.matrix(dt) && !is.vector(dt)){
+        error.string <- paste(error.string,
+                              "'dt' must be of class 'vector' or 'matrix'!\n", sep = "")
+    }else if(is.vector(dt)){
+        dt <- as.matrix(dt)
     }
 
-    time.0 <- proc.time()
+    if(!is.matrix(ct) && !is.vector(ct)){
+        error.string <- paste(error.string,
+                              "'ct' must be of class 'vector' or 'matrix'!\n", sep = "")
+    }else if(is.vector(ct)){
+        ct <- as.matrix(ct)
+    }
+    
+    if(!is.array(Tt)){
+        error.string <- paste(error.string,
+                              "'Tt' must be of class 'matrix' or 'array'!\n", sep = "")
+    }else if(is.matrix(Tt)){
+        Tt <- array(Tt, c(dim(Tt), 1))
+    }
+    
+    if(!is.array(Zt)){
+        error.string <- paste(error.string,
+                              "'Zt' must be of class 'matrix' or 'array'!\n", sep = "")
+    }else if(is.matrix(Zt)){
+        Zt <- array(Zt, c(dim(Zt), 1))
+    }
 
+    if(!is.array(HHt)){
+        error.string <- paste(error.string,
+                              "'HHt' must be of class 'matrix' or 'array'!\n", sep = "")
+    }else if(is.matrix(HHt)){
+        HHt <- array(HHt, c(dim(HHt), 1))
+    }
+    
+    if(!is.array(GGt)){
+        error.string <- paste(error.string,
+                              "'GGt' must be of class 'matrix' or 'array'!\n", sep = "")
+    }else if(is.matrix(GGt)){
+        GGt <- array(GGt, c(dim(GGt), 1))
+    }
+    
+    if(!is.matrix(yt)){
+        error.string <- paste(error.string,
+                              "'yt' must be of class 'matrix'!\n", sep = "")
+    }
+    if(error.string != ""){
+        stop(error.string)
+    }
+    ## Check compatibility of dimensions
+    n <- ncol(yt)
+    d <- nrow(yt)
+    m <- length(a0)
+    
+    if(dim(P0)[2] != m | dim(P0)[1] != m | dim(dt)[1] != m |
+       dim(Zt)[2] != m | dim(HHt)[1] != m | dim(HHt)[2] != m  |
+       dim(Tt)[1] != m  | dim(Tt)[2] != m)
+    {
+        stop("Some of dim(P0)[2], dim(P0)[1], dim(dt)[1],\n",
+             "dim(Zt)[2], dim(HHt)[1], dim(HHt)[2],\n",
+             "dim(Tt)[1] or dim(Tt)[2] is/are not equal to 'm'!\n")
+    }
+    
+    if((dim(dt)[2] != n && dim(dt)[2] != 1) |
+       (dim(ct)[2] != n && dim(ct)[2] != 1) |
+           (dim(Tt)[3] != n && dim(Tt)[3] != 1) |
+       (dim(Zt)[3] != n && dim(Zt)[3] != 1) |
+       (dim(HHt)[3] != n && dim(HHt)[3] != 1) |
+       (dim(GGt)[3] != n && dim(GGt)[3] != 1) |
+       dim(yt)[2]  != n)
+    {
+        stop("Some of dim(dt)[2], dim(ct)[2], dim(Tt)[3],\n",
+             "dim(Zt)[3], dim(HHt)[3], dim(GGt)[3] or\n",
+             "dim(yt)[2] is/are neither equal to 1 nor equal to 'n'!\n")
+    }
+    
+    if(dim(ct)[1] != d | dim(Zt)[1] != d  |
+       dim(GGt)[1]!= d  | dim(GGt)[2] != d  | dim(yt)[1] != d)
+    {
+        stop("Some of dim(ct)[1], dim(Zt)[1], dim(GGt)[1],\n",
+             "dim(GGt)[2] or dim(yt)[1] is/are not equal to 'd'!\n")
+        
+    }
+    
+
+    time.0 <- proc.time()
+    
     
     ans <-.Call("FKF", a0, P0, dt, ct, Tt, Zt, HHt, GGt, yt, PACKAGE = "FKF")
-
+    
     ans$sys.time <- proc.time() - time.0
-
+    
     return(ans)
 }
 

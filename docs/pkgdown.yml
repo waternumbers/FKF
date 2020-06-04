@@ -1,7 +1,0 @@
-pandoc: '2.6'
-pkgdown: 1.5.1
-pkgdown_sha: ~
-articles:
-  FKF: FKF.html
-last_built: 2020-06-03T12:14Z
-

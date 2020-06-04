@@ -1,7 +1,9 @@
 2020-06-03 Paul Smith
 
 FKF v0.1.7
-  * Fixed ASAN error caused by error in Vignette example
+	* Fixed ASAN error caused by error in Vignette example
+	* Depreciated check.input option to fkf so dimensions always
+	checked - the reason for ongoing ASAN issues.
 
 2020-06-01 Paul Smith
 
