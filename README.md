@@ -22,7 +22,7 @@ The latest developmental release canbe installed with
 devtools::install_github("waternumbers/FKF")
 ```
 
-Prebuild packages (usually including the latest
+Prebuild packages (usually including the latest development
 version) are available from the waternumbers drat repository [here](https://waternumbers.github.io/drat).
 
 
