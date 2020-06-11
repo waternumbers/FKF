@@ -9,7 +9,7 @@ os:
   - linux
   - osx
 after_success:
-  - Rscript -e 'covr::codecov()'
+  - Rscript -e 'covr::coveralls()'
   - Rscript -e 'pkgdown::build_site()'
 deploy:
   provider: pages
