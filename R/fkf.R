@@ -284,44 +284,47 @@
 #' @keywords algebra models multivariate
 #' @export
 fkf <- function(a0, P0, dt, ct, Tt, Zt, HHt, GGt, yt, check.input = TRUE) {
+
+       ## Check all inputs are present
     if(any(c(missing(a0), missing(P0), missing(dt), missing(ct), missing(Tt),
              missing(Zt), missing(HHt), missing(GGt), missing(yt)))){
-        
         stop("None of the input arguments 'a0', 'P0', 'dt', 'ct', 'Tt', 'Zt',",
              "'HHt', 'GGt', and 'yt' must be missing.")
     }
 
-    ## Drop the check input, since this is a small overhead
-    if( check.input==FALSE ){
-        warning("All inputs are now checked. This flag will be depreciated in a later verion of FKF")
-    }
     
-    
+    ## Originally the checking of dimensions and type cpuld be disables with 'check.input'
+    ## From v 0.17 this options is dropped since it can cause multiple errors as detected by ASAN
+    ## From the earlier code:
+    ##
     ## 'check.input' should always be 'TRUE' unless the performance
     ## becomes crucial and correctness of the arguments concerning
     ## dimensions, class and storage.mode is ensured.
-    ##if(check.input){
+    ## if( check.input ){
+    ##
+    ## Now we just issue a warnign about depreciation
+    if( check.input==FALSE ){
+        warning("All inputs are now checked. This flag will be depreciated in a later verion of FKF")
+    }
 
+ 
     ## Check the storage mode: Must be 'double' for all arguments
-    stor.mode <- c(storage.mode(a0), storage.mode(P0), storage.mode(dt),
-                   storage.mode(ct), storage.mode(Tt), storage.mode(Zt),
-                   storage.mode(HHt), storage.mode(GGt), storage.mode(yt))
+    stor_mode <- c("a0" = storage.mode(a0), "P0" = storage.mode(P0), "dt" = storage.mode(dt),
+                   "ct" = storage.mode(ct), "Tt" = storage.mode(Tt), "Zt" = storage.mode(Zt),
+                   "HHt" = storage.mode(HHt), "GGt" = storage.mode(GGt), "yt" = storage.mode(yt))
     
-    names(stor.mode) <- c("a0", "P0", "dt", "ct", "Tt", "Zt",
-                          "HHt", "GGt", "yt")
-    
-    if(any(stor.mode != "double")){
-        stop("storage mode of variable(s) '",
-             paste(names(stor.mode)[stor.mode != "double"],
-                       collapse = "', '"),
+    if(any(stor_mode != "double")){
+        stop("Storage mode of variable(s) '",
+             paste(names(stor_mode)[stor_mode != "double"],
+                   collapse = "', '"),
              "' is not 'double'!\n", sep = "")
     }
     
     ## Check classes of arguments
     error.string <- ""
     if(!is.vector(a0)){
-            error.string <- paste(error.string,
-                                  "'a0' must be a vector!\n", sep = "")
+        error.string <- paste(error.string,
+                              "'a0' must be of class 'vector'!\n", sep = "")
     }
     
     if(!is.matrix(P0)){
@@ -335,7 +338,7 @@ fkf <- function(a0, P0, dt, ct, Tt, Zt, HHt, GGt, yt, check.input = TRUE) {
     }else if(is.vector(dt)){
         dt <- as.matrix(dt)
     }
-
+    
     if(!is.matrix(ct) && !is.vector(ct)){
         error.string <- paste(error.string,
                               "'ct' must be of class 'vector' or 'matrix'!\n", sep = "")
@@ -356,7 +359,7 @@ fkf <- function(a0, P0, dt, ct, Tt, Zt, HHt, GGt, yt, check.input = TRUE) {
     }else if(is.matrix(Zt)){
         Zt <- array(Zt, c(dim(Zt), 1))
     }
-
+    
     if(!is.array(HHt)){
         error.string <- paste(error.string,
                               "'HHt' must be of class 'matrix' or 'array'!\n", sep = "")
@@ -378,6 +381,7 @@ fkf <- function(a0, P0, dt, ct, Tt, Zt, HHt, GGt, yt, check.input = TRUE) {
     if(error.string != ""){
         stop(error.string)
     }
+    
     ## Check compatibility of dimensions
     n <- ncol(yt)
     d <- nrow(yt)
@@ -394,7 +398,7 @@ fkf <- function(a0, P0, dt, ct, Tt, Zt, HHt, GGt, yt, check.input = TRUE) {
     
     if((dim(dt)[2] != n && dim(dt)[2] != 1) |
        (dim(ct)[2] != n && dim(ct)[2] != 1) |
-           (dim(Tt)[3] != n && dim(Tt)[3] != 1) |
+       (dim(Tt)[3] != n && dim(Tt)[3] != 1) |
        (dim(Zt)[3] != n && dim(Zt)[3] != 1) |
        (dim(HHt)[3] != n && dim(HHt)[3] != 1) |
        (dim(GGt)[3] != n && dim(GGt)[3] != 1) |
@@ -413,7 +417,7 @@ fkf <- function(a0, P0, dt, ct, Tt, Zt, HHt, GGt, yt, check.input = TRUE) {
         
     }
     
-
+    
     time.0 <- proc.time()
     
     
