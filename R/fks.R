@@ -42,7 +42,7 @@
 #'   dt <- matrix(0, nrow = 2)
 #'   GGt <- matrix(0)
 #'   H <- matrix(c(1, ma1), nrow = 2) * sigma
-#'   HHt <- H \%*\% t(H)
+#'   HHt <- tcrossprod(H)
 #'   a0 <- c(0, 0)
 #'   P0 <- matrix(1e6, nrow = 2, ncol = 2)
 #'   return(list(a0 = a0, P0 = P0, ct = ct, dt = dt, Zt = Zt, Tt = Tt, GGt = GGt,
@@ -68,7 +68,7 @@
 #' ## Filter the series with estimated parameter values
 #' sp <- arma21ss(fit$par["ar1"], fit$par["ar2"], fit$par["ma1"], fit$par["sigma"])
 #' ans <- fkf(a0 = sp$a0, P0 = sp$P0, dt = sp$dt, ct = sp$ct, Tt = sp$Tt,
-#'            Zt = sp$Zt, HHt = sp$HHt, GGt = sp$GGt, yt = rbind(a), smoothing=TRUE)
+#'            Zt = sp$Zt, HHt = sp$HHt, GGt = sp$GGt, yt = rbind(a))
 #' smooth <- fks(ans)
 #'
 #' ## Compare the filtered series with the realization
@@ -103,12 +103,11 @@
 #'                  fn = function(par, ...)
 #'                    -fkf(HHt = matrix(par[1]), GGt = matrix(par[2]), ...)$logLik,
 #'                  yt = rbind(y), a0 = a0, P0 = P0, dt = dt, ct = ct,
-#'                  Zt = Zt, Tt = Tt, check.input = FALSE)
+#'                  Zt = Zt, Tt = Tt)
 #'
 #' ## Filter Nile data with estimated parameters:
 #' fkf.obj <- fkf(a0, P0, dt, ct, Tt, Zt, HHt = matrix(fit.fkf$par[1]),
-#'                GGt = matrix(fit.fkf$par[2]), yt = rbind(y),
-#'                smoothing = TRUE)
+#'                GGt = matrix(fit.fkf$par[2]), yt = rbind(y))
 #' fks.obj <- fks(fkf.obj)
 #'
 #' ## Compare with the stats' structural time series implementation:
@@ -127,7 +126,7 @@
 #'        col = c("black", "green", "blue", "red"), lty = 1)
 #'
 #' @export
-fks <- function (FKFobj){
+fks <- function (FKFobj) {
   if (class(FKFobj) != 'fkf') stop('Input must be an object of class FKF')
   if (FKFobj$status[1] != 0 || FKFobj$status[2] != 0) {
     stop('Smoothing requires successful inversion of Ft for all t')
