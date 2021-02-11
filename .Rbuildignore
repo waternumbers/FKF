@@ -5,3 +5,5 @@ $.git$
 ^\.travis\.yml$
 ^appveyor\.yml$
 .directory
+^.*\.Rproj$
+^\.Rproj\.user$
