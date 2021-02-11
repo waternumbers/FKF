@@ -424,7 +424,9 @@ fkf <- function(a0, P0, dt, ct, Tt, Zt, HHt, GGt, yt, check.input = TRUE) {
     ans <-.Call("FKF", a0, P0, dt, ct, Tt, Zt, HHt, GGt, yt, PACKAGE = "FKF")
     
     ans$sys.time <- proc.time() - time.0
-    
+    ans$yt <- yt
+    ans$Zt <- Zt
+    ans$Tt <- Tt
     return(ans)
 }
 

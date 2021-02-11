@@ -2,6 +2,7 @@
 
 S3method(plot,fkf)
 export(fkf)
+export(fks)
 exportClasses(fkf)
 import(graphics)
 importFrom(grDevices,rainbow)
