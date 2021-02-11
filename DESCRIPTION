@@ -4,14 +4,17 @@ Version: 0.2.0.9000
 Authors@R: c(person(given = "David", family="Luethi", role=c("aut")),
 	    person(given = "Philipp", family="Erb", role=c("aut")),
 	    person(given = "Simon", family="Otziger", role=c("aut")),
+	    person(given = "Daniel",
+           	family = "McDonald",
+           	role = c("aut"),
+           	email = "daniel@stat.ubc.ca"),
 	    person(given = "Paul",
            	family = "Smith",
            	role = c("cre"),
            	email = "paul@waternumbers.co.uk",
            	comment = c(ORCID = "0000-0002-0034-3412")))
 Description: This is a fast and flexible implementation of the Kalman
-        filter, which can deal with NAs. It is entirely written in C
-        and relies fully on linear algebra subroutines contained in
+        filter and Smoother, which can deal with NAs. It is entirely written in C and relies fully on linear algebra subroutines contained in
         BLAS and LAPACK. Due to the speed of the filter, the fitting of
         high-dimensional linear state space models to large datasets
         becomes possible. This package also contains a plot function

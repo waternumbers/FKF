@@ -1,3 +1,13 @@
+# FKF v0.2.0.9000
+
+2021-02-11 Paul Smith
+
+- Incorporated Kalman Smoother Code by Danial McDonald
+- Outputs from the `fkf` function altered for use by the smoother. This
+  includes a change in put put ordering. Code
+  that references by name (e.g. `out$at`} should work as expected. Code
+  that references by location (e.g. `out[[1]]`) might not.
+
 # FKF v0.1.7
 
 2020-06-03 Paul Smith
