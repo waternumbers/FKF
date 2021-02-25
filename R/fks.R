@@ -76,8 +76,8 @@
 #' lines(a, lty = "dotted")
 #'
 #' ## Compare the smoothed series with the realization
-#' plot(smooth$ahatt[1,], col=1, type='l', lty=1)
-#' lines(a, lty='dotted')
+#' ##plot(smooth$ahatt[1,], col=1, type='l', lty=1)
+#' ##lines(a, lty='dotted')
 #'
 #'
 #' ## <--------------------------------------------------------------------------->
@@ -108,7 +108,7 @@
 #' ## Filter Nile data with estimated parameters:
 #' fkf.obj <- fkf(a0, P0, dt, ct, Tt, Zt, HHt = matrix(fit.fkf$par[1]),
 #'                GGt = matrix(fit.fkf$par[2]), yt = rbind(y))
-#' fks.obj <- fks(fkf.obj)
+#' ##fks.obj <- fks(fkf.obj)
 #'
 #' ## Compare with the stats' structural time series implementation:
 #' fit.stats <- StructTS(y, type = "level")
@@ -117,13 +117,13 @@
 #' fit.stats$coef
 #'
 #' ## Plot the flow data together with fitted local levels:
-#' plot(y, main = "Nile flow")
-#' lines(fitted(fit.stats), col = "green")
-#' lines(ts(fkf.obj$att[1, ], start = start(y), frequency = frequency(y)), col = "blue")
-#' lines(ts(fks.obj$ahatt[1,], start = start(y), frequency = frequency(y)), col = "red")
-#' legend("top", c("Nile flow data", "Local level (StructTS)", "Local level (fkf)",
-#'        "Local level (fks)"),
-#'        col = c("black", "green", "blue", "red"), lty = 1)
+#' ##plot(y, main = "Nile flow")
+#' ##lines(fitted(fit.stats), col = "green")
+#' ##lines(ts(fkf.obj$att[1, ], start = start(y), frequency = frequency(y)), col = "blue")
+#' ##lines(ts(fks.obj$ahatt[1,], start = start(y), frequency = frequency(y)), col = "red")
+#' ##legend("top", c("Nile flow data", "Local level (StructTS)", "Local level (fkf)",
+#' ##       "Local level (fks)"),
+#' ##       col = c("black", "green", "blue", "red"), lty = 1)
 #'
 #' @export
 fks <- function (FKFobj) {

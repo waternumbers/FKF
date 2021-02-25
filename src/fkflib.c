@@ -1127,7 +1127,7 @@ void cfks(/* inputs */
   int d_x_d = d * d;
   int m_x_d = m * d;
 
-  int i = n;
+  int i = n-1; /* Test - Attempt to ASAN errors */
 
   /* integers and double precisions used in dcopy and dgemm */
   int intone = 1;
