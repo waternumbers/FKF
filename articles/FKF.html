@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">FKF</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0.9000</span>
       </span>
     </div>
 
@@ -39,7 +39,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -56,7 +56,7 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://github.com/waternumbers/FKF/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -86,58 +86,63 @@
 <div id="getting-started" class="section level1">
 <h1 class="hasAnchor">
 <a href="#getting-started" class="anchor"></a>Getting Started</h1>
-<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="st">'FKF'</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://waternumbers.github.io/FKF/">'FKF'</a></span><span class="op">)</span></code></pre></div>
 </div>
 <div id="example-1-arma2-1-model-estimation-" class="section level1">
 <h1 class="hasAnchor">
 <a href="#example-1-arma2-1-model-estimation-" class="anchor"></a>Example 1: ARMA(2, 1) model estimation.</h1>
 <p>This example shows how to fit an ARMA(2, 1) model using this Kalman filter implementation (see also stats’ makeARIMA and KalmanRun).</p>
 <p>Set the length of the series and parameters</p>
-<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="no">n</span> <span class="kw">&lt;-</span> <span class="fl">1000</span>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">1000</span>
 
 <span class="co">## Set the AR parameters</span>
-<span class="no">ar1</span> <span class="kw">&lt;-</span> <span class="fl">0.6</span>
-<span class="no">ar2</span> <span class="kw">&lt;-</span> <span class="fl">0.2</span>
-<span class="no">ma1</span> <span class="kw">&lt;-</span> -<span class="fl">0.2</span>
-<span class="no">sigma</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>(<span class="fl">0.2</span>)</pre></body></html></div>
+<span class="va">ar1</span> <span class="op">&lt;-</span> <span class="fl">0.6</span>
+<span class="va">ar2</span> <span class="op">&lt;-</span> <span class="fl">0.2</span>
+<span class="va">ma1</span> <span class="op">&lt;-</span> <span class="op">-</span><span class="fl">0.2</span>
+<span class="va">sigma</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fl">0.2</span><span class="op">)</span></code></pre></div>
 <p>Sample from an ARMA(2, 1) process</p>
-<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="no">a</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/arima.sim.html">arima.sim</a></span>(<span class="kw">model</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="kw">ar</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="no">ar1</span>, <span class="no">ar2</span>), <span class="kw">ma</span> <span class="kw">=</span> <span class="no">ma1</span>), <span class="kw">n</span> <span class="kw">=</span> <span class="no">n</span>,
-               <span class="kw">innov</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span>(<span class="no">n</span>) * <span class="no">sigma</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/arima.sim.html">arima.sim</a></span><span class="op">(</span>model <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>ar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">ar1</span>, <span class="va">ar2</span><span class="op">)</span>, ma <span class="op">=</span> <span class="va">ma1</span><span class="op">)</span>, n <span class="op">=</span> <span class="va">n</span>,
+               innov <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span> <span class="op">*</span> <span class="va">sigma</span><span class="op">)</span></code></pre></div>
 <p>Create a state space representation out of the four ARMA parameters</p>
-<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="no">arma21ss</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(<span class="no">ar1</span>, <span class="no">ar2</span>, <span class="no">ma1</span>, <span class="no">sigma</span>) {
-    <span class="no">Tt</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="no">ar1</span>, <span class="no">ar2</span>, <span class="fl">1</span>, <span class="fl">0</span>), <span class="kw">ncol</span> <span class="kw">=</span> <span class="fl">2</span>)
-    <span class="no">Zt</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>, <span class="fl">0</span>), <span class="kw">ncol</span> <span class="kw">=</span> <span class="fl">2</span>)
-    <span class="no">ct</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span>(<span class="fl">0</span>)
-    <span class="no">dt</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span>(<span class="fl">0</span>, <span class="kw">nrow</span> <span class="kw">=</span> <span class="fl">2</span>)
-    <span class="no">GGt</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span>(<span class="fl">0</span>)
-    <span class="no">H</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>, <span class="no">ma1</span>), <span class="kw">nrow</span> <span class="kw">=</span> <span class="fl">2</span>) * <span class="no">sigma</span>
-    <span class="no">HHt</span> <span class="kw">&lt;-</span> <span class="no">H</span> <span class="kw">%*%</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span>(<span class="no">H</span>)
-    <span class="no">a0</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="fl">0</span>)
-    <span class="no">P0</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span>(<span class="fl">1e6</span>, <span class="kw">nrow</span> <span class="kw">=</span> <span class="fl">2</span>, <span class="kw">ncol</span> <span class="kw">=</span> <span class="fl">2</span>)
-    <span class="fu"><a href="https://rdrr.io/r/base/function.html">return</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="kw">a0</span> <span class="kw">=</span> <span class="no">a0</span>, <span class="kw">P0</span> <span class="kw">=</span> <span class="no">P0</span>, <span class="kw">ct</span> <span class="kw">=</span> <span class="no">ct</span>, <span class="kw">dt</span> <span class="kw">=</span> <span class="no">dt</span>, <span class="kw">Zt</span> <span class="kw">=</span> <span class="no">Zt</span>, <span class="kw">Tt</span> <span class="kw">=</span> <span class="no">Tt</span>, <span class="kw">GGt</span> <span class="kw">=</span> <span class="no">GGt</span>,
-                <span class="kw">HHt</span> <span class="kw">=</span> <span class="no">HHt</span>))
-}</pre></body></html></div>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">arma21ss</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">ar1</span>, <span class="va">ar2</span>, <span class="va">ma1</span>, <span class="va">sigma</span><span class="op">)</span> <span class="op">{</span>
+    <span class="va">Tt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">ar1</span>, <span class="va">ar2</span>, <span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span>, ncol <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
+    <span class="va">Zt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span>, ncol <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
+    <span class="va">ct</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>
+    <span class="va">dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fl">0</span>, nrow <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
+    <span class="va">GGt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>
+    <span class="va">H</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="va">ma1</span><span class="op">)</span>, nrow <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">*</span> <span class="va">sigma</span>
+    <span class="va">HHt</span> <span class="op">&lt;-</span> <span class="va">H</span> <span class="op">%*%</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span><span class="op">(</span><span class="va">H</span><span class="op">)</span>
+    <span class="va">a0</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span>
+    <span class="va">P0</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fl">1e6</span>, nrow <span class="op">=</span> <span class="fl">2</span>, ncol <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
+    <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>a0 <span class="op">=</span> <span class="va">a0</span>, P0 <span class="op">=</span> <span class="va">P0</span>, ct <span class="op">=</span> <span class="va">ct</span>, dt <span class="op">=</span> <span class="va">dt</span>, Zt <span class="op">=</span> <span class="va">Zt</span>, Tt <span class="op">=</span> <span class="va">Tt</span>, GGt <span class="op">=</span> <span class="va">GGt</span>,
+                HHt <span class="op">=</span> <span class="va">HHt</span><span class="op">)</span><span class="op">)</span>
+<span class="op">}</span></code></pre></div>
 <p>The objective function passed to ‘optim’</p>
-<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="no">objective</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(<span class="no">theta</span>, <span class="no">yt</span>) {
-    <span class="no">sp</span> <span class="kw">&lt;-</span> <span class="fu">arma21ss</span>(<span class="no">theta</span>[<span class="st">"ar1"</span>], <span class="no">theta</span>[<span class="st">"ar2"</span>], <span class="no">theta</span>[<span class="st">"ma1"</span>], <span class="no">theta</span>[<span class="st">"sigma"</span>])
-    <span class="no">ans</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/FKF/man/fkf.html">fkf</a></span>(<span class="kw">a0</span> <span class="kw">=</span> <span class="no">sp</span>$<span class="no">a0</span>, <span class="kw">P0</span> <span class="kw">=</span> <span class="no">sp</span>$<span class="no">P0</span>, <span class="kw">dt</span> <span class="kw">=</span> <span class="no">sp</span>$<span class="no">dt</span>, <span class="kw">ct</span> <span class="kw">=</span> <span class="no">sp</span>$<span class="no">ct</span>, <span class="kw">Tt</span> <span class="kw">=</span> <span class="no">sp</span>$<span class="no">Tt</span>,
-               <span class="kw">Zt</span> <span class="kw">=</span> <span class="no">sp</span>$<span class="no">Zt</span>, <span class="kw">HHt</span> <span class="kw">=</span> <span class="no">sp</span>$<span class="no">HHt</span>, <span class="kw">GGt</span> <span class="kw">=</span> <span class="no">sp</span>$<span class="no">GGt</span>, <span class="kw">yt</span> <span class="kw">=</span> <span class="no">yt</span>)
-    <span class="fu"><a href="https://rdrr.io/r/base/function.html">return</a></span>(-<span class="no">ans</span>$<span class="no">logLik</span>)
-}
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">objective</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">theta</span>, <span class="va">yt</span><span class="op">)</span> <span class="op">{</span>
+    <span class="va">sp</span> <span class="op">&lt;-</span> <span class="fu">arma21ss</span><span class="op">(</span><span class="va">theta</span><span class="op">[</span><span class="st">"ar1"</span><span class="op">]</span>, <span class="va">theta</span><span class="op">[</span><span class="st">"ar2"</span><span class="op">]</span>, <span class="va">theta</span><span class="op">[</span><span class="st">"ma1"</span><span class="op">]</span>, <span class="va">theta</span><span class="op">[</span><span class="st">"sigma"</span><span class="op">]</span><span class="op">)</span>
+    <span class="va">ans</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fkf.html">fkf</a></span><span class="op">(</span>a0 <span class="op">=</span> <span class="va">sp</span><span class="op">$</span><span class="va">a0</span>, P0 <span class="op">=</span> <span class="va">sp</span><span class="op">$</span><span class="va">P0</span>, dt <span class="op">=</span> <span class="va">sp</span><span class="op">$</span><span class="va">dt</span>, ct <span class="op">=</span> <span class="va">sp</span><span class="op">$</span><span class="va">ct</span>, Tt <span class="op">=</span> <span class="va">sp</span><span class="op">$</span><span class="va">Tt</span>,
+               Zt <span class="op">=</span> <span class="va">sp</span><span class="op">$</span><span class="va">Zt</span>, HHt <span class="op">=</span> <span class="va">sp</span><span class="op">$</span><span class="va">HHt</span>, GGt <span class="op">=</span> <span class="va">sp</span><span class="op">$</span><span class="va">GGt</span>, yt <span class="op">=</span> <span class="va">yt</span><span class="op">)</span>
+    <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="op">-</span><span class="va">ans</span><span class="op">$</span><span class="va">logLik</span><span class="op">)</span>
+<span class="op">}</span>
 
-<span class="no">theta</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="kw">ar</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="fl">0</span>), <span class="kw">ma1</span> <span class="kw">=</span> <span class="fl">0</span>, <span class="kw">sigma</span> <span class="kw">=</span> <span class="fl">1</span>)
-<span class="no">fit</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/optim.html">optim</a></span>(<span class="no">theta</span>, <span class="no">objective</span>, <span class="kw">yt</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span>(<span class="no">a</span>), <span class="kw">hessian</span> <span class="kw">=</span> <span class="fl">TRUE</span>)
-<span class="no">fit</span>
+<span class="va">theta</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>ar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span>, ma1 <span class="op">=</span> <span class="fl">0</span>, sigma <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
+<span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/optim.html">optim</a></span><span class="op">(</span><span class="va">theta</span>, <span class="va">objective</span>, yt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="va">a</span><span class="op">)</span>, hessian <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="va">fit</span>
 <span class="co">#&gt; $par</span>
 <span class="co">#&gt;        ar1        ar2        ma1      sigma </span>
-<span class="co">#&gt;  0.7059191  0.1143984 -0.2718904  0.4327975 </span>
+<span class="co">#&gt;  0.4898906  0.2633278 -0.1072205  0.4484135 </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $value</span>
-<span class="co">#&gt; [1] 588.6245</span>
+<span class="co">#&gt; [1] 624.0361</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $counts</span>
 <span class="co">#&gt; function gradient </span>
-<span class="co">#&gt;      279       NA </span>
+<span class="co">#&gt;      227       NA </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $convergence</span>
 <span class="co">#&gt; [1] 0</span>
@@ -146,129 +151,137 @@
 <span class="co">#&gt; NULL</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $hessian</span>
-<span class="co">#&gt;                ar1         ar2          ma1         sigma</span>
-<span class="co">#&gt; ar1   2822.7106214 2263.520622 1244.9999746    -0.3013594</span>
-<span class="co">#&gt; ar2   2263.5206223 2822.597963  379.4029816    -0.7167570</span>
-<span class="co">#&gt; ma1   1244.9999746  379.402982 1053.1057623     0.2788724</span>
-<span class="co">#&gt; sigma   -0.3013594   -0.716757    0.2788724 10664.7429560</span></pre></body></html></div>
-<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="co">## Confidence intervals</span>
-<span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span>(<span class="no">fit</span>$<span class="no">par</span> - <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">qnorm</a></span>(<span class="fl">0.975</span>) * <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/solve.html">solve</a></span>(<span class="no">fit</span>$<span class="no">hessian</span>))),
-      <span class="no">fit</span>$<span class="no">par</span> + <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">qnorm</a></span>(<span class="fl">0.975</span>) * <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/solve.html">solve</a></span>(<span class="no">fit</span>$<span class="no">hessian</span>))))
-<span class="co">#&gt;            ar1         ar2         ma1     sigma</span>
-<span class="co">#&gt; [1,] 0.5301840 -0.01022983 -0.44810028 0.4138185</span>
-<span class="co">#&gt; [2,] 0.8816541  0.23902656 -0.09568054 0.4517765</span>
+<span class="co">#&gt;                ar1         ar2          ma1        sigma</span>
+<span class="co">#&gt; ar1   1961.3066049 1314.699750 1050.2723027    0.5682365</span>
+<span class="co">#&gt; ar2   1314.6997499 1955.439718  120.6247034   -0.1027130</span>
+<span class="co">#&gt; ma1   1050.2723027  120.624703  986.2327657    0.6341356</span>
+<span class="co">#&gt; sigma    0.5682365   -0.102713    0.6341356 9934.8841742</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">## Confidence intervals</span>
+<span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="va">fit</span><span class="op">$</span><span class="va">par</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">qnorm</a></span><span class="op">(</span><span class="fl">0.975</span><span class="op">)</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/solve.html">solve</a></span><span class="op">(</span><span class="va">fit</span><span class="op">$</span><span class="va">hessian</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,
+      <span class="va">fit</span><span class="op">$</span><span class="va">par</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">qnorm</a></span><span class="op">(</span><span class="fl">0.975</span><span class="op">)</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/solve.html">solve</a></span><span class="op">(</span><span class="va">fit</span><span class="op">$</span><span class="va">hessian</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
+<span class="co">#&gt;            ar1       ar2         ma1     sigma</span>
+<span class="co">#&gt; [1,] 0.3092675 0.1442948 -0.29672327 0.4287497</span>
+<span class="co">#&gt; [2,] 0.6705136 0.3823607  0.08228225 0.4680772</span>
 
 <span class="co">## Filter the series with estimated parameter values</span>
-<span class="no">sp</span> <span class="kw">&lt;-</span> <span class="fu">arma21ss</span>(<span class="no">fit</span>$<span class="no">par</span>[<span class="st">"ar1"</span>], <span class="no">fit</span>$<span class="no">par</span>[<span class="st">"ar2"</span>], <span class="no">fit</span>$<span class="no">par</span>[<span class="st">"ma1"</span>], <span class="no">fit</span>$<span class="no">par</span>[<span class="st">"sigma"</span>])
-<span class="no">ans</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/FKF/man/fkf.html">fkf</a></span>(<span class="kw">a0</span> <span class="kw">=</span> <span class="no">sp</span>$<span class="no">a0</span>, <span class="kw">P0</span> <span class="kw">=</span> <span class="no">sp</span>$<span class="no">P0</span>, <span class="kw">dt</span> <span class="kw">=</span> <span class="no">sp</span>$<span class="no">dt</span>, <span class="kw">ct</span> <span class="kw">=</span> <span class="no">sp</span>$<span class="no">ct</span>, <span class="kw">Tt</span> <span class="kw">=</span> <span class="no">sp</span>$<span class="no">Tt</span>,
-           <span class="kw">Zt</span> <span class="kw">=</span> <span class="no">sp</span>$<span class="no">Zt</span>, <span class="kw">HHt</span> <span class="kw">=</span> <span class="no">sp</span>$<span class="no">HHt</span>, <span class="kw">GGt</span> <span class="kw">=</span> <span class="no">sp</span>$<span class="no">GGt</span>, <span class="kw">yt</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span>(<span class="no">a</span>))
+<span class="va">sp</span> <span class="op">&lt;-</span> <span class="fu">arma21ss</span><span class="op">(</span><span class="va">fit</span><span class="op">$</span><span class="va">par</span><span class="op">[</span><span class="st">"ar1"</span><span class="op">]</span>, <span class="va">fit</span><span class="op">$</span><span class="va">par</span><span class="op">[</span><span class="st">"ar2"</span><span class="op">]</span>, <span class="va">fit</span><span class="op">$</span><span class="va">par</span><span class="op">[</span><span class="st">"ma1"</span><span class="op">]</span>, <span class="va">fit</span><span class="op">$</span><span class="va">par</span><span class="op">[</span><span class="st">"sigma"</span><span class="op">]</span><span class="op">)</span>
+<span class="va">ans</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fkf.html">fkf</a></span><span class="op">(</span>a0 <span class="op">=</span> <span class="va">sp</span><span class="op">$</span><span class="va">a0</span>, P0 <span class="op">=</span> <span class="va">sp</span><span class="op">$</span><span class="va">P0</span>, dt <span class="op">=</span> <span class="va">sp</span><span class="op">$</span><span class="va">dt</span>, ct <span class="op">=</span> <span class="va">sp</span><span class="op">$</span><span class="va">ct</span>, Tt <span class="op">=</span> <span class="va">sp</span><span class="op">$</span><span class="va">Tt</span>,
+           Zt <span class="op">=</span> <span class="va">sp</span><span class="op">$</span><span class="va">Zt</span>, HHt <span class="op">=</span> <span class="va">sp</span><span class="op">$</span><span class="va">HHt</span>, GGt <span class="op">=</span> <span class="va">sp</span><span class="op">$</span><span class="va">GGt</span>, yt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="va">a</span><span class="op">)</span><span class="op">)</span>
 
 <span class="co">## Compare the prediction with the realization</span>
-<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">ans</span>, <span class="kw">at.idx</span> <span class="kw">=</span> <span class="fl">1</span>, <span class="kw">att.idx</span> <span class="kw">=</span> <span class="fl">NA</span>, <span class="kw">CI</span> <span class="kw">=</span> <span class="fl">NA</span>)
-<span class="fu"><a href="https://rdrr.io/r/graphics/lines.html">lines</a></span>(<span class="no">a</span>, <span class="kw">lty</span> <span class="kw">=</span> <span class="st">"dotted"</span>)</pre></body></html></div>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">ans</span>, at.idx <span class="op">=</span> <span class="fl">1</span>, att.idx <span class="op">=</span> <span class="cn">NA</span>, CI <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/lines.html">lines</a></span><span class="op">(</span><span class="va">a</span>, lty <span class="op">=</span> <span class="st">"dotted"</span><span class="op">)</span></code></pre></div>
 <p><img src="FKF_files/figure-html/the_rest-1.png" width="700"></p>
-<div class="sourceCode" id="cb7"><html><body><pre class="r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R">
 <span class="co">## Compare the filtered series with the realization</span>
-<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">ans</span>, <span class="kw">at.idx</span> <span class="kw">=</span> <span class="fl">NA</span>, <span class="kw">att.idx</span> <span class="kw">=</span> <span class="fl">1</span>, <span class="kw">CI</span> <span class="kw">=</span> <span class="fl">NA</span>)
-<span class="fu"><a href="https://rdrr.io/r/graphics/lines.html">lines</a></span>(<span class="no">a</span>, <span class="kw">lty</span> <span class="kw">=</span> <span class="st">"dotted"</span>)</pre></body></html></div>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">ans</span>, at.idx <span class="op">=</span> <span class="cn">NA</span>, att.idx <span class="op">=</span> <span class="fl">1</span>, CI <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/lines.html">lines</a></span><span class="op">(</span><span class="va">a</span>, lty <span class="op">=</span> <span class="st">"dotted"</span><span class="op">)</span></code></pre></div>
 <p><img src="FKF_files/figure-html/the_rest-2.png" width="700"></p>
-<div class="sourceCode" id="cb8"><html><body><pre class="r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R">
 <span class="co">## Check whether the residuals are Gaussian</span>
-<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">ans</span>, <span class="kw">type</span> <span class="kw">=</span> <span class="st">"resid.qq"</span>)</pre></body></html></div>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">ans</span>, type <span class="op">=</span> <span class="st">"resid.qq"</span><span class="op">)</span></code></pre></div>
 <p><img src="FKF_files/figure-html/the_rest-3.png" width="700"></p>
-<div class="sourceCode" id="cb9"><html><body><pre class="r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R">
 <span class="co">## Check for linear serial dependence through 'acf'</span>
-<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">ans</span>, <span class="kw">type</span> <span class="kw">=</span> <span class="st">"acf"</span>)</pre></body></html></div>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">ans</span>, type <span class="op">=</span> <span class="st">"acf"</span><span class="op">)</span></code></pre></div>
 <p><img src="FKF_files/figure-html/the_rest-4.png" width="700"></p>
 </div>
 <div id="example-2-local-level-model-for-the-niles-annual-flow-" class="section level1">
 <h1 class="hasAnchor">
 <a href="#example-2-local-level-model-for-the-niles-annual-flow-" class="anchor"></a>Example 2: Local level model for the Nile’s annual flow.</h1>
-<div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="co">## Transition equation:</span>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">## Transition equation:</span>
 <span class="co">## alpha[t+1] = alpha[t] + eta[t], eta[t] ~ N(0, HHt)          </span>
 <span class="co">## Measurement equation:</span>
 <span class="co">## y[t] = alpha[t] + eps[t], eps[t] ~  N(0, GGt)</span>
 
-<span class="no">y</span> <span class="kw">&lt;-</span> <span class="no">Nile</span>
-<span class="no">y</span>[<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">3</span>, <span class="fl">10</span>)] <span class="kw">&lt;-</span> <span class="fl">NA</span>  <span class="co"># NA values can be handled</span>
+<span class="va">y</span> <span class="op">&lt;-</span> <span class="va">Nile</span>
+<span class="va">y</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">10</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="cn">NA</span>  <span class="co"># NA values can be handled</span>
 
 <span class="co">## Set constant parameters:</span>
-<span class="no">dt</span> <span class="kw">&lt;-</span> <span class="no">ct</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span>(<span class="fl">0</span>)
-<span class="no">Zt</span> <span class="kw">&lt;-</span> <span class="no">Tt</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span>(<span class="fl">1</span>)
-<span class="no">a0</span> <span class="kw">&lt;-</span> <span class="no">y</span>[<span class="fl">1</span>]            <span class="co"># Estimation of the first year flow </span>
-<span class="no">P0</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span>(<span class="fl">100</span>)     <span class="co"># Variance of 'a0'</span>
+<span class="va">dt</span> <span class="op">&lt;-</span> <span class="va">ct</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span> 
+<span class="va">Zt</span> <span class="op">&lt;-</span> <span class="va">Tt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>
+<span class="va">a0</span> <span class="op">&lt;-</span> <span class="va">y</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>            <span class="co"># Estimation of the first year flow </span>
+<span class="va">P0</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>     <span class="co"># Variance of 'a0'</span>
 
 <span class="co">## Estimate parameters:</span>
-<span class="no">fit.fkf</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/optim.html">optim</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="kw">HHt</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.html">var</a></span>(<span class="no">y</span>, <span class="kw">na.rm</span> <span class="kw">=</span> <span class="fl">TRUE</span>) * <span class="fl">.5</span>,
-                   <span class="kw">GGt</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.html">var</a></span>(<span class="no">y</span>, <span class="kw">na.rm</span> <span class="kw">=</span> <span class="fl">TRUE</span>) * <span class="fl">.5</span>),
-                 <span class="kw">fn</span> <span class="kw">=</span> <span class="kw">function</span>(<span class="no">par</span>, <span class="no">...</span>)
-                 -<span class="fu"><a href="https://rdrr.io/pkg/FKF/man/fkf.html">fkf</a></span>(<span class="kw">HHt</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span>(<span class="no">par</span>[<span class="fl">1</span>]), <span class="kw">GGt</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span>(<span class="no">par</span>[<span class="fl">2</span>]), <span class="no">...</span>)$<span class="no">logLik</span>,
-                 <span class="kw">yt</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span>(<span class="no">y</span>), <span class="kw">a0</span> <span class="kw">=</span> <span class="no">a0</span>, <span class="kw">P0</span> <span class="kw">=</span> <span class="no">P0</span>, <span class="kw">dt</span> <span class="kw">=</span> <span class="no">dt</span>, <span class="kw">ct</span> <span class="kw">=</span> <span class="no">ct</span>,
-                 <span class="kw">Zt</span> <span class="kw">=</span> <span class="no">Zt</span>, <span class="kw">Tt</span> <span class="kw">=</span> <span class="no">Tt</span>)
+<span class="va">fit.fkf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/optim.html">optim</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>HHt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.html">var</a></span><span class="op">(</span><span class="va">y</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">*</span> <span class="fl">.5</span>,
+                   GGt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.html">var</a></span><span class="op">(</span><span class="va">y</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">*</span> <span class="fl">.5</span><span class="op">)</span>,
+                 fn <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">par</span>, <span class="va">...</span><span class="op">)</span>
+                 <span class="op">-</span><span class="fu"><a href="../reference/fkf.html">fkf</a></span><span class="op">(</span>HHt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="va">par</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span>, GGt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="va">par</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span><span class="op">$</span><span class="va">logLik</span>,
+                 yt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span>, a0 <span class="op">=</span> <span class="va">a0</span>, P0 <span class="op">=</span> <span class="va">P0</span>, dt <span class="op">=</span> <span class="va">dt</span>, ct <span class="op">=</span> <span class="va">ct</span>,
+                 Zt <span class="op">=</span> <span class="va">Zt</span>, Tt <span class="op">=</span> <span class="va">Tt</span><span class="op">)</span>
 
 <span class="co">## Filter Nile data with estimated parameters:</span>
-<span class="no">fkf.obj</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/FKF/man/fkf.html">fkf</a></span>(<span class="no">a0</span>, <span class="no">P0</span>, <span class="no">dt</span>, <span class="no">ct</span>, <span class="no">Tt</span>, <span class="no">Zt</span>, <span class="kw">HHt</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span>(<span class="no">fit.fkf</span>$<span class="no">par</span>[<span class="fl">1</span>]),
-               <span class="kw">GGt</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span>(<span class="no">fit.fkf</span>$<span class="no">par</span>[<span class="fl">2</span>]), <span class="kw">yt</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span>(<span class="no">y</span>))
+<span class="va">fkf.obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fkf.html">fkf</a></span><span class="op">(</span><span class="va">a0</span>, <span class="va">P0</span>, <span class="va">dt</span>, <span class="va">ct</span>, <span class="va">Tt</span>, <span class="va">Zt</span>, HHt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="va">fit.fkf</span><span class="op">$</span><span class="va">par</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span>,
+               GGt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="va">fit.fkf</span><span class="op">$</span><span class="va">par</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span>, yt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span><span class="op">)</span>
 
 <span class="co">## Compare with the stats' structural time series implementation:</span>
-<span class="no">fit.stats</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/StructTS.html">StructTS</a></span>(<span class="no">y</span>, <span class="kw">type</span> <span class="kw">=</span> <span class="st">"level"</span>)
+<span class="va">fit.stats</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/StructTS.html">StructTS</a></span><span class="op">(</span><span class="va">y</span>, type <span class="op">=</span> <span class="st">"level"</span><span class="op">)</span>
 
-<span class="no">fit.fkf</span>$<span class="no">par</span>
+<span class="va">fit.fkf</span><span class="op">$</span><span class="va">par</span>
 <span class="co">#&gt;       HHt       GGt </span>
 <span class="co">#&gt;  1385.066 15124.131</span>
-<span class="no">fit.stats</span>$<span class="no">coef</span>
+<span class="va">fit.stats</span><span class="op">$</span><span class="va">coef</span>
 <span class="co">#&gt;     level   epsilon </span>
 <span class="co">#&gt;  1599.452 14904.781</span>
 
 <span class="co">## Plot the flow data together with fitted local levels:</span>
-<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">y</span>, <span class="kw">main</span> <span class="kw">=</span> <span class="st">"Nile flow"</span>)
-<span class="fu"><a href="https://rdrr.io/r/graphics/lines.html">lines</a></span>(<span class="fu"><a href="https://rdrr.io/r/stats/fitted.values.html">fitted</a></span>(<span class="no">fit.stats</span>), <span class="kw">col</span> <span class="kw">=</span> <span class="st">"green"</span>)
-<span class="fu"><a href="https://rdrr.io/r/graphics/lines.html">lines</a></span>(<span class="fu"><a href="https://rdrr.io/r/stats/ts.html">ts</a></span>(<span class="no">fkf.obj</span>$<span class="no">att</span>[<span class="fl">1</span>, ], <span class="kw">start</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/start.html">start</a></span>(<span class="no">y</span>), <span class="kw">frequency</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/time.html">frequency</a></span>(<span class="no">y</span>)), <span class="kw">col</span> <span class="kw">=</span> <span class="st">"blue"</span>)
-<span class="fu"><a href="https://rdrr.io/r/graphics/legend.html">legend</a></span>(<span class="st">"top"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Nile flow data"</span>, <span class="st">"Local level (StructTS)"</span>, <span class="st">"Local level (fkf)"</span>),
-       <span class="kw">col</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"black"</span>, <span class="st">"green"</span>, <span class="st">"blue"</span>), <span class="kw">lty</span> <span class="kw">=</span> <span class="fl">1</span>)</pre></body></html></div>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">y</span>, main <span class="op">=</span> <span class="st">"Nile flow"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/lines.html">lines</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/fitted.values.html">fitted</a></span><span class="op">(</span><span class="va">fit.stats</span><span class="op">)</span>, col <span class="op">=</span> <span class="st">"green"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/lines.html">lines</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/ts.html">ts</a></span><span class="op">(</span><span class="va">fkf.obj</span><span class="op">$</span><span class="va">att</span><span class="op">[</span><span class="fl">1</span>, <span class="op">]</span>, start <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/start.html">start</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span>, frequency <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/time.html">frequency</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span><span class="op">)</span>, col <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/legend.html">legend</a></span><span class="op">(</span><span class="st">"top"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Nile flow data"</span>, <span class="st">"Local level (StructTS)"</span>, <span class="st">"Local level (fkf)"</span><span class="op">)</span>,
+       col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"black"</span>, <span class="st">"green"</span>, <span class="st">"blue"</span><span class="op">)</span>, lty <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></code></pre></div>
 <p><img src="FKF_files/figure-html/ex2-1.png" width="700"></p>
 </div>
 <div id="example-3---local-level-and-plotting" class="section level1">
 <h1 class="hasAnchor">
 <a href="#example-3---local-level-and-plotting" class="anchor"></a>Example 3 - Local level and plotting</h1>
-<div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="co">## Transition equation:</span>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">## Transition equation:</span>
 <span class="co">## alpha[t+1] = alpha[t] + eta[t], eta[t] ~ N(0, HHt)</span>
 <span class="co">## Measurement equation:</span>
 <span class="co">## y[t] = alpha[t] + eps[t], eps[t] ~  N(0, GGt)</span>
 
-<span class="no">y</span> <span class="kw">&lt;-</span> <span class="no">treering</span>
-<span class="no">y</span>[<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">3</span>, <span class="fl">10</span>)] <span class="kw">&lt;-</span> <span class="fl">NA</span>  <span class="co"># NA values can be handled</span>
+<span class="va">y</span> <span class="op">&lt;-</span> <span class="va">treering</span>
+<span class="va">y</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">10</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="cn">NA</span>  <span class="co"># NA values can be handled</span>
 
 <span class="co">## Set constant parameters:</span>
-<span class="no">dt</span> <span class="kw">&lt;-</span> <span class="no">ct</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span>(<span class="fl">0</span>)
-<span class="no">Zt</span> <span class="kw">&lt;-</span> <span class="no">Tt</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span>(<span class="fl">1</span>)
-<span class="no">a0</span> <span class="kw">&lt;-</span> <span class="no">y</span>[<span class="fl">1</span>]            <span class="co"># Estimation of the first width</span>
-<span class="no">P0</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span>(<span class="fl">100</span>)     <span class="co"># Variance of 'a0'</span>
+<span class="va">dt</span> <span class="op">&lt;-</span> <span class="va">ct</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>
+<span class="va">Zt</span> <span class="op">&lt;-</span> <span class="va">Tt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span> 
+<span class="va">a0</span> <span class="op">&lt;-</span> <span class="va">y</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>            <span class="co"># Estimation of the first width</span>
+<span class="va">P0</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>     <span class="co"># Variance of 'a0'</span>
 
 <span class="co">## Estimate parameters:</span>
-<span class="no">fit.fkf</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/optim.html">optim</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="kw">HHt</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.html">var</a></span>(<span class="no">y</span>, <span class="kw">na.rm</span> <span class="kw">=</span> <span class="fl">TRUE</span>) * <span class="fl">.5</span>,
-                   <span class="kw">GGt</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.html">var</a></span>(<span class="no">y</span>, <span class="kw">na.rm</span> <span class="kw">=</span> <span class="fl">TRUE</span>) * <span class="fl">.5</span>),
-                 <span class="kw">fn</span> <span class="kw">=</span> <span class="kw">function</span>(<span class="no">par</span>, <span class="no">...</span>)
-                   -<span class="fu"><a href="https://rdrr.io/pkg/FKF/man/fkf.html">fkf</a></span>(<span class="kw">HHt</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/array.html">array</a></span>(<span class="no">par</span>[<span class="fl">1</span>],<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span>)), <span class="kw">GGt</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/array.html">array</a></span>(<span class="no">par</span>[<span class="fl">2</span>],<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span>)), <span class="no">...</span>)$<span class="no">logLik</span>,
-                 <span class="kw">yt</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span>(<span class="no">y</span>), <span class="kw">a0</span> <span class="kw">=</span> <span class="no">a0</span>, <span class="kw">P0</span> <span class="kw">=</span> <span class="no">P0</span>, <span class="kw">dt</span> <span class="kw">=</span> <span class="no">dt</span>, <span class="kw">ct</span> <span class="kw">=</span> <span class="no">ct</span>,
-                 <span class="kw">Zt</span> <span class="kw">=</span> <span class="no">Zt</span>, <span class="kw">Tt</span> <span class="kw">=</span> <span class="no">Tt</span>)
+<span class="va">fit.fkf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/optim.html">optim</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>HHt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.html">var</a></span><span class="op">(</span><span class="va">y</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">*</span> <span class="fl">.5</span>,
+                   GGt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.html">var</a></span><span class="op">(</span><span class="va">y</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">*</span> <span class="fl">.5</span><span class="op">)</span>,
+                 fn <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">par</span>, <span class="va">...</span><span class="op">)</span>
+                   <span class="op">-</span><span class="fu"><a href="../reference/fkf.html">fkf</a></span><span class="op">(</span>HHt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/array.html">array</a></span><span class="op">(</span><span class="va">par</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span>, GGt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/array.html">array</a></span><span class="op">(</span><span class="va">par</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span><span class="op">$</span><span class="va">logLik</span>,
+                 yt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span>, a0 <span class="op">=</span> <span class="va">a0</span>, P0 <span class="op">=</span> <span class="va">P0</span>, dt <span class="op">=</span> <span class="va">dt</span>, ct <span class="op">=</span> <span class="va">ct</span>,
+                 Zt <span class="op">=</span> <span class="va">Zt</span>, Tt <span class="op">=</span> <span class="va">Tt</span><span class="op">)</span>
 
 <span class="co">## Filter tree ring data with estimated parameters:</span>
-<span class="no">fkf.obj</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/FKF/man/fkf.html">fkf</a></span>(<span class="no">a0</span>, <span class="no">P0</span>, <span class="no">dt</span>, <span class="no">ct</span>, <span class="no">Tt</span>, <span class="no">Zt</span>, <span class="kw">HHt</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/array.html">array</a></span>(<span class="no">fit.fkf</span>$<span class="no">par</span>[<span class="fl">1</span>],<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span>)),
-               <span class="kw">GGt</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/array.html">array</a></span>(<span class="no">fit.fkf</span>$<span class="no">par</span>[<span class="fl">2</span>],<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span>)), <span class="kw">yt</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span>(<span class="no">y</span>))
+<span class="va">fkf.obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fkf.html">fkf</a></span><span class="op">(</span><span class="va">a0</span>, <span class="va">P0</span>, <span class="va">dt</span>, <span class="va">ct</span>, <span class="va">Tt</span>, <span class="va">Zt</span>, HHt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/array.html">array</a></span><span class="op">(</span><span class="va">fit.fkf</span><span class="op">$</span><span class="va">par</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span>,
+               GGt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/array.html">array</a></span><span class="op">(</span><span class="va">fit.fkf</span><span class="op">$</span><span class="va">par</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span>, yt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span><span class="op">)</span>
 
 <span class="co">## Plot the width together with fitted local levels:</span>
-<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">y</span>, <span class="kw">main</span> <span class="kw">=</span> <span class="st">"Treering data"</span>)
-<span class="fu"><a href="https://rdrr.io/r/graphics/lines.html">lines</a></span>(<span class="fu"><a href="https://rdrr.io/r/stats/ts.html">ts</a></span>(<span class="no">fkf.obj</span>$<span class="no">att</span>[<span class="fl">1</span>, ], <span class="kw">start</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/start.html">start</a></span>(<span class="no">y</span>), <span class="kw">frequency</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/time.html">frequency</a></span>(<span class="no">y</span>)), <span class="kw">col</span> <span class="kw">=</span> <span class="st">"blue"</span>)
-<span class="fu"><a href="https://rdrr.io/r/graphics/legend.html">legend</a></span>(<span class="st">"top"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Treering data"</span>, <span class="st">"Local level"</span>), <span class="kw">col</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"black"</span>, <span class="st">"blue"</span>), <span class="kw">lty</span> <span class="kw">=</span> <span class="fl">1</span>)</pre></body></html></div>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">y</span>, main <span class="op">=</span> <span class="st">"Treering data"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/lines.html">lines</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/ts.html">ts</a></span><span class="op">(</span><span class="va">fkf.obj</span><span class="op">$</span><span class="va">att</span><span class="op">[</span><span class="fl">1</span>, <span class="op">]</span>, start <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/start.html">start</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span>, frequency <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/time.html">frequency</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span><span class="op">)</span>, col <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/legend.html">legend</a></span><span class="op">(</span><span class="st">"top"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Treering data"</span>, <span class="st">"Local level"</span><span class="op">)</span>, col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"black"</span>, <span class="st">"blue"</span><span class="op">)</span>, lty <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></code></pre></div>
 <p><img src="FKF_files/figure-html/ex_3-1.png" width="700"></p>
-<div class="sourceCode" id="cb12"><html><body><pre class="r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R">
 <span class="co">## Check the residuals for normality:</span>
-<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">fkf.obj</span>, <span class="kw">type</span> <span class="kw">=</span> <span class="st">"resid.qq"</span>)</pre></body></html></div>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fkf.obj</span>, type <span class="op">=</span> <span class="st">"resid.qq"</span><span class="op">)</span></code></pre></div>
 <p><img src="FKF_files/figure-html/ex_3-2.png" width="700"></p>
-<div class="sourceCode" id="cb13"><html><body><pre class="r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R">
 <span class="co">## Test for autocorrelation:</span>
-<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">fkf.obj</span>, <span class="kw">type</span> <span class="kw">=</span> <span class="st">"acf"</span>, <span class="kw">na.action</span> <span class="kw">=</span> <span class="no">na.pass</span>)</pre></body></html></div>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fkf.obj</span>, type <span class="op">=</span> <span class="st">"acf"</span>, na.action <span class="op">=</span> <span class="va">na.pass</span><span class="op">)</span></code></pre></div>
 <p><img src="FKF_files/figure-html/ex_3-3.png" width="700"></p>
 </div>
   </div>
@@ -284,11 +297,11 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by David Luethi, Philipp Erb, Simon Otziger, Paul Smith.</p>
+  <p>Developed by David Luethi, Philipp Erb, Simon Otziger, Daniel McDonald, Paul Smith.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

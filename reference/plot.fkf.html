@@ -76,7 +76,7 @@ crosscorrelation function of the residuals." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">FKF</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0.9000</span>
       </span>
     </div>
 
@@ -84,7 +84,7 @@ crosscorrelation function of the residuals." />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -101,7 +101,7 @@ crosscorrelation function of the residuals." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/waternumbers/FKF/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -124,7 +124,7 @@ crosscorrelation function of the residuals." />
     </div>
 
     <div class="ref-description">
-    <p>Plotting method for objects of class <code>fkf</code>. This function
+    <p>Plotting method for objects of class <code><a href='fkf.html'>fkf</a></code>. This function
 provides tools for graphical analysis of the Kalman filter output:
 Visualization of the state vector, QQ-plot of the individual
 residuals, QQ-plot of the Mahalanobis distance, auto- as well as
@@ -132,21 +132,21 @@ crosscorrelation function of the residuals.</p>
     </div>
 
     <pre class="usage"><span class='co'># S3 method for fkf</span>
-<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(
-  <span class='no'>x</span>,
-  <span class='kw'>type</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"state"</span>, <span class='st'>"resid.qq"</span>, <span class='st'>"qqchisq"</span>, <span class='st'>"acf"</span>),
-  <span class='kw'>CI</span> <span class='kw'>=</span> <span class='fl'>0.95</span>,
-  <span class='kw'>at.idx</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span>(<span class='no'>x</span>$<span class='no'>at</span>),
-  <span class='kw'>att.idx</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span>(<span class='no'>x</span>$<span class='no'>att</span>),
-  <span class='no'>...</span>
-)</pre>
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  type <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"state"</span>, <span class='st'>"resid.qq"</span>, <span class='st'>"qqchisq"</span>, <span class='st'>"acf"</span><span class='op'>)</span>,
+  CI <span class='op'>=</span> <span class='fl'>0.95</span>,
+  at.idx <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>$</span><span class='va'>at</span><span class='op'>)</span>,
+  att.idx <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>$</span><span class='va'>att</span><span class='op'>)</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>The output of <code>fkf</code>.</p></td>
+      <td><p>The output of <code><a href='fkf.html'>fkf</a></code>.</p></td>
     </tr>
     <tr>
       <th>type</th>
@@ -169,7 +169,7 @@ which shall be plotted if <code>type == "state"</code>.</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>Arguments passed to either <code><a href='https://rdrr.io/r/base/plot.html'>plot</a></code>,
+      <td><p>Arguments passed to either <code><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></code>,
 <code><a href='https://rdrr.io/r/stats/qqnorm.html'>qqnorm</a></code>, <code><a href='https://rdrr.io/r/stats/qqnorm.html'>qqplot</a></code> or <code><a href='https://rdrr.io/r/stats/acf.html'>acf</a></code>.</p></td>
     </tr>
     </table>
@@ -187,7 +187,7 @@ of observations.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>The argument <code>type</code> states what shall be plotted. <code>type</code>
-must partially match one of the following:</p><dl'>
+must partially match one of the following:</p><dl>
     <dt><code>state</code></dt><dd><p>The state variables are plotted. By the
       arguments <code>at.idx</code> and <code>att.idx</code>, the user can specify
       which of the predicted (\(a_{t}\)) and filtered
@@ -207,11 +207,11 @@ must partially match one of the following:</p><dl'>
 
     
 
-<p><code><a href='https://rdrr.io/r/base/plot.html'>plot(x, type = c("state", "resid.qq", "qqchisq", "acf"),
+<p><code><a href='https://rdrr.io/r/graphics/plot.default.html'>plot(x, type = c("state", "resid.qq", "qqchisq", "acf"),
 CI = 0.95, at.idx = 1:nrow(x$at), att.idx = 1:nrow(x$att), ...)</a></code></p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code>fkf</code></p></div>
+    <div class='dont-index'><p><code><a href='fkf.html'>fkf</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'>## &lt;---------------------------------------------------------------------------&gt;</span>
@@ -222,33 +222,38 @@ CI = 0.95, at.idx = 1:nrow(x$at), att.idx = 1:nrow(x$att), ...)</a></code></p>
 <span class='co'>## Measurement equation:</span>
 <span class='co'>## y[t] = alpha[t] + eps[t], eps[t] ~  N(0, GGt)</span>
 
-<span class='no'>y</span> <span class='kw'>&lt;-</span> <span class='no'>treering</span>
-<span class='no'>y</span>[<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>3</span>, <span class='fl'>10</span>)] <span class='kw'>&lt;-</span> <span class='fl'>NA</span>  <span class='co'># NA values can be handled</span>
+<span class='va'>y</span> <span class='op'>&lt;-</span> <span class='va'>treering</span>
+<span class='va'>y</span><span class='op'>[</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>3</span>, <span class='fl'>10</span><span class='op'>)</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='cn'>NA</span>  <span class='co'># NA values can be handled</span>
 
 <span class='co'>## Set constant parameters:</span>
-<span class='no'>dt</span> <span class='kw'>&lt;-</span> <span class='no'>ct</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fl'>0</span>)
-<span class='no'>Zt</span> <span class='kw'>&lt;-</span> <span class='no'>Tt</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/array.html'>array</a></span>(<span class='fl'>1</span>,<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>1</span>))
-<span class='no'>a0</span> <span class='kw'>&lt;-</span> <span class='no'>y</span>[<span class='fl'>1</span>]            <span class='co'># Estimation of the first width</span>
-<span class='no'>P0</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fl'>100</span>)     <span class='co'># Variance of 'a0'</span>
+<span class='va'>dt</span> <span class='op'>&lt;-</span> <span class='va'>ct</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>
+<span class='va'>Zt</span> <span class='op'>&lt;-</span> <span class='va'>Tt</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/array.html'>array</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>a0</span> <span class='op'>&lt;-</span> <span class='va'>y</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span>            <span class='co'># Estimation of the first width</span>
+<span class='va'>P0</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fl'>100</span><span class='op'>)</span>     <span class='co'># Variance of 'a0'</span>
 
 <span class='co'>## Estimate parameters:</span>
-<span class='no'>fit.fkf</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/optim.html'>optim</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='kw'>HHt</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/cor.html'>var</a></span>(<span class='no'>y</span>, <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>) * <span class='fl'>.5</span>,
-                   <span class='kw'>GGt</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/cor.html'>var</a></span>(<span class='no'>y</span>, <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>) * <span class='fl'>.5</span>),
-                 <span class='kw'>fn</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>par</span>, <span class='no'>...</span>)
-                 -<span class='fu'>fkf</span>(<span class='kw'>HHt</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/array.html'>array</a></span>(<span class='no'>par</span>[<span class='fl'>1</span>],<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>1</span>)), <span class='kw'>GGt</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/array.html'>array</a></span>(<span class='no'>par</span>[<span class='fl'>2</span>],<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>1</span>)), <span class='no'>...</span>)$<span class='no'>logLik</span>,
-                 <span class='kw'>yt</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span>(<span class='no'>y</span>), <span class='kw'>a0</span> <span class='kw'>=</span> <span class='no'>a0</span>, <span class='kw'>P0</span> <span class='kw'>=</span> <span class='no'>P0</span>, <span class='kw'>dt</span> <span class='kw'>=</span> <span class='no'>dt</span>, <span class='kw'>ct</span> <span class='kw'>=</span> <span class='no'>ct</span>,
-                 <span class='kw'>Zt</span> <span class='kw'>=</span> <span class='no'>Zt</span>, <span class='kw'>Tt</span> <span class='kw'>=</span> <span class='no'>Tt</span>)
+<span class='va'>fit.fkf</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/optim.html'>optim</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span>HHt <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/cor.html'>var</a></span><span class='op'>(</span><span class='va'>y</span>, na.rm <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span> <span class='op'>*</span> <span class='fl'>.5</span>,
+                   GGt <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/cor.html'>var</a></span><span class='op'>(</span><span class='va'>y</span>, na.rm <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span> <span class='op'>*</span> <span class='fl'>.5</span><span class='op'>)</span>,
+                 fn <span class='op'>=</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>par</span>, <span class='va'>...</span><span class='op'>)</span>
+                 <span class='op'>-</span><span class='fu'><a href='fkf.html'>fkf</a></span><span class='op'>(</span>HHt <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/array.html'>array</a></span><span class='op'>(</span><span class='va'>par</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span>,<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>, GGt <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/array.html'>array</a></span><span class='op'>(</span><span class='va'>par</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span>,<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>, <span class='va'>...</span><span class='op'>)</span><span class='op'>$</span><span class='va'>logLik</span>,
+                 yt <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span><span class='op'>(</span><span class='va'>y</span><span class='op'>)</span>, a0 <span class='op'>=</span> <span class='va'>a0</span>, P0 <span class='op'>=</span> <span class='va'>P0</span>, dt <span class='op'>=</span> <span class='va'>dt</span>, ct <span class='op'>=</span> <span class='va'>ct</span>,
+                 Zt <span class='op'>=</span> <span class='va'>Zt</span>, Tt <span class='op'>=</span> <span class='va'>Tt</span><span class='op'>)</span>
 
 <span class='co'>## Filter tree ring data with estimated parameters:</span>
-<span class='no'>fkf.obj</span> <span class='kw'>&lt;-</span> <span class='fu'>fkf</span>(<span class='no'>a0</span>, <span class='no'>P0</span>, <span class='no'>dt</span>, <span class='no'>ct</span>, <span class='no'>Tt</span>, <span class='no'>Zt</span>, <span class='kw'>HHt</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/array.html'>array</a></span>(<span class='no'>fit.fkf</span>$<span class='no'>par</span>[<span class='fl'>1</span>],<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>1</span>)),
-               <span class='kw'>GGt</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/array.html'>array</a></span>(<span class='no'>fit.fkf</span>$<span class='no'>par</span>[<span class='fl'>2</span>],<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>1</span>)), <span class='kw'>yt</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span>(<span class='no'>y</span>))
+<span class='va'>fkf.obj</span> <span class='op'>&lt;-</span> <span class='fu'><a href='fkf.html'>fkf</a></span><span class='op'>(</span><span class='va'>a0</span>, <span class='va'>P0</span>, <span class='va'>dt</span>, <span class='va'>ct</span>, <span class='va'>Tt</span>, <span class='va'>Zt</span>, HHt <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/array.html'>array</a></span><span class='op'>(</span><span class='va'>fit.fkf</span><span class='op'>$</span><span class='va'>par</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span>,<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>,
+               GGt <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/array.html'>array</a></span><span class='op'>(</span><span class='va'>fit.fkf</span><span class='op'>$</span><span class='va'>par</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span>,<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>, yt <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span><span class='op'>(</span><span class='va'>y</span><span class='op'>)</span><span class='op'>)</span>
 
 <span class='co'>## Plot the width together with fitted local levels:</span>
-<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>y</span>, <span class='kw'>main</span> <span class='kw'>=</span> <span class='st'>"Treering data"</span>)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/ts.html'>ts</a></span>(<span class='no'>fkf.obj</span>$<span class='no'>att</span>[<span class='fl'>1</span>, ], <span class='kw'>start</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/start.html'>start</a></span>(<span class='no'>y</span>), <span class='kw'>frequency</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/time.html'>frequency</a></span>(<span class='no'>y</span>)), <span class='kw'>col</span> <span class='kw'>=</span> <span class='st'>"blue"</span>)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/legend.html'>legend</a></span>(<span class='st'>"top"</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Treering data"</span>, <span class='st'>"Local level"</span>), <span class='kw'>col</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"black"</span>, <span class='st'>"blue"</span>), <span class='kw'>lty</span> <span class='kw'>=</span> <span class='fl'>1</span>)</div><div class='img'><img src='plot.fkf-1.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>y</span>, main <span class='op'>=</span> <span class='st'>"Treering data"</span><span class='op'>)</span>
+</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/ts.html'>ts</a></span><span class='op'>(</span><span class='va'>fkf.obj</span><span class='op'>$</span><span class='va'>att</span><span class='op'>[</span><span class='fl'>1</span>, <span class='op'>]</span>, start <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/start.html'>start</a></span><span class='op'>(</span><span class='va'>y</span><span class='op'>)</span>, frequency <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/time.html'>frequency</a></span><span class='op'>(</span><span class='va'>y</span><span class='op'>)</span><span class='op'>)</span>, col <span class='op'>=</span> <span class='st'>"blue"</span><span class='op'>)</span>
+</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/legend.html'>legend</a></span><span class='op'>(</span><span class='st'>"top"</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Treering data"</span>, <span class='st'>"Local level"</span><span class='op'>)</span>, col <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"black"</span>, <span class='st'>"blue"</span><span class='op'>)</span>, lty <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
+</div><div class='img'><img src='plot.fkf-1.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>## Check the residuals for normality:</span>
-<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>fkf.obj</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"resid.qq"</span>)</div><div class='img'><img src='plot.fkf-2.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>fkf.obj</span>, type <span class='op'>=</span> <span class='st'>"resid.qq"</span><span class='op'>)</span>
+</div><div class='img'><img src='plot.fkf-2.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>## Test for autocorrelation:</span>
-<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>fkf.obj</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"acf"</span>, <span class='kw'>na.action</span> <span class='kw'>=</span> <span class='no'>na.pass</span>)</div><div class='img'><img src='plot.fkf-3.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>fkf.obj</span>, type <span class='op'>=</span> <span class='st'>"acf"</span>, na.action <span class='op'>=</span> <span class='va'>na.pass</span><span class='op'>)</span>
+</div><div class='img'><img src='plot.fkf-3.png' alt='' width='700' height='433' /></div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -261,11 +266,11 @@ CI = 0.95, at.idx = 1:nrow(x$at), att.idx = 1:nrow(x$att), ...)</a></code></p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by David Luethi, Philipp Erb, Simon Otziger, Paul Smith.</p>
+  <p>Developed by David Luethi, Philipp Erb, Simon Otziger, Daniel McDonald, Paul Smith.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

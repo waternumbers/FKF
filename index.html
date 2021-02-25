@@ -13,8 +13,7 @@
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
 <script src="pkgdown.js"></script><meta property="og:title" content="Fast Kalman Filter">
 <meta property="og:description" content="This is a fast and flexible implementation of the Kalman
-        filter, which can deal with NAs. It is entirely written in C
-        and relies fully on linear algebra subroutines contained in
+        filter and Smoother, which can deal with NAs. It is entirely written in C and relies fully on linear algebra subroutines contained in
         BLAS and LAPACK. Due to the speed of the filter, the fitting of
         high-dimensional linear state space models to large datasets
         becomes possible. This package also contains a plot function
@@ -38,7 +37,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">FKF</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0.9000</span>
       </span>
     </div>
 
@@ -46,7 +45,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -63,7 +62,7 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://github.com/waternumbers/FKF/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -89,7 +88,7 @@
 <p>Development can be tracked via the <a href="https://github.com/waternumbers/FKF">github repository</a> which contains source code for the package starting with version 0.1.5.</p>
 <p>The latest developmental release canbe installed with</p>
 <pre><code>devtools::install_github("waternumbers/FKF")</code></pre>
-<p>Prebuild packages (usually including the latest version) are available from the waternumbers drat repository <a href="https://waternumbers.github.io/drat">here</a>.</p>
+<p>Prebuild packages (usually including the latest development version) are available from the waternumbers drat repository <a href="https://waternumbers.github.io/drat">here</a>.</p>
 </div>
   </div>
 
@@ -117,6 +116,7 @@
 <li>David Luethi <br><small class="roles"> Author </small>  </li>
 <li>Philipp Erb <br><small class="roles"> Author </small>  </li>
 <li>Simon Otziger <br><small class="roles"> Author </small>  </li>
+<li>Daniel McDonald <br><small class="roles"> Author </small>  </li>
 <li>Paul Smith <br><small class="roles"> Maintainer </small> <a href="https://orcid.org/0000-0002-0034-3412" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
 </ul>
 </div>
@@ -134,11 +134,11 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by David Luethi, Philipp Erb, Simon Otziger, Paul Smith.</p>
+  <p>Developed by David Luethi, Philipp Erb, Simon Otziger, Daniel McDonald, Paul Smith.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
