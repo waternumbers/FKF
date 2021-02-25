@@ -8,9 +8,15 @@ warnings_are_errors: true
 os:
   - linux
   - osx
-apt_packages:
-  - libharfbuzz-dev
-  - libfribidi-dev
+addons:
+  apt:
+    packages:
+    - libharfbuzz-dev
+    - libfribidi-dev
+  homebrew:
+    packages:
+    - harfbuzz
+    - fribidi
 after_success:
   - Rscript -e 'covr::coveralls()'
   - Rscript -e 'pkgdown::build_site()'
