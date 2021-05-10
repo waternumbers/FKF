@@ -134,15 +134,15 @@
 <span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/optim.html">optim</a></span><span class="op">(</span><span class="va">theta</span>, <span class="va">objective</span>, yt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="va">a</span><span class="op">)</span>, hessian <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 <span class="va">fit</span>
 <span class="co">#&gt; $par</span>
-<span class="co">#&gt;        ar1        ar2        ma1      sigma </span>
-<span class="co">#&gt;  0.5429695  0.2442144 -0.1811025  0.4406022 </span>
+<span class="co">#&gt;         ar1         ar2         ma1       sigma </span>
+<span class="co">#&gt;  0.46968078  0.27303771 -0.06216601  0.43264213 </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $value</span>
-<span class="co">#&gt; [1] 606.5898</span>
+<span class="co">#&gt; [1] 588.5733</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $counts</span>
 <span class="co">#&gt; function gradient </span>
-<span class="co">#&gt;      275       NA </span>
+<span class="co">#&gt;      271       NA </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $convergence</span>
 <span class="co">#&gt; [1] 0</span>
@@ -151,18 +151,18 @@
 <span class="co">#&gt; NULL</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $hessian</span>
-<span class="co">#&gt;                ar1          ar2          ma1         sigma</span>
-<span class="co">#&gt; ar1   2206.9020363 1586.8478539 1118.4661031     0.1631668</span>
-<span class="co">#&gt; ar2   1586.8478539 2206.3923525  202.0264871     0.7388029</span>
-<span class="co">#&gt; ma1   1118.4661031  202.0264871 1019.4909422    -0.2500999</span>
-<span class="co">#&gt; sigma    0.1631668    0.7388029   -0.2500999 10293.6693442</span></code></pre></div>
+<span class="co">#&gt;                ar1          ar2          ma1        sigma</span>
+<span class="co">#&gt; ar1   1847.1077242 1195.5413871 1025.6416044 9.283028e-01</span>
+<span class="co">#&gt; ar2   1195.5413871 1846.7379500   65.5446135 7.788535e-01</span>
+<span class="co">#&gt; ma1   1025.6416044   65.5446135 1020.7500395 3.233252e-01</span>
+<span class="co">#&gt; sigma    0.9283028    0.7788535    0.3233252 1.068226e+04</span></code></pre></div>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Confidence intervals</span>
 <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="va">fit</span><span class="op">$</span><span class="va">par</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">qnorm</a></span><span class="op">(</span><span class="fl">0.975</span><span class="op">)</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/solve.html">solve</a></span><span class="op">(</span><span class="va">fit</span><span class="op">$</span><span class="va">hessian</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,
       <span class="va">fit</span><span class="op">$</span><span class="va">par</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">qnorm</a></span><span class="op">(</span><span class="fl">0.975</span><span class="op">)</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/solve.html">solve</a></span><span class="op">(</span><span class="va">fit</span><span class="op">$</span><span class="va">hessian</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt;            ar1       ar2          ma1     sigma</span>
-<span class="co">#&gt; [1,] 0.3636891 0.1236420 -0.366081037 0.4212842</span>
-<span class="co">#&gt; [2,] 0.7222500 0.3647868  0.003876031 0.4599202</span>
+<span class="co">#&gt;            ar1       ar2        ma1     sigma</span>
+<span class="co">#&gt; [1,] 0.2936179 0.1558311 -0.2428965 0.4136787</span>
+<span class="co">#&gt; [2,] 0.6457437 0.3902444  0.1185644 0.4516055</span>
 
 <span class="co">## Filter the series with estimated parameter values</span>
 <span class="va">sp</span> <span class="op">&lt;-</span> <span class="fu">arma21ss</span><span class="op">(</span><span class="va">fit</span><span class="op">$</span><span class="va">par</span><span class="op">[</span><span class="st">"ar1"</span><span class="op">]</span>, <span class="va">fit</span><span class="op">$</span><span class="va">par</span><span class="op">[</span><span class="st">"ar2"</span><span class="op">]</span>, <span class="va">fit</span><span class="op">$</span><span class="va">par</span><span class="op">[</span><span class="st">"ma1"</span><span class="op">]</span>, <span class="va">fit</span><span class="op">$</span><span class="va">par</span><span class="op">[</span><span class="st">"sigma"</span><span class="op">]</span><span class="op">)</span>
