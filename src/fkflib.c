@@ -1391,7 +1391,7 @@ SEXP FKS(SEXP yt, SEXP Zt, SEXP vt, SEXP Tt, SEXP Kt, SEXP Ftinv,
 
   /* Set the class to 'fkf' */
   PROTECT(class_name = NEW_CHARACTER(1));
-  SET_STRING_ELT(class_name, 0, mkChar("fkf"));
+  SET_STRING_ELT(class_name, 0, mkChar("fks"));
   classgets(ans, class_name);
 
   UNPROTECT(5);
