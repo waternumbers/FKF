@@ -24,7 +24,6 @@ License: GPL (>= 2)
 Encoding: UTF-8
 Imports: graphics
 Suggests: 
-    RUnit,
     knitr,
     rmarkdown,
     covr,
