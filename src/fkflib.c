@@ -1159,10 +1159,6 @@ void cfks(/* inputs */
   double *vt_temp = malloc(sizeof(double) * (d - 1));
   double *Ftinv_temp = malloc(sizeof(double) * (d - 1) * (d - 1));
   double *Kt_temp = malloc(sizeof(double) * (d - 1) * m);
-
-  int cnt_missing = 0;
-  int cnt_full = 0;
-  int cnt_reduce = 0;
   
   /* ---------- Begin iterations --------------*/
   while(i>-1){
@@ -1196,7 +1192,7 @@ void cfks(/* inputs */
     if(NAsum == d)
       /* Everything is missing */
       {
-	cnt_missing++;
+	
 	/* In this case L = Tt[,,i] */
 	
 	/* r = t(L) %*% r */
@@ -1215,7 +1211,7 @@ void cfks(/* inputs */
     else
       {
 	if(NAsum==0){
-	  cnt_full++;
+	  
 	  /*******Case 2: no NA's, easy case ****/
 
 	  /*----------------*/
@@ -1275,7 +1271,7 @@ void cfks(/* inputs */
 	}
 	else
 	  {
-	    cnt_reduce++;
+	    
 	    /* ** Bad case, reduced matrices ** */ 
 	    int d_reduced = d - NAsum;
 
@@ -1338,9 +1334,6 @@ void cfks(/* inputs */
     i--;
   }
 
-  Rprintf("\n\nNumber complete obs:   %i \n", cnt_full);
-  Rprintf("\n\nNumber reduced obs:   %i \n", cnt_reduce);
-  Rprintf("\n\nNumber no obs:   %i \n", cnt_missing);
   /**************************************************************/
   /* ---------- ---------- end recursions ---------- ---------- */
   /**************************************************************/
