@@ -7,9 +7,6 @@
 #' \code{FKF} which fully relies on linear algebra subroutines contained
 #' in BLAS and LAPACK.
 #'
-#' @section Usage:
-#' \code{fkf(a0, P0, dt, ct, Tt, Zt, HHt, GGt, yt, check.input = TRUE)}
-#'
 #' @param a0 A \code{vector} giving the initial value/estimation of the state variable.
 #' @param P0 A \code{matrix} giving the variance of \code{a0}.
 #' @param dt A \code{matrix} giving the intercept of the transition equation (see \bold{Details}).
@@ -19,8 +16,24 @@
 #' @param HHt An \code{array} giving the variance of the innovations of the transition equation (see \bold{Details}).
 #' @param GGt An \code{array} giving the variance of the disturbances of the measurement equation (see \bold{Details}).
 #' @param yt A \code{matrix} containing the observations. \dQuote{NA}-values are allowed (see \bold{Details}).
-#' @param check.input A \code{logical} stating whether the input shall be checked for consistency (\dQuote{storage.mode}, \dQuote{class}, and dimensionality, see \bold{Details}). This input is depreciated and will be removed in a future version, checks are always made.
+# #' @param check.input A \code{logical} stating whether the input shall be checked for consistency (\dQuote{storage.mode}, \dQuote{class}, and dimensionality, see \bold{Details}). This input is depreciated and will be removed in a future version, checks are always made.
 #'
+#' @return
+#' An S3-object of class \dQuote{fkf}, which is a list with the following elements:
+#' 
+#' \tabular{rl}{
+#'     \code{att} \tab A \eqn{m \times n}{m * n}-matrix containing the filtered state variables, i.e. att[,t] = \eqn{a_{t|t}}{a(t|t)}.\cr
+#'     \code{at} \tab A \eqn{m \times (n + 1)}{m * (n + 1)}-matrix containing the predicted state variables, i.e. at[,t] = \eqn{a_t}{a(t)}.\cr
+#'     \code{Ptt} \tab A \eqn{m \times m \times n}{m * m * n}-array containing the variance of \code{att}, i.e. Ptt[,,t] = \eqn{P_{t|t}}{P(t|t)}.\cr
+#'     \code{Pt} \tab A \eqn{m \times m \times (n + 1)}{m * m * (n + 1)}-array containing the variances of \code{at}, i.e. Pt[,,t] = \eqn{P_t}{P(t)}.\cr
+#'     \code{vt} \tab A \eqn{d \times n}{d * n}-matrix of the prediction errors i.e. vt[,t] = \eqn{v_t}{v(t)}.\cr
+#'     \code{Ft} \tab A \eqn{d \times d \times n}{d * d * n}-array which contains the variances of \code{vt}, i.e. Ft[,,t] = \eqn{F_t}{F(t)}.\cr
+#'     \code{Kt} \tab A \eqn{m \times d \times n}{m * d * n}-array containing the \dQuote{Kalman gain} i.e. Kt[,,t] = \eqn{k_t}{K(t)}.\cr
+#'     \code{logLik} \tab The log-likelihood. \cr
+#'     \code{status} \tab A vector which contains the status of LAPACK's \code{dpotri} and \code{dpotrf}. \eqn{(0, 0)} means successful exit.\cr
+#'   \code{sys.time} \tab The time elapsed as an object of class \dQuote{proc_time}.
+#' }
+#' 
 #' @details
 #' \strong{State space form}
 #'
@@ -38,41 +51,49 @@
 #' variable. The parameters admit the following dimensions:
 #'
 #' \tabular{lll}{
-#' \eqn{a_t \in R^m} \tab \eqn{d_t \in R^m} \tab \eqn{eta_t \in R^m} \cr
-#' \eqn{T_t \in R^{m \times m}}{d[t] \in R^(m * m)} \tab \eqn{H_t \in R^{m \times m}}{d[t] \in R^(m * m)} \tab \cr
-#' \eqn{y_t \in R^d}{y[t] in R^d} \tab \eqn{c_t \in R^d}{c[t] \in R^d} \tab \eqn{\epsilon_t \in R^d}{epsilon[t] \in R^d} \cr
-#' \eqn{Z_t \in R^{d \times m}}{Z[t] \in R^(d * m)} \tab \eqn{G_t \in R^{d \times d}}{G[t] \in R^(d * d)} \tab 
+#' \eqn{\alpha_{t} \in R^{m}}{alpha(t) in R^m} \tab
+#' \eqn{d_{t} \in R^m}{d(t) in R^m} \tab
+#' \eqn{\eta_{t} \in R^m}{eta(t) in R^m} \cr
+#' \eqn{T_{t} \in R^{m \times m}}{T(t) in R^{m x m}} \tab
+#' \eqn{H_{t} \in R^{m \times m}}{H(t) in R^{m x m}} \tab \cr
+#' \eqn{y_{t} \in R^d}{y(t) in R^d} \tab
+#' \eqn{c_t \in R^d}{c(t) in R^d} \tab
+#' \eqn{\epsilon_{t} \in R^d}{epsilon(t) in R^d} \cr
+#' \eqn{Z_{t} \in R^{d \times m}}{Z(t) in R^{d x m}} \tab
+#' \eqn{G_{t} \in R^{d \times d}}{G(t) in R^{d x d}} \tab 
 #' }
 #'
 #' Note that \code{fkf} takes as input \code{HHt} and \code{GGt} which
-#' corresponds to \eqn{H_t H_t'}{H[t] \%*\% t(H[t])} and \eqn{G_t G_t'}{G[t] \%*\% t(G[t])}. 
+#' corresponds to \eqn{H_t H_t^\prime}{H(t)H(t)'} and \eqn{G_t G_t^\prime}{G(t)G(t)'}. 
 #'
 #' % <------------------------------------->
 #' \strong{Iteration:}
 #'
-#' Let \code{i} be the loop variable. The filter iterations are
-#' implemented the following way (in case of no NA's):
+#' The filter iterations are implemented using the expected values
+#' \deqn{a_{t} = E[\alpha_t | y_1,\ldots,y_{t-1}]}{a(t) = E[alpha(t) | y(1),...,y(t-1)]}
+#' \deqn{a_{t|t} = E[\alpha_t | y_1,\ldots,y_{t}]}{a(t|t) = E[alpha(t) | y(1),...,y(t)]}
 #'
-#' Initialization:
-#' \code{ if(i == 1)\{
-#'   at[, i] = a0 
-#'   Pt[,, i] = P0 
-#' \} }
+#' and variances
+#' \deqn{P_{t} = Var[\alpha_t | y_1,\ldots,y_{t-1}]}{P(t) = Var[alpha(t) | y(1),...,y(t-1)]}
+#' \deqn{P_{t|t} = Var[\alpha_t | y_1,\ldots,y_{t}]}{P(t|t) = Var[alpha(t) | y(1),...,y(t)]}
+#' 
+#' of the state \eqn{\alpha_{t}}{alpha(t)} in the following way
+#' (for the case of no NA's):
 #'
-#' Updating equations:\cr
-#'   \code{vt[, i] = yt[, i] - ct[, i] - Zt[,,i] \%*\% at[, i]}\cr
-#'   \code{Ft[,, i] = Zt[,, i] \%*\% Pt[,, i] \%*\% t(Zt[,, i]) + GGt[,, i]}\cr
-#'   \code{Kt[,, i] = Pt[,, i] \%*\% t(Zt[,, i]) \%*\% solve(Ft[,, i])}\cr
-#'   \code{att[, i] = at[, i] + Kt[,, i] \%*\% vt[, i]}\cr
-#'   \code{Ptt[, i] = Pt[,, i] - Pt[,, i] \%*\% t(Zt[,, i]) \%*\% t(Kt[,, i])}
+#' Initialisation: Set \eqn{t=1}{t=1} with \eqn{a_{t} = a0}{a(t)=a0} and \eqn{P_{t}=P0}{P(t)=P0}
 #'
-#' Prediction equations:\cr
-#'   \code{at[, i + 1] = dt[, i] + Tt[,, i] \%*\% att[, i]}\cr
-#'   \code{Pt[,, i + 1] = Tt[,, i] \%*\% Ptt[,, i] \%*\% t(Tt[,, i]) + HHt[,, i]}
+#' Updating equations:
+#' \deqn{v_t = y_t - c_t - Z_t a_t}{v(t) = y(t) - c(t) - Z(t) a(t)}
+#' \deqn{F_t = Z_t P_t Z_t^{\prime} + G_t G_t^\prime}{F(t)=Z(t)P(t)Z(t)' + G(t)G(t)'}
+#' \deqn{K_t = P_t Z_t^{\prime} F_{t}^{-1}}{K(t) = P(t) Z(t)' F(t)^{-1}}
+#' \deqn{a_{t|t} = a_t + K_t v_t}{a(t|t) = a(t) + K(t)v(t)}
+#' \deqn{P_{t|t} = P_t - P_t Z_t^\prime K_t^\prime}{P(t|t) = P(t) - P(t) Z(t)' K(t)'}
 #'
-#' Next iteration:\cr
-#'   \code{i <- i + 1}\cr
-#'   goto \dQuote{Updating equations}.
+#' Prediction equations:
+#' \deqn{a_{t+1} = d_{t} + T_{t} a_{t|t}}{a(t+1) = d(t) + T(t) a(t|t)}
+#' \deqn{P_{t+1} = T_{t} P_{t|t} T_{t}^{\prime} + H_t H_t^\prime}{P(t+1) = T(t)P(t)T(t)' + H(t)H(t)'}
+#' 
+#' Next iteration: Set \eqn{t=t+1}{t=t+1} and goto \dQuote{Updating equations}.
 #'
 #' % <------------------------------------->
 #' \strong{NA-values:}
@@ -134,27 +155,11 @@
 #'   The determinant of \eqn{F_t}{F[,,t]} is computed using again the
 #'   Cholesky decomposition.
 #' 
-#' @return
-#' An S3-object of class \dQuote{fkf}, which is a list with the following elements:
-#' 
-#' \tabular{rl}{
-#'     \code{att} \tab A \eqn{m \times n}{m * n}-matrix containing the filtered state variables, i.e. \eqn{a_{t|t} = E(\alpha_t | y_t)}{att[,t] = E(alpha[t] | y[,t])}.\cr
-#'     \code{at} \tab A \eqn{m \times (n + 1)}{m * (n + 1)}-matrix containing the predicted state variables, i.e. \eqn{a_t = E(\alpha_t | y_{t - 1})}{at[,t] = E(alpha[t] | y[,t - 1])}.\cr
-#'     \code{Ptt} \tab A \eqn{m \times m \times n}{m * m * n}-array containing the variance of \code{att}, i.e. \eqn{P_{t|t} =  var(\alpha_t | y_t)}{Ptt[,,t] = var(alpha[t] | y[,t])}.\cr
-#'     \code{Pt} \tab A \eqn{m \times m \times (n + 1)}{m * m * (n + 1)}-array containing the variances of \code{at}, i.e. \eqn{P_t = var(\alpha_t | y_{t - 1})}{Pt[,,t] = var(alpha[t] | y[,t - 1])}.\cr
-#'     \code{vt} \tab A \eqn{d \times n}{d * n}-matrix of the prediction errors given by \eqn{v_t = y_t - c_t - Z_t a_t}{vt[,t] = yt[,t] - ct[,t] - Zt[,,t] \%*\% at[,t]}.\cr
-#'     \code{Ft} \tab A \eqn{d \times d \times n}{d * d * n}-array which contains the variances of \code{vt}, i.e. \eqn{F_t = var(v_t)}{Ft[,,t] = var(v[,t])}.\cr
-#'     \code{Kt} \tab A \eqn{m \times d \times n}{m * d * n}-array containing the \dQuote{Kalman gain} (ambiguity, see calculation above). \cr
-#'     \code{logLik} \tab The log-likelihood. \cr
-#'     \code{status} \tab A vector which contains the status of LAPACK's \code{dpotri} and \code{dpotrf}. \eqn{(0, 0)} means successful exit.\cr
-#'   \code{sys.time} \tab The time elapsed as an object of class \dQuote{proc_time}.
-#' }
+
 #' 
 #' The first element of both \code{at} and \code{Pt} is filled with the
 #' function arguments \code{a0} and \code{P0}, and the last, i.e. the (n +
-#' 1)-th, element of \code{at} and \code{Pt} contains the predictions \cr
-#' \eqn{at[,n + 1] = E(\alpha_{n + 1} | y_n)}{at[,n + 1] = E(alpha[n + 1] | y[,n])} and \cr
-#' \eqn{Pt[,,n + 1] = var(\alpha_{n + 1} | y_n)}{Pt[,,n + 1] = var(alpha[n + 1] | y[,n])}.
+#' 1)-th, element of \code{at} and \code{Pt} contains the predictions for the next time step.
 #'
 #' @section References:
 #'   Harvey, Andrew C. (1990). \emph{Forecasting, Structural Time Series
@@ -172,75 +177,7 @@
 #'
 #' @examples
 #' ## <--------------------------------------------------------------------------->
-#' ## Example 1: ARMA(2, 1) model estimation.
-#' ## <--------------------------------------------------------------------------->
-#' ## This example shows how to fit an ARMA(2, 1) model using this Kalman
-#' ## filter implementation (see also stats' makeARIMA and KalmanRun).
-#' n <- 1000
-#'
-#' ## Set the AR parameters
-#' ar1 <- 0.6
-#' ar2 <- 0.2
-#' ma1 <- -0.2
-#' sigma <- sqrt(0.2)
-#'
-#' ## Sample from an ARMA(2, 1) process
-#' a <- arima.sim(model = list(ar = c(ar1, ar2), ma = ma1), n = n,
-#'                innov = rnorm(n) * sigma)
-#'
-#' ## Create a state space representation out of the four ARMA parameters
-#' arma21ss <- function(ar1, ar2, ma1, sigma) {
-#'     Tt <- matrix(c(ar1, ar2, 1, 0), ncol = 2)
-#'     Zt <- matrix(c(1, 0), ncol = 2)
-#'     ct <- matrix(0)
-#'     dt <- matrix(0, nrow = 2)
-#'     GGt <- matrix(0)
-#'     H <- matrix(c(1, ma1), nrow = 2) * sigma
-#'     HHt <- H %*% t(H)
-#'     a0 <- c(0, 0)
-#'     P0 <- matrix(1e6, nrow = 2, ncol = 2)
-#'     return(list(a0 = a0, P0 = P0, ct = ct, dt = dt, Zt = Zt, Tt = Tt, GGt = GGt,
-#'                 HHt = HHt))
-#' }
-#'
-#' ## The objective function passed to 'optim'
-#' objective <- function(theta, yt) {
-#'     sp <- arma21ss(theta["ar1"], theta["ar2"], theta["ma1"], theta["sigma"])
-#'     ans <- fkf(a0 = sp$a0, P0 = sp$P0, dt = sp$dt, ct = sp$ct, Tt = sp$Tt,
-#'                Zt = sp$Zt, HHt = sp$HHt, GGt = sp$GGt, yt = yt)
-#'     return(-ans$logLik)
-#' }
-#'
-#' theta <- c(ar = c(0, 0), ma1 = 0, sigma = 1)
-#' fit <- optim(theta, objective, yt = rbind(a), hessian = TRUE)
-#' fit
-#'
-#' ## Confidence intervals
-#' rbind(fit$par - qnorm(0.975) * sqrt(diag(solve(fit$hessian))),
-#'       fit$par + qnorm(0.975) * sqrt(diag(solve(fit$hessian))))
-#'
-#' ## Filter the series with estimated parameter values
-#' sp <- arma21ss(fit$par["ar1"], fit$par["ar2"], fit$par["ma1"], fit$par["sigma"])
-#' ans <- fkf(a0 = sp$a0, P0 = sp$P0, dt = sp$dt, ct = sp$ct, Tt = sp$Tt,
-#'            Zt = sp$Zt, HHt = sp$HHt, GGt = sp$GGt, yt = rbind(a))
-#'
-#' ## Compare the prediction with the realization
-#' plot(ans, at.idx = 1, att.idx = NA, CI = NA)
-#' lines(a, lty = "dotted")
-#'
-#' ## Compare the filtered series with the realization
-#' plot(ans, at.idx = NA, att.idx = 1, CI = NA)
-#' lines(a, lty = "dotted")
-#'
-#' ## Check whether the residuals are Gaussian
-#' plot(ans, type = "resid.qq")
-#'
-#' ## Check for linear serial dependence through 'acf'
-#' plot(ans, type = "acf")
-#'
-#'
-#' ## <--------------------------------------------------------------------------->
-#' ## Example 2: Local level model for the Nile's annual flow.
+#' ## Example: Local level model for the Nile's annual flow.
 #' ## <--------------------------------------------------------------------------->
 #' ## Transition equation:
 #' ## alpha[t+1] = alpha[t] + eta[t], eta[t] ~ N(0, HHt)          
@@ -283,7 +220,7 @@
 #'
 #' @keywords algebra models multivariate
 #' @export
-fkf <- function(a0, P0, dt, ct, Tt, Zt, HHt, GGt, yt, check.input = TRUE) {
+fkf <- function(a0, P0, dt, ct, Tt, Zt, HHt, GGt, yt) {
 
        ## Check all inputs are present
     if(any(c(missing(a0), missing(P0), missing(dt), missing(ct), missing(Tt),
@@ -303,9 +240,9 @@ fkf <- function(a0, P0, dt, ct, Tt, Zt, HHt, GGt, yt, check.input = TRUE) {
     ## if( check.input ){
     ##
     ## Now we just issue a warnign about depreciation
-    if( check.input==FALSE ){
-        warning("All inputs are now checked. This flag will be depreciated in a later verion of FKF")
-    }
+    ##if( check.input==FALSE ){
+    ##    warning("All inputs are now checked. This flag will be depreciated in a later verion of FKF")
+    ##}
 
  
     ## Check the storage mode: Must be 'double' for all arguments

@@ -1,87 +1,54 @@
 #' Fast Kalman Smoother
 #'
-#' This function can be run after running \code{\link{fkf}} to produce
-#' "smoothed" estimates of the state variable \code{a(t)} and it's variance
-#' \code{V(t)}. Unlike the output of the filter, these estimates are conditional
-#' on the entire data rather than only the past, that is it estimates \eqn{E[at
-#' | y1,\ldots,yn]} and \eqn{V[at | y1,\ldots,yn]}.
+#' @description This function can be run after running \code{\link{fkf}} to produce
+#' "smoothed" estimates of the state variable \eqn{\alpha_t}{alpha(t)}.
+#' Unlike the output of the filter, these estimates are conditional
+#' on the entire set of \eqn{n}{n} data points rather than only the past, see details.
 #'
 #' @param FKFobj  An S3-object of class "fkf", returned by \code{\link{fkf}}.
 #'
-#' @return A list with the following elements:
+#' @return An S3-object of class "fks" which is a list with the following elements:
 #'
-#'   \code{ahatt}  A \eqn{m \times (n + 1)}{m * (n + 1)}-matrix containing the
-#'   smoothed state variables, i.e. \eqn{ahat_t = E(\alpha_t | y_{n}}\cr
-#'   \code{Vt}  A \eqn{m \times m \times (n + 1)}{m * m * (n + 1)}-array
-#'   containing the variances of \code{ahatt}, i.e. \eqn{V_t = Var(\alpha_t |
-#'   y_{n}}\cr
+#'   \code{ahatt}  A \eqn{m \times n}{m * n}-matrix containing the
+#'   smoothed state variables, i.e. ahatt[,t] = \eqn{a_{t|n}}{a(t|n)}\cr
+#'   \code{Vt}  A \eqn{m \times m \times n}{m * m * n}-array
+#'   containing the variances of \code{ahatt}, i.e. Vt[,,t] = \eqn{P_{t|n}}{P(t|n)}\cr
 #'
+#' @details
+#' The following notation is taken from the \code{\link{fkf}} function descriptions
+#' and is close to the one of Koopman et al. The smoother estimates
+#' \deqn{a_{t|n} = E[\alpha_{t} | y_1,\ldots,y_n]}{a(t|n)=E[alpha(t)|y(1),...,y(n)]}
+#' \deqn{P_{t|n} = Var[\alpha_{t} | y_1,\ldots,y_n]}{P(t|n)=Var[alpha(t)|y(1),...,y(n)]}
+#' based on the outputs of the forward filtering pass performed by \code{\link{fkf}}.
+#'
+#' The formulation of Koopman and Durbin is used which evolves the two values
+#' \eqn{r_{t} \in R^m}{r(t) in R^m} and \eqn{N_{t} \in R^{m \times m}}{N(t) in R^{m x m}}
+#' to avoid inverting the covariance matrix.
+#'
+#' \strong{Iteration:}
+#'
+#' If there are no missing values the iteration proceeds as follows:
+#' 
+#' Initialisation: Set \eqn{t=n}{t=n}, with \eqn{r_t =0}{r(t)=0} and \eqn{N_t =0}{N(t)=0}.
+#'
+#' Updating equations:
+#' \deqn{a_{t|n} = a_{t|t} + P_{t|t}r_{t}}{a(t|n) = a(t|t) + P(t|t)r(t)}
+#' \deqn{P_{t|n} = P_{t|t} - P_{t|t}N_{t}P_{t|t}}{P(t|n) = P(t|t) - P(t|t)N(t)P(t|t)}
+#'
+#' Evolution:
+#' \deqn{L = T_{t} - K_{t}Z_{t}}{L = T(t) - K(t)Z(t)}
+#' \deqn{r_{t-1} = Z_{t}^\prime F_{t}^{-1} v_{t} + L^\prime r_{t}}{r(t-1) = Z(t)' F(t)^{-1} v(t) + L'r(t)}
+#' \deqn{N_{t-1} = Z_{t}^\prime F_{t}^{-1} Z_{t} + L^\prime N_{t} L}{N(t-1) = Z(t)' F(t)^{-1} Z(t) + L' N(t) L}
+#'
+#' Next iteration: Set \eqn{t=t-1}{t=t-1} and goto \dQuote{Updating equations}.
+#'
+#' @section References:
+#'
+#' Koopman, S. J. and Durbin, J. (2000). \emph{Fast filtering and smoothing for multivariate state space models} Journal of Time Series Analysis Vol. 21, No. 3
+#' 
 #' @examples
 #' ## <--------------------------------------------------------------------------->
-#' ## Example 1: ARMA(2, 1) model estimation.
-#' ## <--------------------------------------------------------------------------->
-#' ## This example shows how to fit an ARMA(2, 1) model using this Kalman
-#' ## filter implementation (see also stats' makeARIMA and KalmanRun).
-#' n <- 1000
-#'
-#' ## Set the AR parameters
-#' ar1 <- 0.6
-#' ar2 <- 0.2
-#' ma1 <- -0.2
-#' sigma <- sqrt(0.2)
-#'
-#' ## Sample from an ARMA(2, 1) process
-#' a <- arima.sim(model = list(ar = c(ar1, ar2), ma = ma1), n = n,
-#'                innov = rnorm(n) * sigma)
-#'
-#' ## Create a state space representation out of the four ARMA parameters
-#' arma21ss <- function(ar1, ar2, ma1, sigma) {
-#'   Tt <- matrix(c(ar1, ar2, 1, 0), ncol = 2)
-#'   Zt <- matrix(c(1, 0), ncol = 2)
-#'   ct <- matrix(0)
-#'   dt <- matrix(0, nrow = 2)
-#'   GGt <- matrix(0)
-#'   H <- matrix(c(1, ma1), nrow = 2) * sigma
-#'   HHt <- tcrossprod(H)
-#'   a0 <- c(0, 0)
-#'   P0 <- matrix(1e6, nrow = 2, ncol = 2)
-#'   return(list(a0 = a0, P0 = P0, ct = ct, dt = dt, Zt = Zt, Tt = Tt, GGt = GGt,
-#'               HHt = HHt))
-#' }
-#'
-#' ## The objective function passed to 'optim'
-#' objective <- function(theta, yt) {
-#'   sp <- arma21ss(theta["ar1"], theta["ar2"], theta["ma1"], theta["sigma"])
-#'   ans <- fkf(a0 = sp$a0, P0 = sp$P0, dt = sp$dt, ct = sp$ct, Tt = sp$Tt,
-#'              Zt = sp$Zt, HHt = sp$HHt, GGt = sp$GGt, yt = yt)
-#'   return(-ans$logLik)
-#' }
-#'
-#' theta <- c(ar = c(0, 0), ma1 = 0, sigma = 1)
-#' fit <- optim(theta, objective, yt = rbind(a), hessian = TRUE)
-#' fit
-#'
-#' ## Confidence intervals
-#' rbind(fit$par - qnorm(0.975) * sqrt(diag(solve(fit$hessian))),
-#'       fit$par + qnorm(0.975) * sqrt(diag(solve(fit$hessian))))
-#'
-#' ## Filter the series with estimated parameter values
-#' sp <- arma21ss(fit$par["ar1"], fit$par["ar2"], fit$par["ma1"], fit$par["sigma"])
-#' ans <- fkf(a0 = sp$a0, P0 = sp$P0, dt = sp$dt, ct = sp$ct, Tt = sp$Tt,
-#'            Zt = sp$Zt, HHt = sp$HHt, GGt = sp$GGt, yt = rbind(a))
-#' smooth <- fks(ans)
-#'
-#' ## Compare the filtered series with the realization
-#' plot(ans, at.idx = NA, att.idx = 1, CI = NA)
-#' lines(a, lty = "dotted")
-#'
-#' ## Compare the smoothed series with the realization
-#' ##plot(smooth$ahatt[1,], col=1, type='l', lty=1)
-#' ##lines(a, lty='dotted')
-#'
-#'
-#' ## <--------------------------------------------------------------------------->
-#' ## Example 2: Local level model for the Nile's annual flow.
+#' ## Example: Local level model for the Nile's annual flow.
 #' ## <--------------------------------------------------------------------------->
 #' ## Transition equation:
 #' ## alpha[t+1] = alpha[t] + eta[t], eta[t] ~ N(0, HHt)
@@ -108,22 +75,16 @@
 #' ## Filter Nile data with estimated parameters:
 #' fkf.obj <- fkf(a0, P0, dt, ct, Tt, Zt, HHt = matrix(fit.fkf$par[1]),
 #'                GGt = matrix(fit.fkf$par[2]), yt = rbind(y))
-#' ##fks.obj <- fks(fkf.obj)
 #'
-#' ## Compare with the stats' structural time series implementation:
-#' fit.stats <- StructTS(y, type = "level")
+#' ## Smooth the data based on the filter object
+#' fks.obj <- fks(fkf.obj)
 #'
-#' fit.fkf$par
-#' fit.stats$coef
-#'
-#' ## Plot the flow data together with fitted local levels:
-#' ##plot(y, main = "Nile flow")
-#' ##lines(fitted(fit.stats), col = "green")
-#' ##lines(ts(fkf.obj$att[1, ], start = start(y), frequency = frequency(y)), col = "blue")
-#' ##lines(ts(fks.obj$ahatt[1,], start = start(y), frequency = frequency(y)), col = "red")
-#' ##legend("top", c("Nile flow data", "Local level (StructTS)", "Local level (fkf)",
-#' ##       "Local level (fks)"),
-#' ##       col = c("black", "green", "blue", "red"), lty = 1)
+#' ## Plot the flow data together with local levels:
+#' plot(y, main = "Nile flow")
+#' lines(ts(fkf.obj$att[1, ], start = start(y), frequency = frequency(y)), col = "blue")
+#' lines(ts(fks.obj$ahatt[1,], start = start(y), frequency = frequency(y)), col = "red")
+#' legend("top", c("Nile flow data", "Local level (fkf)","Local level (fks)"),
+#'        col = c("black", "green", "blue", "red"), lty = 1)
 #'
 #' @export
 fks <- function (FKFobj) {
@@ -136,8 +97,8 @@ fks <- function (FKFobj) {
   Ftinv <- FKFobj$Ftinv
   n <- dim(Ftinv)[3]
   Kt <- FKFobj$Kt
-  at <- FKFobj$at[,1:n]
-  Pt <- FKFobj$Pt[,,1:n]
+  at <- FKFobj$att[,1:n]
+  Pt <- FKFobj$Ptt[,,1:n]
   Zt <- FKFobj$Zt
   Tt <- FKFobj$Tt
 
