@@ -207,15 +207,7 @@ $$N_{t-1} = Z_{t}^\prime F_{t}^{-1} Z_{t} + L^\prime N_{t} L$$</p>
 
 <span class='co'>## Smooth the data based on the filter object</span>
 <span class='va'>fks.obj</span> <span class='op'>&lt;-</span> <span class='fu'>fks</span><span class='op'>(</span><span class='va'>fkf.obj</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; 
-#&gt; 
-#&gt; Number complete obs:   98 
-#&gt; 
-#&gt; 
-#&gt; Number reduced obs:   0 
-#&gt; 
-#&gt; 
-#&gt; Number no obs:   2 </div><div class='input'>
+
 <span class='co'>## Plot the flow data together with local levels:</span>
 <span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>y</span>, main <span class='op'>=</span> <span class='st'>"Nile flow"</span><span class='op'>)</span>
 </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/ts.html'>ts</a></span><span class='op'>(</span><span class='va'>fkf.obj</span><span class='op'>$</span><span class='va'>att</span><span class='op'>[</span><span class='fl'>1</span>, <span class='op'>]</span>, start <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/start.html'>start</a></span><span class='op'>(</span><span class='va'>y</span><span class='op'>)</span>, frequency <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/time.html'>frequency</a></span><span class='op'>(</span><span class='va'>y</span><span class='op'>)</span><span class='op'>)</span>, col <span class='op'>=</span> <span class='st'>"blue"</span><span class='op'>)</span>

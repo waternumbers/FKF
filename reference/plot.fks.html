@@ -191,15 +191,7 @@ which of the smoothed (\(a_{t|n}\)) state variables will be drawn.</p>
                GGt <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/array.html'>array</a></span><span class='op'>(</span><span class='va'>fit.fkf</span><span class='op'>$</span><span class='va'>par</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span>,<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>, yt <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span><span class='op'>(</span><span class='va'>y</span><span class='op'>)</span><span class='op'>)</span>
 
 <span class='va'>fks.obj</span> <span class='op'>&lt;-</span> <span class='fu'><a href='fks.html'>fks</a></span><span class='op'>(</span><span class='va'>fkf.obj</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; 
-#&gt; 
-#&gt; Number complete obs:   7978 
-#&gt; 
-#&gt; 
-#&gt; Number reduced obs:   0 
-#&gt; 
-#&gt; 
-#&gt; Number no obs:   2 </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>fks.obj</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>fks.obj</span><span class='op'>)</span>
 </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span><span class='op'>(</span><span class='va'>y</span><span class='op'>)</span>,col<span class='op'>=</span><span class='st'>"blue"</span><span class='op'>)</span>
 </div><div class='img'><img src='plot.fks-1.png' alt='' width='700' height='433' /></div><div class='input'>
 
