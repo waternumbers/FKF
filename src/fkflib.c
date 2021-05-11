@@ -1137,12 +1137,18 @@ void cfks(/* inputs */
   /* temporary arrays */
   double *tmpmxd = (double *) Calloc(m_x_d, double);
   double *tmpmxm = (double *) Calloc(m_x_m, double);
+  double *tmpPt = (double *) Calloc(m_x_m, double);
   double *tmpN = (double *) Calloc(m_x_m, double);
-  double *tmpL = (double *) Calloc(m_x_m, double);
+  // double *tmpL = (double *) Calloc(m_x_m, double);
 
   /* temporary vecs */
   double *tmpr = (double *) Calloc(m, double);
 
+  /* recursion parameters */
+  double *N = (double *) Calloc(m_x_m,double);
+  double *r = (double *) Calloc(m,double);
+  double *L = (double *) Calloc(m_x_m, double);
+  
   /* NA detection */
   int NAsum;
   int *NAindices = malloc(sizeof(int) * d);
@@ -1154,9 +1160,34 @@ void cfks(/* inputs */
   double *Ftinv_temp = malloc(sizeof(double) * (d - 1) * (d - 1));
   double *Kt_temp = malloc(sizeof(double) * (d - 1) * m);
 
-
+  int cnt_missing = 0;
+  int cnt_full = 0;
+  int cnt_reduce = 0;
+  
   /* ---------- Begin iterations --------------*/
-  while(i>0){
+  while(i>-1){
+    //print_array(&tmpN[0], m, m, "N:");
+
+    /* at[,i] = at[,i] + Pt[,,i] %*% r[,i-1] */
+    F77_NAME(dgemm)(dont_transpose, dont_transpose, &m,
+		    &intone, &m, &dblone,
+		    &Pt[m_x_m * i], &m,
+		    r, &m,
+		    &dblone, &at[m*i], &m);
+
+    /* tmpmxm = Pt[,,i] %*% tmpN */
+    F77_NAME(dgemm)(dont_transpose, dont_transpose, &m, &m, &m, &dblone,
+		    &Pt[m_x_m * i], &m, N, &m,
+		    &dblzero, tmpmxm, &m);
+
+    /* Pt[,,i] = Pt[,,i] - tmpmxm%*% Pt[,,i] */
+    F77_NAME(dcopy)(&m_x_m, &Pt[m_x_m * i], &intone, tmpPt, &intone);
+    F77_NAME(dgemm)(dont_transpose, dont_transpose, &m, &m, &m, &dblminusone,
+		    tmpmxm, &m, tmpPt, &m,
+		    &dblone, &Pt[m_x_m *i], &m);
+
+
+    
     /************************/
     /* check for NA's in observation yt[,i] */
     /************************/
@@ -1165,76 +1196,87 @@ void cfks(/* inputs */
     if(NAsum == d)
       /* Everything is missing */
       {
-	/* tmpr = Tt[,,i*incT] %*% r[,i] */
-	F77_NAME(dgemm)(dont_transpose, dont_transpose, &m, &intone, &m,
-			&dblone, &Tt[m_x_m * i * incTt], &m, tmpr, &m, &dblzero, tmpr, &m);
-
-	/* N[,,i-1] = t(Tt[,,i*incT]) %*% N[,,i] %*% Tt[,,i*incT] */
-
-	/* tmpN = t(Tt) %*% N */
+	cnt_missing++;
+	/* In this case L = Tt[,,i] */
+	
+	/* r = t(L) %*% r */
+	F77_NAME(dcopy)(&m, &r[0], &intone, &tmpr[0], &intone);
+	F77_NAME(dgemm)(transpose, dont_transpose, &m, &intone, &m,
+			  &dblone, &Tt[m_x_m * i * incTt], &m, tmpr, &m, &dblzero, r, &m);
+	
+	/* N[,,i-1] = t(L) %*% N[,,i] %*% L */
+	//print_array(&tmpN[0], m, m, "N at start:");
 	F77_NAME(dgemm)(transpose, dont_transpose, &m, &m, &m, &dblone,
-		       &Tt[m_x_m * i * incTt], &m, tmpN, &m, &dblzero, tmpmxm, &m);
-
-	/* tmpN = tmpN  %*% Tt */
+			&Tt[m_x_m * i * incTt], &m, N, &m, &dblzero, tmpN, &m);
 	F77_NAME(dgemm)(dont_transpose, dont_transpose, &m, &m, &m, &dblone,
-			tmpN, &m, &Tt[m_x_m * i * incTt], &m, &dblzero, tmpN, &m);
+			tmpN, &m, &Tt[m_x_m * i * incTt], &m, &dblzero, N, &m);
+	
       }
     else
       {
 	if(NAsum==0){
+	  cnt_full++;
 	  /*******Case 2: no NA's, easy case ****/
 
 	  /*----------------*/
 	  /* precompute L = T - K %*% Z */
 	  /*----------------*/
 
-	  /* tmpL = Tt */
-	  F77_NAME(dcopy)(&m_x_m, &Tt[m_x_m * i * incTt], &intone, tmpL, &intone);
-	  /* tmpL = -1*K %*% Zt + tmpL*/
+	  /* L = Tt */
+	  F77_NAME(dcopy)(&m_x_m, &Tt[m_x_m * i * incTt], &intone, L, &intone);
+	  
+	  /* L = -1*K %*% Zt + L*/
 	  F77_NAME(dgemm)(dont_transpose, dont_transpose, &m,
 			  &m, &d, &dblminusone, &Kt[m_x_d * i ], &m,
-			  &Zt[m_x_d * i * incZt], &d, &dblone, tmpL, &m);
-
-
-	  /*----------------*/
-	  /* Compute r[,i-1] = t(Z[,,i]) %*% Finv[,,i] %*% v[,i] + t(L) %*% r[,i]*/
-	  /*----------------*/
+			  &Zt[m_x_d * i * incZt], &d, &dblone, L, &m);
 
 	  /* tmpmxd = t(Z[,,i]) %*% Ftinv[,,i] */
 	  F77_NAME(dgemm)(transpose, dont_transpose, &m, &d, &d, &dblone,
 			  &Zt[m_x_d * i * incZt], &d, &Ftinv[d_x_d * i],
 			  &d, &dblzero, tmpmxd, &m);
+	  
+	  /*----------------*/
+	  /* Compute r[,i-1] = t(Z[,,i]) %*% Finv[,,i] %*% v[,i] + t(L) %*% r[,i]*/
+	  /*----------------*/
 
-	  /* tmpr = t(tmpL) %*% tmpr */
+	  /* set r to t(L) %*% r */
+	  F77_NAME(dcopy)(&m, &r[0], &intone, &tmpr[0], &intone);
 	  F77_NAME(dgemm)(transpose, dont_transpose, &m, &intone, &m,
-			  &dblone, tmpL, &m, tmpr, &m, &dblzero, tmpr, &m);
+			  &dblone, L, &m, tmpr, &m, &dblzero, r, &m);
 
-	  /* tmpr = tmpmxd %*% v[,n] + tmpr*/
+	  /* r = tmpmxd %*% v[,n] + r*/
 	  F77_NAME(dgemm)(dont_transpose, dont_transpose, &m, &intone, &d,
-			  &dblone, tmpmxd, &m, &vt[d * i], &d, &dblone, tmpr, &m);
+			  &dblone, tmpmxd, &m, &vt[d * i], &d, &dblone, r, &m);
 
 
 	  /*----------------*/
 	  /* Compute N[,i-1] = t(Z[,,i]) %*% Ftinv[,,i] %*% Z[,,i]   + t(L) %*% N %*% L */
 	  /*----------------*/
 
-	  /* tmpN = t(L) %*% tmpN */
+	  /* tmpN = t(L) %*% N */
+	  //print_array(&tmpN[0], m, m, "N at start:");
 	  F77_NAME(dgemm)(transpose, dont_transpose, &m, &m, &m, &dblone,
-			  tmpL, &m, tmpN, &m, &dblzero, tmpN, &m);
+			  L, &m, N, &m, &dblzero, tmpN, &m);
 
-	  /* tmpN = tmpN %*% L */
+	  //print_array(&tmpN[0], m, m, "t(L)N:");
+	  
+	  /* N = tmpN %*% L */
 	  F77_NAME(dgemm)(dont_transpose, dont_transpose, &m, &m, &m, &dblone,
-			  tmpN, &m, tmpL, &m, &dblzero, tmpN, &m);
+			  tmpN, &m, L, &m, &dblzero, N, &m);
 
-	  /* tmpN = tmpmxd %*% Z[,,i] + tmpN */
+	  //print_array(&N[0], m, m, "t(L)NL:");
+
+	  /* N = tmpmxd %*% Z[,,i] + N */
 	  F77_NAME(dgemm)(dont_transpose, dont_transpose, &m, &m, &d, &dblone,
-			  tmpmxd, &m, &Zt[m_x_d * i * incZt], &d,
-			  &dblone, tmpN, &m);
+	  		  tmpmxd, &m, &Zt[m_x_d * i * incZt], &d,
+	  		  &dblone, N, &m);
+	  //print_array(&N[0], m, m, "N at end:");
 
 	}
 	else
 	  {
-	    /*** Bad case, reduced matrices ***/
+	    cnt_reduce++;
+	    /* ** Bad case, reduced matrices ** */ 
 	    int d_reduced = d - NAsum;
 
 	    reduce_array(&vt[d * i], d, 1, vt_temp, positions, d_reduced);
@@ -1246,82 +1288,72 @@ void cfks(/* inputs */
 	    /*----------------*/
 	    /* precompute L = T - K %*% Z */
 	    /*----------------*/
-	    F77_NAME(dcopy)(&m_x_m, &Tt[m_x_m * i * incTt], &intone, tmpL, &intone);
+	    F77_NAME(dcopy)(&m_x_m, &Tt[m_x_m * i * incTt], &intone, L, &intone);
 	    F77_NAME(dgemm)(dont_transpose, dont_transpose, &m,
-			    &m, &d_reduced, &dblone, Kt_temp, &m,
-			    Zt_temp, &d_reduced, &dblzero, tmpL, &m);
+	    		    &m, &d_reduced, &dblminusone, Kt_temp, &m,
+	    		    Zt_temp, &d_reduced, &dblone, L, &m);
 
-
+	    /* compute tmpmxd = t(Z[,,i]) %*% Ftinv[,,i] */
+	    F77_NAME(dgemm)(transpose, dont_transpose, &m, &d_reduced, &d_reduced, &dblone,
+			    Zt_temp, &d_reduced, Ftinv_temp,
+			    &d_reduced, &dblzero, tmpmxd, &m);
+	    
 	    /*----------------*/
 	    /* Compute r[,i-1] = t(Z[,,i]) %*% Finv[,,i] %*% v[,i] + t(L) %*% r[,i]*/
 	    /*----------------*/
-
-	    /* tmpmxd = t(Z[,,i]) %*% Ftinv[,,i] */
-	    F77_NAME(dgemm)(transpose, dont_transpose, &m, &d_reduced, &d_reduced,
-			    &dblone, Zt_temp, &d_reduced, Ftinv_temp,
-			    &d_reduced, &dblzero, tmpmxd, &m);
-
-	    /* tmpr = t(tmpL) %*% tmpr */
+	    
+	    /* set r to t(L) %*% r */
+	    F77_NAME(dcopy)(&m, &r[0], &intone, &tmpr[0], &intone);
 	    F77_NAME(dgemm)(transpose, dont_transpose, &m, &intone, &m,
-			    &dblone, tmpL, &m, tmpr, &m, &dblzero, tmpr, &m);
-
-	    /* tmpr = tmpmxd %*% v[,n] + tmpr*/
+			    &dblone, L, &m, tmpr, &m, &dblzero, r, &m);
+	    
+	    /* r = tmpmxd %*% v[,n] + r*/
 	    F77_NAME(dgemm)(dont_transpose, dont_transpose, &m, &intone, &d,
-			    &dblone, tmpmxd, &m, vt_temp, &d, &dblone, tmpr, &m);
+			    &dblone, tmpmxd, &m, vt_temp, &d, &dblone, r, &m);
 
 
 	    /*----------------*/
 	    /* Compute N[,i-1] = t(Z[,,i]) %*% Ftinv[,,i] %*% Z[,,i]   + t(L) %*% N %*% L */
 	    /*----------------*/
 
-	    /* tmpN = t(L) %*% tmpN */
+	    /* tmpN = t(L) %*% N */
 	    F77_NAME(dgemm)(transpose, dont_transpose, &m, &m, &m, &dblone,
-			    tmpL, &m, tmpN, &m, &dblzero, tmpN, &m);
-
-	    /* tmpN = tmpN %*% L */
+			    L, &m, N, &m, &dblzero, tmpN, &m);
+	  
+	    /* N = tmpN %*% L */
 	    F77_NAME(dgemm)(dont_transpose, dont_transpose, &m, &m, &m, &dblone,
-			    tmpN, &m, tmpL, &m, &dblzero, tmpN, &m);
+			    tmpN, &m, L, &m, &dblzero, N, &m);
 
-	    /* tmpN = tmpmxd %*% Z[,,i] + tmpN */
+	    /* N = tmpmxd %*% Z[,,i] + N */
 	    F77_NAME(dgemm)(dont_transpose, dont_transpose, &m, &m, &d_reduced,
 			    &dblone, tmpmxd, &m, Zt_temp, &d_reduced,
-			    &dblone, tmpN, &m);
+			    &dblone, N, &m);
 
 	  }
 	/*------------------*/
 	/* N and r computations complete */
-	/* Now update ahat and V */
 	/*------------------*/
       }
-
-    /* at[,i] = at[,i] + Pt[,,i] %*% r[,i-1] */
-    F77_NAME(dgemm)(dont_transpose, dont_transpose, &m,
-		    &intone, &m, &dblone,
-		    &Pt[m_x_m * i], &m,
-		    tmpr, &m,
-		    &dblone, &at[m*i], &m);
-
-    /* tmpmxm = Pt[,,i] %*% tmpN */
-    F77_NAME(dgemm)(dont_transpose, dont_transpose, &m, &m, &m, &dblone,
-		    &Pt[m_x_m * i], &m, tmpN, &m,
-		    &dblzero, tmpmxm, &m);
-
-    /* Pt[,,i] = Pt[,,i] - tmpmxm%*% Pt[,,i] */
-    F77_NAME(dgemm)(dont_transpose, dont_transpose, &m, &m, &m, &dblminusone,
-		    tmpN, &m, tmpmxm, &m,
-		    &dblone, &Pt[m_x_m *i], &m);
-
+    
     i--;
   }
+
+  Rprintf("\n\nNumber complete obs:   %i \n", cnt_full);
+  Rprintf("\n\nNumber reduced obs:   %i \n", cnt_reduce);
+  Rprintf("\n\nNumber no obs:   %i \n", cnt_missing);
   /**************************************************************/
   /* ---------- ---------- end recursions ---------- ---------- */
   /**************************************************************/
 
   Free(tmpmxm);
   Free(tmpmxd);
-  Free(tmpL);
   Free(tmpN);
   Free(tmpr);
+
+  Free(L);
+  Free(N);
+  Free(r);
+
 
   free(NAindices);
   free(positions);
