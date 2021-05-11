@@ -41,10 +41,9 @@
 
 <meta property="og:title" content="Fast Kalman Smoother — fks" />
 <meta property="og:description" content="This function can be run after running fkf to produce
-&quot;smoothed&quot; estimates of the state variable a(t) and it's variance
-V(t). Unlike the output of the filter, these estimates are conditional
-on the entire data rather than only the past, that is it estimates \(E[at
-| y1,\ldots,yn]\) and \(V[at | y1,\ldots,yn]\)." />
+&quot;smoothed&quot; estimates of the state variable \(\alpha_t\).
+Unlike the output of the filter, these estimates are conditional
+on the entire set of \(n\) data points rather than only the past, see details." />
 
 
 
@@ -76,7 +75,7 @@ on the entire data rather than only the past, that is it estimates \(E[at
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">FKF</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0.9010</span>
       </span>
     </div>
 
@@ -125,10 +124,9 @@ on the entire data rather than only the past, that is it estimates \(E[at
 
     <div class="ref-description">
     <p>This function can be run after running <code><a href='fkf.html'>fkf</a></code> to produce
-"smoothed" estimates of the state variable <code>a(t)</code> and it's variance
-<code>V(t)</code>. Unlike the output of the filter, these estimates are conditional
-on the entire data rather than only the past, that is it estimates \(E[at
-| y1,\ldots,yn]\) and \(V[at | y1,\ldots,yn]\).</p>
+"smoothed" estimates of the state variable \(\alpha_t\).
+Unlike the output of the filter, these estimates are conditional
+on the entire set of \(n\) data points rather than only the past, see details.</p>
     </div>
 
     <pre class="usage"><span class='fu'>fks</span><span class='op'>(</span><span class='va'>FKFobj</span><span class='op'>)</span></pre>
@@ -144,104 +142,42 @@ on the entire data rather than only the past, that is it estimates \(E[at
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A list with the following elements:</p>
-<p><code>ahatt</code>  A \(m \times (n + 1)\)-matrix containing the
-  smoothed state variables, i.e. \(ahat_t = E(\alpha_t | y_{n}\)<br />
-  <code>Vt</code>  A \(m \times m \times (n + 1)\)-array
-  containing the variances of <code>ahatt</code>, i.e. \(V_t = Var(\alpha_t |
-  y_{n}\)<br /></p>
+    <p>An S3-object of class "fks" which is a list with the following elements:</p>
+<p><code>ahatt</code>  A \(m \times n\)-matrix containing the
+  smoothed state variables, i.e. ahatt[,t] = \(a_{t|n}\)<br />
+  <code>Vt</code>  A \(m \times m \times n\)-array
+  containing the variances of <code>ahatt</code>, i.e. Vt[,,t] = \(P_{t|n}\)<br /></p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>The following notation is taken from the <code><a href='fkf.html'>fkf</a></code> function descriptions
+and is close to the one of Koopman et al. The smoother estimates
+$$a_{t|n} = E[\alpha_{t} | y_1,\ldots,y_n]$$
+$$P_{t|n} = Var[\alpha_{t} | y_1,\ldots,y_n]$$
+based on the outputs of the forward filtering pass performed by <code><a href='fkf.html'>fkf</a></code>.</p>
+<p>The formulation of Koopman and Durbin is used which evolves the two values
+\(r_{t} \in R^m\) and \(N_{t} \in R^{m \times m}\)
+to avoid inverting the covariance matrix.</p>
+<p><strong>Iteration:</strong></p>
+<p>If there are no missing values the iteration proceeds as follows:</p>
+<p>Initialisation: Set \(t=n\), with \(r_t =0\) and \(N_t =0\).</p>
+<p>Updating equations:
+$$a_{t|n} = a_{t|t} + P_{t|t}r_{t}$$
+$$P_{t|n} = P_{t|t} - P_{t|t}N_{t}P_{t|t}$$</p>
+<p>Evolution:
+$$L = T_{t} - K_{t}Z_{t}$$
+$$r_{t-1} = Z_{t}^\prime F_{t}^{-1} v_{t} + L^\prime r_{t}$$
+$$N_{t-1} = Z_{t}^\prime F_{t}^{-1} Z_{t} + L^\prime N_{t} L$$</p>
+<p>Next iteration: Set \(t=t-1\) and goto &#8220;Updating equations&#8221;.</p>
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+
+    
+
+
+<p>Koopman, S. J. and Durbin, J. (2000). <em>Fast filtering and smoothing for multivariate state space models</em> Journal of Time Series Analysis Vol. 21, No. 3</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'>## &lt;---------------------------------------------------------------------------&gt;</span>
-<span class='co'>## Example 1: ARMA(2, 1) model estimation.</span>
-<span class='co'>## &lt;---------------------------------------------------------------------------&gt;</span>
-<span class='co'>## This example shows how to fit an ARMA(2, 1) model using this Kalman</span>
-<span class='co'>## filter implementation (see also stats' makeARIMA and KalmanRun).</span>
-<span class='va'>n</span> <span class='op'>&lt;-</span> <span class='fl'>1000</span>
-
-<span class='co'>## Set the AR parameters</span>
-<span class='va'>ar1</span> <span class='op'>&lt;-</span> <span class='fl'>0.6</span>
-<span class='va'>ar2</span> <span class='op'>&lt;-</span> <span class='fl'>0.2</span>
-<span class='va'>ma1</span> <span class='op'>&lt;-</span> <span class='op'>-</span><span class='fl'>0.2</span>
-<span class='va'>sigma</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span><span class='op'>(</span><span class='fl'>0.2</span><span class='op'>)</span>
-
-<span class='co'>## Sample from an ARMA(2, 1) process</span>
-<span class='va'>a</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/arima.sim.html'>arima.sim</a></span><span class='op'>(</span>model <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>ar <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='va'>ar1</span>, <span class='va'>ar2</span><span class='op'>)</span>, ma <span class='op'>=</span> <span class='va'>ma1</span><span class='op'>)</span>, n <span class='op'>=</span> <span class='va'>n</span>,
-               innov <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>n</span><span class='op'>)</span> <span class='op'>*</span> <span class='va'>sigma</span><span class='op'>)</span>
-
-<span class='co'>## Create a state space representation out of the four ARMA parameters</span>
-<span class='va'>arma21ss</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>ar1</span>, <span class='va'>ar2</span>, <span class='va'>ma1</span>, <span class='va'>sigma</span><span class='op'>)</span> <span class='op'>{</span>
-  <span class='va'>Tt</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='va'>ar1</span>, <span class='va'>ar2</span>, <span class='fl'>1</span>, <span class='fl'>0</span><span class='op'>)</span>, ncol <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
-  <span class='va'>Zt</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>0</span><span class='op'>)</span>, ncol <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
-  <span class='va'>ct</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>
-  <span class='va'>dt</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fl'>0</span>, nrow <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
-  <span class='va'>GGt</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>
-  <span class='va'>H</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='va'>ma1</span><span class='op'>)</span>, nrow <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span> <span class='op'>*</span> <span class='va'>sigma</span>
-  <span class='va'>HHt</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/crossprod.html'>tcrossprod</a></span><span class='op'>(</span><span class='va'>H</span><span class='op'>)</span>
-  <span class='va'>a0</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>0</span><span class='op'>)</span>
-  <span class='va'>P0</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fl'>1e6</span>, nrow <span class='op'>=</span> <span class='fl'>2</span>, ncol <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
-  <span class='kw'><a href='https://rdrr.io/r/base/function.html'>return</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>a0 <span class='op'>=</span> <span class='va'>a0</span>, P0 <span class='op'>=</span> <span class='va'>P0</span>, ct <span class='op'>=</span> <span class='va'>ct</span>, dt <span class='op'>=</span> <span class='va'>dt</span>, Zt <span class='op'>=</span> <span class='va'>Zt</span>, Tt <span class='op'>=</span> <span class='va'>Tt</span>, GGt <span class='op'>=</span> <span class='va'>GGt</span>,
-              HHt <span class='op'>=</span> <span class='va'>HHt</span><span class='op'>)</span><span class='op'>)</span>
-<span class='op'>}</span>
-
-<span class='co'>## The objective function passed to 'optim'</span>
-<span class='va'>objective</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>theta</span>, <span class='va'>yt</span><span class='op'>)</span> <span class='op'>{</span>
-  <span class='va'>sp</span> <span class='op'>&lt;-</span> <span class='fu'>arma21ss</span><span class='op'>(</span><span class='va'>theta</span><span class='op'>[</span><span class='st'>"ar1"</span><span class='op'>]</span>, <span class='va'>theta</span><span class='op'>[</span><span class='st'>"ar2"</span><span class='op'>]</span>, <span class='va'>theta</span><span class='op'>[</span><span class='st'>"ma1"</span><span class='op'>]</span>, <span class='va'>theta</span><span class='op'>[</span><span class='st'>"sigma"</span><span class='op'>]</span><span class='op'>)</span>
-  <span class='va'>ans</span> <span class='op'>&lt;-</span> <span class='fu'><a href='fkf.html'>fkf</a></span><span class='op'>(</span>a0 <span class='op'>=</span> <span class='va'>sp</span><span class='op'>$</span><span class='va'>a0</span>, P0 <span class='op'>=</span> <span class='va'>sp</span><span class='op'>$</span><span class='va'>P0</span>, dt <span class='op'>=</span> <span class='va'>sp</span><span class='op'>$</span><span class='va'>dt</span>, ct <span class='op'>=</span> <span class='va'>sp</span><span class='op'>$</span><span class='va'>ct</span>, Tt <span class='op'>=</span> <span class='va'>sp</span><span class='op'>$</span><span class='va'>Tt</span>,
-             Zt <span class='op'>=</span> <span class='va'>sp</span><span class='op'>$</span><span class='va'>Zt</span>, HHt <span class='op'>=</span> <span class='va'>sp</span><span class='op'>$</span><span class='va'>HHt</span>, GGt <span class='op'>=</span> <span class='va'>sp</span><span class='op'>$</span><span class='va'>GGt</span>, yt <span class='op'>=</span> <span class='va'>yt</span><span class='op'>)</span>
-  <span class='kw'><a href='https://rdrr.io/r/base/function.html'>return</a></span><span class='op'>(</span><span class='op'>-</span><span class='va'>ans</span><span class='op'>$</span><span class='va'>logLik</span><span class='op'>)</span>
-<span class='op'>}</span>
-
-<span class='va'>theta</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span>ar <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>0</span><span class='op'>)</span>, ma1 <span class='op'>=</span> <span class='fl'>0</span>, sigma <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
-<span class='va'>fit</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/optim.html'>optim</a></span><span class='op'>(</span><span class='va'>theta</span>, <span class='va'>objective</span>, yt <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span><span class='op'>(</span><span class='va'>a</span><span class='op'>)</span>, hessian <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-<span class='va'>fit</span>
-</div><div class='output co'>#&gt; $par
-#&gt;        ar1        ar2        ma1      sigma 
-#&gt;  0.6164279  0.2049020 -0.2045607  0.4291127 
-#&gt; 
-#&gt; $value
-#&gt; [1] 580.2165
-#&gt; 
-#&gt; $counts
-#&gt; function gradient 
-#&gt;      269       NA 
-#&gt; 
-#&gt; $convergence
-#&gt; [1] 0
-#&gt; 
-#&gt; $message
-#&gt; NULL
-#&gt; 
-#&gt; $hessian
-#&gt;               ar1         ar2         ma1        sigma
-#&gt; ar1   2621.773643 2035.051976 1153.749013     2.253705
-#&gt; ar2   2035.051976 2621.752076  237.572577     1.196811
-#&gt; ma1   1153.749013  237.572577 1021.126371     1.427165
-#&gt; sigma    2.253705    1.196811    1.427165 10853.052012
-#&gt; </div><div class='input'>
-<span class='co'>## Confidence intervals</span>
-<span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span><span class='op'>(</span><span class='va'>fit</span><span class='op'>$</span><span class='va'>par</span> <span class='op'>-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>qnorm</a></span><span class='op'>(</span><span class='fl'>0.975</span><span class='op'>)</span> <span class='op'>*</span> <span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/diag.html'>diag</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/solve.html'>solve</a></span><span class='op'>(</span><span class='va'>fit</span><span class='op'>$</span><span class='va'>hessian</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>,
-      <span class='va'>fit</span><span class='op'>$</span><span class='va'>par</span> <span class='op'>+</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>qnorm</a></span><span class='op'>(</span><span class='fl'>0.975</span><span class='op'>)</span> <span class='op'>*</span> <span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/diag.html'>diag</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/solve.html'>solve</a></span><span class='op'>(</span><span class='va'>fit</span><span class='op'>$</span><span class='va'>hessian</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;            ar1        ar2          ma1     sigma
-#&gt; [1,] 0.4224861 0.06591009 -0.402585418 0.4102991
-#&gt; [2,] 0.8103697 0.34389388 -0.006535976 0.4479263</div><div class='input'>
-<span class='co'>## Filter the series with estimated parameter values</span>
-<span class='va'>sp</span> <span class='op'>&lt;-</span> <span class='fu'>arma21ss</span><span class='op'>(</span><span class='va'>fit</span><span class='op'>$</span><span class='va'>par</span><span class='op'>[</span><span class='st'>"ar1"</span><span class='op'>]</span>, <span class='va'>fit</span><span class='op'>$</span><span class='va'>par</span><span class='op'>[</span><span class='st'>"ar2"</span><span class='op'>]</span>, <span class='va'>fit</span><span class='op'>$</span><span class='va'>par</span><span class='op'>[</span><span class='st'>"ma1"</span><span class='op'>]</span>, <span class='va'>fit</span><span class='op'>$</span><span class='va'>par</span><span class='op'>[</span><span class='st'>"sigma"</span><span class='op'>]</span><span class='op'>)</span>
-<span class='va'>ans</span> <span class='op'>&lt;-</span> <span class='fu'><a href='fkf.html'>fkf</a></span><span class='op'>(</span>a0 <span class='op'>=</span> <span class='va'>sp</span><span class='op'>$</span><span class='va'>a0</span>, P0 <span class='op'>=</span> <span class='va'>sp</span><span class='op'>$</span><span class='va'>P0</span>, dt <span class='op'>=</span> <span class='va'>sp</span><span class='op'>$</span><span class='va'>dt</span>, ct <span class='op'>=</span> <span class='va'>sp</span><span class='op'>$</span><span class='va'>ct</span>, Tt <span class='op'>=</span> <span class='va'>sp</span><span class='op'>$</span><span class='va'>Tt</span>,
-           Zt <span class='op'>=</span> <span class='va'>sp</span><span class='op'>$</span><span class='va'>Zt</span>, HHt <span class='op'>=</span> <span class='va'>sp</span><span class='op'>$</span><span class='va'>HHt</span>, GGt <span class='op'>=</span> <span class='va'>sp</span><span class='op'>$</span><span class='va'>GGt</span>, yt <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span><span class='op'>(</span><span class='va'>a</span><span class='op'>)</span><span class='op'>)</span>
-<span class='va'>smooth</span> <span class='op'>&lt;-</span> <span class='fu'>fks</span><span class='op'>(</span><span class='va'>ans</span><span class='op'>)</span>
-
-<span class='co'>## Compare the filtered series with the realization</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>ans</span>, at.idx <span class='op'>=</span> <span class='cn'>NA</span>, att.idx <span class='op'>=</span> <span class='fl'>1</span>, CI <span class='op'>=</span> <span class='cn'>NA</span><span class='op'>)</span>
-</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span><span class='op'>(</span><span class='va'>a</span>, lty <span class='op'>=</span> <span class='st'>"dotted"</span><span class='op'>)</span>
-</div><div class='img'><img src='fks-1.png' alt='' width='700' height='433' /></div><div class='input'>
-<span class='co'>## Compare the smoothed series with the realization</span>
-<span class='co'>##plot(smooth$ahatt[1,], col=1, type='l', lty=1)</span>
-<span class='co'>##lines(a, lty='dotted')</span>
-
-
-<span class='co'>## &lt;---------------------------------------------------------------------------&gt;</span>
-<span class='co'>## Example 2: Local level model for the Nile's annual flow.</span>
+<span class='co'>## Example: Local level model for the Nile's annual flow.</span>
 <span class='co'>## &lt;---------------------------------------------------------------------------&gt;</span>
 <span class='co'>## Transition equation:</span>
 <span class='co'>## alpha[t+1] = alpha[t] + eta[t], eta[t] ~ N(0, HHt)</span>
@@ -268,25 +204,25 @@ on the entire data rather than only the past, that is it estimates \(E[at
 <span class='co'>## Filter Nile data with estimated parameters:</span>
 <span class='va'>fkf.obj</span> <span class='op'>&lt;-</span> <span class='fu'><a href='fkf.html'>fkf</a></span><span class='op'>(</span><span class='va'>a0</span>, <span class='va'>P0</span>, <span class='va'>dt</span>, <span class='va'>ct</span>, <span class='va'>Tt</span>, <span class='va'>Zt</span>, HHt <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='va'>fit.fkf</span><span class='op'>$</span><span class='va'>par</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>)</span>,
                GGt <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='va'>fit.fkf</span><span class='op'>$</span><span class='va'>par</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span><span class='op'>)</span>, yt <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span><span class='op'>(</span><span class='va'>y</span><span class='op'>)</span><span class='op'>)</span>
-<span class='co'>##fks.obj &lt;- fks(fkf.obj)</span>
 
-<span class='co'>## Compare with the stats' structural time series implementation:</span>
-<span class='va'>fit.stats</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/StructTS.html'>StructTS</a></span><span class='op'>(</span><span class='va'>y</span>, type <span class='op'>=</span> <span class='st'>"level"</span><span class='op'>)</span>
-
-<span class='va'>fit.fkf</span><span class='op'>$</span><span class='va'>par</span>
-</div><div class='output co'>#&gt;       HHt       GGt 
-#&gt;  1385.066 15124.131 </div><div class='input'><span class='va'>fit.stats</span><span class='op'>$</span><span class='va'>coef</span>
-</div><div class='output co'>#&gt;     level   epsilon 
-#&gt;  1599.452 14904.781 </div><div class='input'>
-<span class='co'>## Plot the flow data together with fitted local levels:</span>
-<span class='co'>##plot(y, main = "Nile flow")</span>
-<span class='co'>##lines(fitted(fit.stats), col = "green")</span>
-<span class='co'>##lines(ts(fkf.obj$att[1, ], start = start(y), frequency = frequency(y)), col = "blue")</span>
-<span class='co'>##lines(ts(fks.obj$ahatt[1,], start = start(y), frequency = frequency(y)), col = "red")</span>
-<span class='co'>##legend("top", c("Nile flow data", "Local level (StructTS)", "Local level (fkf)",</span>
-<span class='co'>##       "Local level (fks)"),</span>
-<span class='co'>##       col = c("black", "green", "blue", "red"), lty = 1)</span>
-
+<span class='co'>## Smooth the data based on the filter object</span>
+<span class='va'>fks.obj</span> <span class='op'>&lt;-</span> <span class='fu'>fks</span><span class='op'>(</span><span class='va'>fkf.obj</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; 
+#&gt; 
+#&gt; Number complete obs:   98 
+#&gt; 
+#&gt; 
+#&gt; Number reduced obs:   0 
+#&gt; 
+#&gt; 
+#&gt; Number no obs:   2 </div><div class='input'>
+<span class='co'>## Plot the flow data together with local levels:</span>
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>y</span>, main <span class='op'>=</span> <span class='st'>"Nile flow"</span><span class='op'>)</span>
+</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/ts.html'>ts</a></span><span class='op'>(</span><span class='va'>fkf.obj</span><span class='op'>$</span><span class='va'>att</span><span class='op'>[</span><span class='fl'>1</span>, <span class='op'>]</span>, start <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/start.html'>start</a></span><span class='op'>(</span><span class='va'>y</span><span class='op'>)</span>, frequency <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/time.html'>frequency</a></span><span class='op'>(</span><span class='va'>y</span><span class='op'>)</span><span class='op'>)</span>, col <span class='op'>=</span> <span class='st'>"blue"</span><span class='op'>)</span>
+</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/ts.html'>ts</a></span><span class='op'>(</span><span class='va'>fks.obj</span><span class='op'>$</span><span class='va'>ahatt</span><span class='op'>[</span><span class='fl'>1</span>,<span class='op'>]</span>, start <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/start.html'>start</a></span><span class='op'>(</span><span class='va'>y</span><span class='op'>)</span>, frequency <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/time.html'>frequency</a></span><span class='op'>(</span><span class='va'>y</span><span class='op'>)</span><span class='op'>)</span>, col <span class='op'>=</span> <span class='st'>"red"</span><span class='op'>)</span>
+</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/legend.html'>legend</a></span><span class='op'>(</span><span class='st'>"top"</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Nile flow data"</span>, <span class='st'>"Local level (fkf)"</span>,<span class='st'>"Local level (fks)"</span><span class='op'>)</span>,
+       col <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"black"</span>, <span class='st'>"green"</span>, <span class='st'>"blue"</span>, <span class='st'>"red"</span><span class='op'>)</span>, lty <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
+</div><div class='img'><img src='fks-1.png' alt='' width='700' height='433' /></div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
