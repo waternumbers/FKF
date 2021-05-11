@@ -147,11 +147,11 @@ a_{t} = \frac{-0.2}{1 - 0.6z^{-1} - 0.2z^{-1}}\eta_t
            lowerCI <span class="op">=</span> <span class="va">fit</span><span class="op">$</span><span class="va">par</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">qnorm</a></span><span class="op">(</span><span class="fl">0.975</span><span class="op">)</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/solve.html">solve</a></span><span class="op">(</span><span class="va">fit</span><span class="op">$</span><span class="va">hessian</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,
            upperCI <span class="op">=</span> <span class="va">fit</span><span class="op">$</span><span class="va">par</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">qnorm</a></span><span class="op">(</span><span class="fl">0.975</span><span class="op">)</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/solve.html">solve</a></span><span class="op">(</span><span class="va">fit</span><span class="op">$</span><span class="va">hessian</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
 <span class="va">p</span>
-<span class="co">#&gt;           actual    estimate    lowerCI    upperCI</span>
-<span class="co">#&gt; ar1    0.6000000  0.47516807  0.3190504 0.63128575</span>
-<span class="co">#&gt; ar2    0.2000000  0.28902822  0.1820013 0.39605510</span>
-<span class="co">#&gt; ma1   -0.2000000 -0.07593531 -0.2378643 0.08599373</span>
-<span class="co">#&gt; sigma  0.4472136  0.45490756  0.4349593 0.47485577</span></code></pre></div>
+<span class="co">#&gt;           actual    estimate    lowerCI   upperCI</span>
+<span class="co">#&gt; ar1    0.6000000 0.453523192  0.2699154 0.6371310</span>
+<span class="co">#&gt; ar2    0.2000000 0.307438561  0.1804398 0.4344373</span>
+<span class="co">#&gt; ma1   -0.2000000 0.002854494 -0.1962234 0.2019324</span>
+<span class="co">#&gt; sigma  0.4472136 0.452938810  0.4330793 0.4727984</span></code></pre></div>
 <p>showing the actual parameters fall within the 95% CI of the estimated values.</p>
 <p>The series can be filtered usinf the estimated parameter values</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
@@ -180,9 +180,6 @@ a_{t} = \frac{-0.2}{1 - 0.6z^{-1} - 0.2z^{-1}}\eta_t
 <p>The smoothed estiamte with confidence intervals can be plotted alongside the observed data</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">sm</span><span class="op">)</span>
-<span class="co">#&gt; Warning in sqrt(x$Vt[ahatt.idx[i], ahatt.idx[i], ]): NaNs produced</span>
-
-<span class="co">#&gt; Warning in sqrt(x$Vt[ahatt.idx[i], ahatt.idx[i], ]): NaNs produced</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/lines.html">lines</a></span><span class="op">(</span><span class="va">a</span>,col<span class="op">=</span><span class="st">"black"</span><span class="op">)</span></code></pre></div>
 <p><img src="FKF_files/figure-html/fks_plot-1.png" width="700"></p>
 </div>
