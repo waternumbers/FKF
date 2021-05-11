@@ -1338,15 +1338,15 @@ void cfks(/* inputs */
   /* ---------- ---------- end recursions ---------- ---------- */
   /**************************************************************/
 
-  Free(tmpmxm);
   Free(tmpmxd);
+  Free(tmpmxm);
+  Free(tmpPt);
   Free(tmpN);
   Free(tmpr);
 
-  Free(L);
   Free(N);
   Free(r);
-
+  Free(L);
 
   free(NAindices);
   free(positions);
