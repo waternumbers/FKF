@@ -55,7 +55,7 @@
 #'
 #' @examples
 #' ## <--------------------------------------------------------------------------->
-#' ## Example 3: Local level model for the treering data
+#' ## Example: Local level model for the treering data
 #' ## <--------------------------------------------------------------------------->
 #' ## Transition equation:
 #' ## alpha[t+1] = alpha[t] + eta[t], eta[t] ~ N(0, HHt)          
