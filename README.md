@@ -2,7 +2,7 @@
 
 <!-- badges: start -->
 [![Travis build status](https://travis-ci.org/waternumbers/FKF.svg?branch=master)](https://travis-ci.org/waternumbers/FKF)
-[![Coveralls test coverage](https://coveralls.io/repos/github/waternumbers/FKF/badge.svg)](https://coveralls.io/r/waternumbers/FKF?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/waternumbers/FKF/badge.svg?branch=master)](https://coveralls.io/github/waternumbers/FKF?branch=master)
 [![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/waternumbers/FKF?branch=master&svg=true)](https://ci.appveyor.com/project/waternumbers/FKF)
 <!-- badges: end -->
 
