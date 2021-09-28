@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">FKF</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0.9010</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
       </span>
     </div>
 
@@ -70,7 +70,7 @@
 
       
 
-      </header><div class="row">
+      </header><script src="FKF_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Fast Kalman Filter</h1>
@@ -147,11 +147,11 @@ a_{t} = \frac{-0.2}{1 - 0.6z^{-1} - 0.2z^{-1}}\eta_t
            lowerCI <span class="op">=</span> <span class="va">fit</span><span class="op">$</span><span class="va">par</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">qnorm</a></span><span class="op">(</span><span class="fl">0.975</span><span class="op">)</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/solve.html">solve</a></span><span class="op">(</span><span class="va">fit</span><span class="op">$</span><span class="va">hessian</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,
            upperCI <span class="op">=</span> <span class="va">fit</span><span class="op">$</span><span class="va">par</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">qnorm</a></span><span class="op">(</span><span class="fl">0.975</span><span class="op">)</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/solve.html">solve</a></span><span class="op">(</span><span class="va">fit</span><span class="op">$</span><span class="va">hessian</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
 <span class="va">p</span>
-<span class="co">#&gt;           actual    estimate    lowerCI   upperCI</span>
-<span class="co">#&gt; ar1    0.6000000 0.453523192  0.2699154 0.6371310</span>
-<span class="co">#&gt; ar2    0.2000000 0.307438561  0.1804398 0.4344373</span>
-<span class="co">#&gt; ma1   -0.2000000 0.002854494 -0.1962234 0.2019324</span>
-<span class="co">#&gt; sigma  0.4472136 0.452938810  0.4330793 0.4727984</span></code></pre></div>
+<span class="co">#&gt;           actual   estimate    lowerCI   upperCI</span>
+<span class="co">#&gt; ar1    0.6000000 0.37736413  0.1944015 0.5603267</span>
+<span class="co">#&gt; ar2    0.2000000 0.31764786  0.2040784 0.4312174</span>
+<span class="co">#&gt; ma1   -0.2000000 0.02079905 -0.1769466 0.2185447</span>
+<span class="co">#&gt; sigma  0.4472136 0.44363298  0.4241810 0.4630849</span></code></pre></div>
 <p>showing the actual parameters fall within the 95% CI of the estimated values.</p>
 <p>The series can be filtered usinf the estimated parameter values</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">

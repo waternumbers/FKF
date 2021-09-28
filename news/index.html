@@ -71,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">FKF</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0.9010</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
       </span>
     </div>
 
@@ -117,19 +117,20 @@
       <small>Source: <a href='https://github.com/waternumbers/FKF/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="fkf-v0-2-0-9000" class="section level1">
-<h1 class="page-header" data-toc-text="0.2.0.9000">
-<a href="#fkf-v0-2-0-9000" class="anchor"></a>FKF v0.2.0.9000<small> Unreleased </small>
+    <div id="fkf-v021" class="section level1">
+<h1 class="page-header" data-toc-text="0.2.1">
+<a href="#fkf-v021" class="anchor"></a>FKF v0.2.1<small> Unreleased </small>
 </h1>
-<p>2021-02-11 Paul Smith</p>
+<p>2021-09-28 Paul Smith</p>
 <ul>
 <li>Incorporated Kalman Smoother Code by Danial McDonald</li>
-<li>Outputs from the <code>fkf</code> function altered for use by the smoother. This includes a change in put put ordering. Code that references by name (e.g. <code>out$at</code>} should work as expected. Code that references by location (e.g. <code>out[[1]]</code>) might not.</li>
+<li>Outputs from the <code>fkf</code> function altered for use by the smoother. This includes a change in the output ordering. Code that references by name (e.g. <code>out$at</code>} should work as expected. Code that references by location (e.g. <code>out[[1]]</code>) might not.</li>
+<li>Implimentation of USE_FC_LEN_T on calls to BLAS and LAPACK</li>
 </ul>
 </div>
-    <div id="fkf-v0-1-7" class="section level1">
+    <div id="fkf-v017" class="section level1">
 <h1 class="page-header" data-toc-text="0.1.7">
-<a href="#fkf-v0-1-7" class="anchor"></a>FKF v0.1.7<small> 2020-06-14 </small>
+<a href="#fkf-v017" class="anchor"></a>FKF v0.1.7<small> 2020-06-14 </small>
 </h1>
 <p>2020-06-03 Paul Smith</p>
 <ul>
@@ -137,9 +138,9 @@
 <li>Depreciated check.input option to fkf so dimensions always checked - the reason for ongoing ASAN issues since v0.1.2.</li>
 </ul>
 </div>
-    <div id="fkf-v0-1-6" class="section level1">
+    <div id="fkf-v016" class="section level1">
 <h1 class="page-header" data-toc-text="0.1.6">
-<a href="#fkf-v0-1-6" class="anchor"></a>FKF v0.1.6<small> 2020-06-01 </small>
+<a href="#fkf-v016" class="anchor"></a>FKF v0.1.6<small> 2020-06-01 </small>
 </h1>
 <p>2020-06-01 Paul Smith</p>
 <ul>
@@ -147,9 +148,9 @@
 <li>Converted Vignettes to use knitr</li>
 </ul>
 </div>
-    <div id="fkf-v0-1-5" class="section level1">
+    <div id="fkf-v015" class="section level1">
 <h1 class="page-header" data-toc-text="0.1.5">
-<a href="#fkf-v0-1-5" class="anchor"></a>FKF v0.1.5<small> 2018-07-20 </small>
+<a href="#fkf-v015" class="anchor"></a>FKF v0.1.5<small> 2018-07-20 </small>
 </h1>
 <p>2018-07-16 Paul Smith</p>
 <ul>
@@ -158,9 +159,9 @@
 <li>Stopped RUnit tests writing files which caused CRAN build errors due to directory permissions</li>
 </ul>
 </div>
-    <div id="fkf-v0-1-4" class="section level1">
+    <div id="fkf-v014" class="section level1">
 <h1 class="page-header" data-toc-text="0.1.4">
-<a href="#fkf-v0-1-4" class="anchor"></a>FKF v0.1.4<small> 2018-07-13 </small>
+<a href="#fkf-v014" class="anchor"></a>FKF v0.1.4<small> 2018-07-13 </small>
 </h1>
 <p>2018-07-01 Paul Smith</p>
 <ul>
@@ -169,9 +170,9 @@
 <li>Moved function documentaion to use roxygen2 for generation</li>
 </ul>
 </div>
-    <div id="fkf-v0-1-2" class="section level1">
+    <div id="fkf-v012" class="section level1">
 <h1 class="page-header" data-toc-text="0.1.2">
-<a href="#fkf-v0-1-2" class="anchor"></a>FKF v0.1.2<small> 2012-03-21 </small>
+<a href="#fkf-v012" class="anchor"></a>FKF v0.1.2<small> 2012-03-21 </small>
 </h1>
 <p>2014-01-03 Aleksandar Spasojevic</p>
 <ul>
@@ -179,18 +180,18 @@
 <li>section Maintaner updated since ZHAW - Institute of Data Analysis and Process Design is maintaing FKF now</li>
 </ul>
 </div>
-    <div id="fkf-v0-1-2-1" class="section level1">
+    <div id="fkf-v012-1" class="section level1">
 <h1 class="page-header" data-toc-text="0.1.2">
-<a href="#fkf-v0-1-2-1" class="anchor"></a>FKF v0.1.2<small> 2012-03-21 </small>
+<a href="#fkf-v012-1" class="anchor"></a>FKF v0.1.2<small> 2012-03-21 </small>
 </h1>
 <p>2012-03-20 David Luethi</p>
 <ul>
 <li>RUnit added as dependancy</li>
 </ul>
 </div>
-    <div id="fkf-v0-1-1" class="section level1">
+    <div id="fkf-v011" class="section level1">
 <h1 class="page-header" data-toc-text="0.1.1">
-<a href="#fkf-v0-1-1" class="anchor"></a>FKF v0.1.1<small> 2010-11-03 </small>
+<a href="#fkf-v011" class="anchor"></a>FKF v0.1.1<small> 2010-11-03 </small>
 </h1>
 <p>2010-10-17 David Luethi</p>
 <ul>
@@ -204,27 +205,27 @@
 <li>Fixed minor inconsistency in input check messages of fkf()</li>
 </ul>
 </div>
-    <div id="fkf-v0-1-0" class="section level1">
+    <div id="fkf-v010" class="section level1">
 <h1 class="page-header" data-toc-text="0.1.0">
-<a href="#fkf-v0-1-0" class="anchor"></a>FKF v0.1.0<small> 2009-10-19 </small>
+<a href="#fkf-v010" class="anchor"></a>FKF v0.1.0<small> 2009-10-19 </small>
 </h1>
 <p>2009-09-28 Philipp Erb</p>
 <ul>
 <li>NA-values in the vector of response variables yt are now supported. In the filter recursions the observation vector yt with missing values will be reduced to the vector yt- without missing values and the measurement equation will be adjusted accordingly.</li>
 </ul>
 </div>
-    <div id="fkf-v0-0-3" class="section level1">
+    <div id="fkf-v003" class="section level1">
 <h1 class="page-header" data-toc-text="0.0.3">
-<a href="#fkf-v0-0-3" class="anchor"></a>FKF v0.0.3<small> Unreleased </small>
+<a href="#fkf-v003" class="anchor"></a>FKF v0.0.3<small> Unreleased </small>
 </h1>
 <p>2009-07-30 David Luethi</p>
 <ul>
 <li>c-function ‘cfkf’: Warning for non-finite ‘logDet’ or ‘mahalanobis’ removed (too verbose as information is contained in the output ‘status’ and also documented). Potential warnings occurring in the Cholesky factorization are more informative now.</li>
 </ul>
 </div>
-    <div id="fkf-v0-0-2" class="section level1">
+    <div id="fkf-v002" class="section level1">
 <h1 class="page-header" data-toc-text="0.0.2">
-<a href="#fkf-v0-0-2" class="anchor"></a>FKF v0.0.2<small> 2009-07-18 </small>
+<a href="#fkf-v002" class="anchor"></a>FKF v0.0.2<small> 2009-07-18 </small>
 </h1>
 <p>2009-06-26 David Luethi</p>
 <ul>
@@ -232,9 +233,9 @@
 <li>Function ‘fkf’ scans for missing arguments now.</li>
 </ul>
 </div>
-    <div id="fkf-v0-0-1" class="section level1">
+    <div id="fkf-v001" class="section level1">
 <h1 class="page-header" data-toc-text="0.0.1">
-<a href="#fkf-v0-0-1" class="anchor"></a>FKF v0.0.1<small> 2009-02-12 </small>
+<a href="#fkf-v001" class="anchor"></a>FKF v0.0.1<small> 2009-02-12 </small>
 </h1>
 <p>2009-02-10 David Luethi</p>
 <ul>

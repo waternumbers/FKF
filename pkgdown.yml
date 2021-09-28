@@ -1,7 +1,7 @@
-pandoc: '2.2'
+pandoc: 2.7.3
 pkgdown: 1.6.1
 pkgdown_sha: ~
 articles:
   FKF: FKF.html
-last_built: 2021-05-11T19:34Z
+last_built: 2021-09-28T10:04Z
 
