@@ -1,6 +1,6 @@
 Package: FKF
 Title: Fast Kalman Filter
-Version: 0.2.0.9010
+Version: 0.2.1
 Authors@R: c(person(given = "David", family="Luethi", role=c("aut")),
 	    person(given = "Philipp", family="Erb", role=c("aut")),
 	    person(given = "Simon", family="Otziger", role=c("aut")),
@@ -33,7 +33,7 @@ Depends: R(>= 2.8)
 BugReports: https://github.com/waternumbers/FKF/issues
 URL: https://waternumbers.github.io/FKF/, https://github.com/waternumbers/FKF
 NeedsCompilation: yes
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 VignetteBuilder: knitr
 X-CRAN-Original-Maintainer: Marc Weibel <marc.weibel@zhaw.ch>
 X-CRAN-Comment: Orphaned on 2018-02-11 as email address bounced when

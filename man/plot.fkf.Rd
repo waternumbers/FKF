@@ -75,7 +75,7 @@ CI = 0.95, at.idx = 1:nrow(x$at), att.idx = 1:nrow(x$att), \dots)}
 
 \examples{
 ## <--------------------------------------------------------------------------->
-## Example 3: Local level model for the treering data
+## Example: Local level model for the treering data
 ## <--------------------------------------------------------------------------->
 ## Transition equation:
 ## alpha[t+1] = alpha[t] + eta[t], eta[t] ~ N(0, HHt)          
