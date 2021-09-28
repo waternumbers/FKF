@@ -1,9 +1,13 @@
+#define USE_FC_LEN_T
 #include <R.h>
 #include <Rdefines.h>
 #include <Rinternals.h>
 #include <Rmath.h>
 #include <R_ext/BLAS.h>
 #include <R_ext/Lapack.h>
+#ifndef FCONE
+# define FCONE
+#endif
 
 /* Macro to transform an index of a 2-dimensional array into an index of a vector */
 #define IDX(i,j,dim0) (i) + (j) * (dim0)
@@ -359,7 +363,7 @@ void cfkf(/* inputs */
 			  &intone, &m, &dblminusone,
 			  &Zt[m_x_d * i * incZt], &d,
 			  &at[m * i], &m,
-			  &dblone, &vt[d * i], &d);
+			  &dblone, &vt[d * i], &d FCONE FCONE);
 
 	  /* --------------------------------------------------------------------------------------- */
 	  /* Compute Ft[,,i] = Zt[,,i * incZt] %*% Pt[,,i] %*% t(Zt[,,i * incZt]) + GGt[,,i * incGt] */
@@ -371,7 +375,7 @@ void cfkf(/* inputs */
 			  &m, &m, &dblone,
 			  &Zt[m_x_d * i * incZt], &d,
 			  &Pt[m_x_m * i], &m,
-			  &dblzero, tmpdxm, &d);
+			  &dblzero, tmpdxm, &d FCONE FCONE);
 	  /* Ft[,,i] = Gt[,,i * incGGt] */
 	  F77_NAME(dcopy)(&d_x_d, &GGt[d_x_d * i * incGGt], &intone, &Ft[d_x_d * i], &intone);
 
@@ -385,7 +389,7 @@ void cfkf(/* inputs */
 			  &d, &m, &dblone,
 			  tmpdxm, &d,
 			  &Zt[m_x_d * i * incZt], &d,
-			  &dblone, &Ft[d_x_d * i], &d);
+			  &dblone, &Ft[d_x_d * i], &d FCONE FCONE);
 
 	  /* ---------------------------------------------------------------------- */
 	  /* Invert Ft[,,i]                                                         */
@@ -399,7 +403,7 @@ void cfkf(/* inputs */
 
 	      /* Cholesky factorization */
 	      F77_NAME(dpotrf)(upper_triangle, &d,
-			       &Ftinv[d_x_d * i], &d, &potrf_info);
+			       &Ftinv[d_x_d * i], &d, &potrf_info FCONE);
 	      if(potrf_info != 0)
 		  Rprintf("Warning: Cholesky factorization 'dpotrf' exited with status: %d\nVariance of the prediction error can not be computed.\n",
 			  potrf_info);
@@ -407,7 +411,7 @@ void cfkf(/* inputs */
 	      strcpy(dpotri_uplo, "U");
 	      /* Computes the inverse using the Cholesky factorization */
 	      F77_NAME(dpotri)(dpotri_uplo, &d,
-			       &Ftinv[d_x_d * i], &d, &potri_info);
+			       &Ftinv[d_x_d * i], &d, &potri_info FCONE);
 
 	      /* As 'dpotri' returns a lower or upper tringle -> mirror the matrix */
 	      FKFmirrorLU(&Ftinv[d_x_d * i], d, dpotri_uplo);
@@ -427,14 +431,14 @@ void cfkf(/* inputs */
 			  &d, &m, &dblone,
 			  &Pt[m_x_m * i], &m,
 			  &Zt[m_x_d * i * incZt], &d,
-			  &dblzero, tmpdxm, &m);
+			  &dblzero, tmpdxm, &m FCONE FCONE);
 
 	  /* Kt[,,i] = tmpdxm %*% Ftinv[,,i] */
 	  F77_NAME(dgemm)(dont_transpose, dont_transpose, &m,
 			  &d, &d, &dblone,
 			  tmpdxm, &m,
 			  &Ftinv[d_x_d * i], &d,
-			  &dblzero, &Kt[m_x_d * i], &m);
+			  &dblzero, &Kt[m_x_d * i], &m FCONE FCONE);
 
 	  /* ---------------------------------------------------------------------- */
 	  /* att[,i] = at[,i] + Kt[,,i] %*% vt[,i]                                  */
@@ -448,7 +452,7 @@ void cfkf(/* inputs */
 			  &intone, &d, &dblone,
 			  &Kt[m_x_d * i], &m,
 			  &vt[d * i], &d,
-			  &dblone, &att[m * i], &m);
+			  &dblone, &att[m * i], &m FCONE FCONE);
 
 	  /* ---------------------------------------------------------------------- */
 	  /* Ptt[,,i] = Pt[,,i] - Pt[,,i] %*% t(Zt[,,i * incZt]) %*% t(Kt[,,i])     */
@@ -459,7 +463,7 @@ void cfkf(/* inputs */
 			  &m, &d, &dblone,
 			  &Zt[m_x_d * i * incZt], &d,
 			  &Kt[m_x_d * i], &m,
-			  &dblzero, tmpmxm, &m);
+			  &dblzero, tmpmxm, &m FCONE FCONE);
 
 	  /* Ptt[,i] = Pt[,i] */
 	  F77_NAME(dcopy)(&m_x_m, &Pt[m_x_m * i], &intone, &Ptt[m_x_m * i], &intone);
@@ -472,7 +476,7 @@ void cfkf(/* inputs */
 			  &m, &m, &dblminusone,
 			  tmptmpmxm, &m,
 			  tmpmxm, &m,
-			  &dblone, &Ptt[m_x_m * i], &m);
+			  &dblone, &Ptt[m_x_m * i], &m FCONE FCONE);
 
 	  /* ================================================================================== */
 	  /* logLik = logLik - 0.5 * log(det(Ft[,,i])) - 0.5 t(vt[,i]) %*% Ftinv[,,i] %*% vt[,i] */
@@ -485,7 +489,7 @@ void cfkf(/* inputs */
 			  &intone, &d, &dblone,
 			  &Ftinv[d_x_d * i], &d,
 			  &vt[d * i], &d,
-			  &dblzero, tmpdxd, &d);
+			  &dblzero, tmpdxd, &d FCONE FCONE);
 
 	  /* mahalanobis = t(vt[,i]) %*% tmpdxd */
 	  mahalanobis = 0;
@@ -493,7 +497,7 @@ void cfkf(/* inputs */
 			  &intone, &d, &dblone,
 			  &vt[d * i], &d,
 			  tmpdxd, &d,
-			  &dblone, &mahalanobis, &intone);
+			  &dblone, &mahalanobis, &intone FCONE FCONE);
 
 	  /* ---------------------------------------------------------------------- */
 	  /* Compute the determinant of Fti employing a Cholesky decomposition      */
@@ -506,7 +510,7 @@ void cfkf(/* inputs */
 
 	      /* Compute the Cholesky factorization */
 	      F77_NAME(dpotrf)(upper_triangle, &d,
-			       tmpdxd, &d, &det_potrf_info);
+			       tmpdxd, &d, &det_potrf_info FCONE);
 
 	      if(det_potrf_info != 0)
 		  Rprintf("Warning: Cholesky factorization 'dpotrf' exited with status: %d\nDeterminant of the variance of the prediction error can not be computed.\n",
@@ -604,7 +608,7 @@ void cfkf(/* inputs */
 			      &intone, &m, &dblminusone,
 			      Zt_temp, &d_reduced,
 			      &at[m * i], &m,
-			      &dblone, vt_temp, &d_reduced);
+			      &dblone, vt_temp, &d_reduced FCONE FCONE);
 
 	      /* --------------------------------------------------------------------------------------- */
 	      /* Compute Ft[,,i] = Zt[,,i * incZt] %*% Pt[,,i] %*% t(Zt[,,i * incZt]) + GGt[,,i * incGt] */
@@ -616,7 +620,7 @@ void cfkf(/* inputs */
 			      &m, &m, &dblone,
 			      Zt_temp, &d_reduced,
 			      &Pt[m_x_m * i], &m,
-			      &dblzero, tmpdxm, &d_reduced);
+			      &dblzero, tmpdxm, &d_reduced FCONE FCONE);
 	      /* Ft[,,i] = Gt[,,i * incGGt] */
 	      F77_NAME(dcopy)(&d_red_x_d_red, GGt_temp, &intone, Ft_temp, &intone);
 
@@ -629,7 +633,7 @@ void cfkf(/* inputs */
 			      &d_reduced, &m, &dblone,
 			      tmpdxm, &d_reduced,
 			      Zt_temp, &d_reduced,
-			      &dblone, Ft_temp, &d_reduced);
+			      &dblone, Ft_temp, &d_reduced FCONE FCONE);
 
 	      /* ---------------------------------------------------------------------- */
 	      /* Invert Ft[,,i]                                                         */
@@ -642,7 +646,7 @@ void cfkf(/* inputs */
 
 		  /* Cholesky factorization */
 		  F77_NAME(dpotrf)(upper_triangle, &d_reduced,
-				   It_temp, &d_reduced, &potrf_info);
+				   It_temp, &d_reduced, &potrf_info FCONE);
 		  if(potrf_info != 0)
 		      Rprintf("Warning: Cholesky factorization 'dpotrf' exited with status: %d\nVariance of the prediction error can not be computed.\n",
 			      potrf_info);
@@ -650,7 +654,7 @@ void cfkf(/* inputs */
 		  strcpy(dpotri_uplo, "U");
 		  /* Computes the inverse using the Cholesky factorization */
 		  F77_NAME(dpotri)(dpotri_uplo, &d_reduced,
-				   It_temp, &d_reduced, &potri_info);
+				   It_temp, &d_reduced, &potri_info FCONE);
 
 		  /* As 'dpotri' returns a lower or upper tringle -> mirror the matrix */
 		  FKFmirrorLU(It_temp, d_reduced, dpotri_uplo);
@@ -670,14 +674,14 @@ void cfkf(/* inputs */
 			      &d_reduced, &m, &dblone,
 			      &Pt[m_x_m * i], &m,
 			      Zt_temp, &d_reduced,
-			      &dblzero, tmpdxm, &m);
+			      &dblzero, tmpdxm, &m FCONE FCONE);
 
 	      /* Kt[,,i] = tmpdxm %*% tmpFt_inv */
 	      F77_NAME(dgemm)(dont_transpose, dont_transpose, &m,
 			      &d_reduced, &d_reduced, &dblone,
 			      tmpdxm, &m,
 			      It_temp, &d_reduced,
-			      &dblzero, Kt_temp, &m);
+			      &dblzero, Kt_temp, &m FCONE FCONE);
 
 	      /* ---------------------------------------------------------------------- */
 	      /* att[,i] = at[,i] + Kt[,,i] %*% vt[,i]                                  */
@@ -691,7 +695,7 @@ void cfkf(/* inputs */
 			      &intone, &d_reduced, &dblone,
 			      Kt_temp, &m,
 			      vt_temp, &d_reduced,
-			      &dblone, &att[m * i], &m);
+			      &dblone, &att[m * i], &m FCONE FCONE);
 
 	      /* ---------------------------------------------------------------------- */
 	      /* Ptt[,,i] = Pt[,,i] - Pt[,,i] %*% t(Zt[,,i * incZt]) %*% t(Kt[,,i])     */
@@ -702,7 +706,7 @@ void cfkf(/* inputs */
 			      &m, &d_reduced, &dblone,
 			      Zt_temp, &d_reduced,
 			      Kt_temp, &m,
-			      &dblzero, tmpmxm, &m);
+			      &dblzero, tmpmxm, &m FCONE FCONE);
 
 	      /* Ptt[,i] = Pt[,i] */
 	      F77_NAME(dcopy)(&m_x_m, &Pt[m_x_m * i], &intone, &Ptt[m_x_m * i], &intone);
@@ -715,7 +719,7 @@ void cfkf(/* inputs */
 			      &m, &m, &dblminusone,
 			      tmptmpmxm, &m,
 			      tmpmxm, &m,
-			      &dblone, &Ptt[m_x_m * i], &m);
+			      &dblone, &Ptt[m_x_m * i], &m FCONE FCONE);
 
 	      /* ================================================================================== */
 	      /* logLik = logLik - 0.5 * log(det(Ft[,,i])) - 0.5 t(vt[,i]) %*% tmpFt_inv %*% vt[,i] */
@@ -728,7 +732,7 @@ void cfkf(/* inputs */
 			      &intone, &d_reduced, &dblone,
 			      It_temp, &d_reduced,
 			      vt_temp, &d_reduced,
-			      &dblzero, tmpdxd, &d_reduced);
+			      &dblzero, tmpdxd, &d_reduced FCONE FCONE);
 
 	      /* mahalanobis = t(vt[,i]) %*% tmpdxd */
 	      mahalanobis = 0;
@@ -736,7 +740,7 @@ void cfkf(/* inputs */
 			      &intone, &d_reduced, &dblone,
 			      vt_temp, &d_reduced,
 			      tmpdxd, &d_reduced,
-			      &dblone, &mahalanobis, &intone);
+			      &dblone, &mahalanobis, &intone FCONE FCONE);
 
 	      /* ---------------------------------------------------------------------- */
 	      /* Compute the determinant of Fti employing a Cholesky decomposition      */
@@ -749,7 +753,7 @@ void cfkf(/* inputs */
 
 		  /* Compute the Cholesky factorization */
 		  F77_NAME(dpotrf)(upper_triangle, &d_reduced,
-				   tmpdxd, &d_reduced, &det_potrf_info);
+				   tmpdxd, &d_reduced, &det_potrf_info FCONE);
 
 		  if(det_potrf_info != 0)
 		      Rprintf("Warning: Cholesky factorization 'dpotrf' exited with status: %d\nDeterminant of the variance of the prediction error can not be computed.\n",
@@ -824,7 +828,7 @@ void cfkf(/* inputs */
 		      &intone, &m, &dblone,
 		      &Tt[m_x_m * i * incTt], &m,
 		      &att[m * i], &m,
-		      &dblone, &at[m * (i + 1)], &m);
+		      &dblone, &at[m * (i + 1)], &m FCONE FCONE);
 
       /* --------------------------------------------------------------------------------- */
       /* Pt[,,i + 1] = Tt[,,i * incTt] %*% Ptt[,,i] %*% t(Tt[,,i * incTt]) + HHt[,,i * incHHt] */
@@ -835,7 +839,7 @@ void cfkf(/* inputs */
 		      &m, &m, &dblone,
 		      &Ptt[m_x_m * i], &m,
 		      &Tt[m_x_m * i * incTt], &m,
-		      &dblzero, tmpmxm, &m);
+		      &dblzero, tmpmxm, &m FCONE FCONE);
 
       /* Pt[,,i + 1] = HHt[,,i * incHHt] */
       F77_NAME(dcopy)(&m_x_m, &HHt[m_x_m * i * incHHt], &intone, &Pt[m_x_m * (i + 1)], &intone);
@@ -849,7 +853,7 @@ void cfkf(/* inputs */
 		      &m, &m, &dblone,
 		      &Tt[m_x_m * i * incTt], &m,
 		      tmpmxm, &m,
-		      &dblone, &Pt[m_x_m * (i + 1)], &m);
+		      &dblone, &Pt[m_x_m * (i + 1)], &m FCONE FCONE);
 
 
 #ifdef DEBUG_PRINT
@@ -1169,18 +1173,18 @@ void cfks(/* inputs */
 		    &intone, &m, &dblone,
 		    &Pt[m_x_m * i], &m,
 		    r, &m,
-		    &dblone, &at[m*i], &m);
+		    &dblone, &at[m*i], &m FCONE FCONE);
 
     /* tmpmxm = Pt[,,i] %*% tmpN */
     F77_NAME(dgemm)(dont_transpose, dont_transpose, &m, &m, &m, &dblone,
 		    &Pt[m_x_m * i], &m, N, &m,
-		    &dblzero, tmpmxm, &m);
+		    &dblzero, tmpmxm, &m FCONE FCONE);
 
     /* Pt[,,i] = Pt[,,i] - tmpmxm%*% Pt[,,i] */
     F77_NAME(dcopy)(&m_x_m, &Pt[m_x_m * i], &intone, tmpPt, &intone);
     F77_NAME(dgemm)(dont_transpose, dont_transpose, &m, &m, &m, &dblminusone,
 		    tmpmxm, &m, tmpPt, &m,
-		    &dblone, &Pt[m_x_m *i], &m);
+		    &dblone, &Pt[m_x_m *i], &m FCONE FCONE);
 
 
     
@@ -1198,14 +1202,14 @@ void cfks(/* inputs */
 	/* r = t(L) %*% r */
 	F77_NAME(dcopy)(&m, &r[0], &intone, &tmpr[0], &intone);
 	F77_NAME(dgemm)(transpose, dont_transpose, &m, &intone, &m,
-			  &dblone, &Tt[m_x_m * i * incTt], &m, tmpr, &m, &dblzero, r, &m);
+			  &dblone, &Tt[m_x_m * i * incTt], &m, tmpr, &m, &dblzero, r, &m FCONE FCONE);
 	
 	/* N[,,i-1] = t(L) %*% N[,,i] %*% L */
 	//print_array(&tmpN[0], m, m, "N at start:");
 	F77_NAME(dgemm)(transpose, dont_transpose, &m, &m, &m, &dblone,
-			&Tt[m_x_m * i * incTt], &m, N, &m, &dblzero, tmpN, &m);
+			&Tt[m_x_m * i * incTt], &m, N, &m, &dblzero, tmpN, &m FCONE FCONE);
 	F77_NAME(dgemm)(dont_transpose, dont_transpose, &m, &m, &m, &dblone,
-			tmpN, &m, &Tt[m_x_m * i * incTt], &m, &dblzero, N, &m);
+			tmpN, &m, &Tt[m_x_m * i * incTt], &m, &dblzero, N, &m FCONE FCONE);
 	
       }
     else
@@ -1224,12 +1228,12 @@ void cfks(/* inputs */
 	  /* L = -1*K %*% Zt + L*/
 	  F77_NAME(dgemm)(dont_transpose, dont_transpose, &m,
 			  &m, &d, &dblminusone, &Kt[m_x_d * i ], &m,
-			  &Zt[m_x_d * i * incZt], &d, &dblone, L, &m);
+			  &Zt[m_x_d * i * incZt], &d, &dblone, L, &m FCONE FCONE);
 
 	  /* tmpmxd = t(Z[,,i]) %*% Ftinv[,,i] */
 	  F77_NAME(dgemm)(transpose, dont_transpose, &m, &d, &d, &dblone,
 			  &Zt[m_x_d * i * incZt], &d, &Ftinv[d_x_d * i],
-			  &d, &dblzero, tmpmxd, &m);
+			  &d, &dblzero, tmpmxd, &m FCONE FCONE);
 	  
 	  /*----------------*/
 	  /* Compute r[,i-1] = t(Z[,,i]) %*% Finv[,,i] %*% v[,i] + t(L) %*% r[,i]*/
@@ -1238,11 +1242,11 @@ void cfks(/* inputs */
 	  /* set r to t(L) %*% r */
 	  F77_NAME(dcopy)(&m, &r[0], &intone, &tmpr[0], &intone);
 	  F77_NAME(dgemm)(transpose, dont_transpose, &m, &intone, &m,
-			  &dblone, L, &m, tmpr, &m, &dblzero, r, &m);
+			  &dblone, L, &m, tmpr, &m, &dblzero, r, &m FCONE FCONE);
 
 	  /* r = tmpmxd %*% v[,n] + r*/
 	  F77_NAME(dgemm)(dont_transpose, dont_transpose, &m, &intone, &d,
-			  &dblone, tmpmxd, &m, &vt[d * i], &d, &dblone, r, &m);
+			  &dblone, tmpmxd, &m, &vt[d * i], &d, &dblone, r, &m FCONE FCONE);
 
 
 	  /*----------------*/
@@ -1252,20 +1256,20 @@ void cfks(/* inputs */
 	  /* tmpN = t(L) %*% N */
 	  //print_array(&tmpN[0], m, m, "N at start:");
 	  F77_NAME(dgemm)(transpose, dont_transpose, &m, &m, &m, &dblone,
-			  L, &m, N, &m, &dblzero, tmpN, &m);
+			  L, &m, N, &m, &dblzero, tmpN, &m FCONE FCONE);
 
 	  //print_array(&tmpN[0], m, m, "t(L)N:");
 	  
 	  /* N = tmpN %*% L */
 	  F77_NAME(dgemm)(dont_transpose, dont_transpose, &m, &m, &m, &dblone,
-			  tmpN, &m, L, &m, &dblzero, N, &m);
+			  tmpN, &m, L, &m, &dblzero, N, &m FCONE FCONE);
 
 	  //print_array(&N[0], m, m, "t(L)NL:");
 
 	  /* N = tmpmxd %*% Z[,,i] + N */
 	  F77_NAME(dgemm)(dont_transpose, dont_transpose, &m, &m, &d, &dblone,
 	  		  tmpmxd, &m, &Zt[m_x_d * i * incZt], &d,
-	  		  &dblone, N, &m);
+	  		  &dblone, N, &m FCONE FCONE);
 	  //print_array(&N[0], m, m, "N at end:");
 
 	}
@@ -1287,12 +1291,12 @@ void cfks(/* inputs */
 	    F77_NAME(dcopy)(&m_x_m, &Tt[m_x_m * i * incTt], &intone, L, &intone);
 	    F77_NAME(dgemm)(dont_transpose, dont_transpose, &m,
 	    		    &m, &d_reduced, &dblminusone, Kt_temp, &m,
-	    		    Zt_temp, &d_reduced, &dblone, L, &m);
+	    		    Zt_temp, &d_reduced, &dblone, L, &m FCONE FCONE);
 
 	    /* compute tmpmxd = t(Z[,,i]) %*% Ftinv[,,i] */
 	    F77_NAME(dgemm)(transpose, dont_transpose, &m, &d_reduced, &d_reduced, &dblone,
 			    Zt_temp, &d_reduced, Ftinv_temp,
-			    &d_reduced, &dblzero, tmpmxd, &m);
+			    &d_reduced, &dblzero, tmpmxd, &m FCONE FCONE);
 	    
 	    /*----------------*/
 	    /* Compute r[,i-1] = t(Z[,,i]) %*% Finv[,,i] %*% v[,i] + t(L) %*% r[,i]*/
@@ -1301,11 +1305,11 @@ void cfks(/* inputs */
 	    /* set r to t(L) %*% r */
 	    F77_NAME(dcopy)(&m, &r[0], &intone, &tmpr[0], &intone);
 	    F77_NAME(dgemm)(transpose, dont_transpose, &m, &intone, &m,
-			    &dblone, L, &m, tmpr, &m, &dblzero, r, &m);
+			    &dblone, L, &m, tmpr, &m, &dblzero, r, &m FCONE FCONE);
 	    
 	    /* r = tmpmxd %*% v[,n] + r*/
 	    F77_NAME(dgemm)(dont_transpose, dont_transpose, &m, &intone, &d,
-			    &dblone, tmpmxd, &m, vt_temp, &d, &dblone, r, &m);
+			    &dblone, tmpmxd, &m, vt_temp, &d, &dblone, r, &m FCONE FCONE);
 
 
 	    /*----------------*/
@@ -1314,16 +1318,16 @@ void cfks(/* inputs */
 
 	    /* tmpN = t(L) %*% N */
 	    F77_NAME(dgemm)(transpose, dont_transpose, &m, &m, &m, &dblone,
-			    L, &m, N, &m, &dblzero, tmpN, &m);
+			    L, &m, N, &m, &dblzero, tmpN, &m FCONE FCONE);
 	  
 	    /* N = tmpN %*% L */
 	    F77_NAME(dgemm)(dont_transpose, dont_transpose, &m, &m, &m, &dblone,
-			    tmpN, &m, L, &m, &dblzero, N, &m);
+			    tmpN, &m, L, &m, &dblzero, N, &m FCONE FCONE);
 
 	    /* N = tmpmxd %*% Z[,,i] + N */
 	    F77_NAME(dgemm)(dont_transpose, dont_transpose, &m, &m, &d_reduced,
 			    &dblone, tmpmxd, &m, Zt_temp, &d_reduced,
-			    &dblone, N, &m);
+			    &dblone, N, &m FCONE FCONE);
 
 	  }
 	/*------------------*/

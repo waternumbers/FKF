@@ -1,12 +1,13 @@
-# FKF v0.2.0.9000
+# FKF v0.2.1
 
-2021-02-11 Paul Smith
+2021-09-28 Paul Smith
 
 - Incorporated Kalman Smoother Code by Danial McDonald
 - Outputs from the `fkf` function altered for use by the smoother. This
-  includes a change in put put ordering. Code
+  includes a change in the output ordering. Code
   that references by name (e.g. `out$at`} should work as expected. Code
   that references by location (e.g. `out[[1]]`) might not.
+- Implimentation of USE_FC_LEN_T on calls to BLAS and LAPACK
 
 # FKF v0.1.7
 
