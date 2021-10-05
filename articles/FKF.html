@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">FKF</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.2</span>
       </span>
     </div>
 
@@ -148,10 +148,10 @@ a_{t} = \frac{-0.2}{1 - 0.6z^{-1} - 0.2z^{-1}}\eta_t
            upperCI <span class="op">=</span> <span class="va">fit</span><span class="op">$</span><span class="va">par</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">qnorm</a></span><span class="op">(</span><span class="fl">0.975</span><span class="op">)</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/solve.html">solve</a></span><span class="op">(</span><span class="va">fit</span><span class="op">$</span><span class="va">hessian</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
 <span class="va">p</span>
 <span class="co">#&gt;           actual   estimate    lowerCI   upperCI</span>
-<span class="co">#&gt; ar1    0.6000000 0.37736413  0.1944015 0.5603267</span>
-<span class="co">#&gt; ar2    0.2000000 0.31764786  0.2040784 0.4312174</span>
-<span class="co">#&gt; ma1   -0.2000000 0.02079905 -0.1769466 0.2185447</span>
-<span class="co">#&gt; sigma  0.4472136 0.44363298  0.4241810 0.4630849</span></code></pre></div>
+<span class="co">#&gt; ar1    0.6000000  0.4216492  0.1703407 0.6729577</span>
+<span class="co">#&gt; ar2    0.2000000  0.3085338  0.1518033 0.4652642</span>
+<span class="co">#&gt; ma1   -0.2000000 -0.0254158 -0.2969177 0.2460861</span>
+<span class="co">#&gt; sigma  0.4472136  0.4614853  0.4412494 0.4817211</span></code></pre></div>
 <p>showing the actual parameters fall within the 95% CI of the estimated values.</p>
 <p>The series can be filtered usinf the estimated parameter values</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
