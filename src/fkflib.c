@@ -1176,7 +1176,8 @@ void cfks(/* inputs */
 		    &dblone, &at[m*i], &m FCONE FCONE);
 
     /* tmpmxm = Pt[,,i] %*% tmpN */
-    F77_NAME(dgemm)(dont_transpose, dont_transpose, &m, &m, &m, &dblone,
+    F77_NAME(dgemm)(dont_transpose, dont_transpose, &m,
+		    &m, &m, &dblone,
 		    &Pt[m_x_m * i], &m, N, &m,
 		    &dblzero, tmpmxm, &m FCONE FCONE);
 
@@ -1308,8 +1309,8 @@ void cfks(/* inputs */
 			    &dblone, L, &m, tmpr, &m, &dblzero, r, &m FCONE FCONE);
 	    
 	    /* r = tmpmxd %*% v[,n] + r*/
-	    F77_NAME(dgemm)(dont_transpose, dont_transpose, &m, &intone, &d,
-			    &dblone, tmpmxd, &m, vt_temp, &d, &dblone, r, &m FCONE FCONE);
+	    F77_NAME(dgemm)(dont_transpose, dont_transpose, &m, &intone, &d_reduced,
+			    &dblone, tmpmxd, &m, vt_temp, &d_reduced, &dblone, r, &m FCONE FCONE);
 
 
 	    /*----------------*/

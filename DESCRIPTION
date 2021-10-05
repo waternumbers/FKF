@@ -1,6 +1,6 @@
 Package: FKF
 Title: Fast Kalman Filter
-Version: 0.2.1
+Version: 0.2.2
 Authors@R: c(person(given = "David", family="Luethi", role=c("aut")),
 	    person(given = "Philipp", family="Erb", role=c("aut")),
 	    person(given = "Simon", family="Otziger", role=c("aut")),
