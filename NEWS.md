@@ -1,3 +1,8 @@
+# FKF v0.2.2
+
+- Fix memory leak in fks identified by CRAN valgrind tests
+- Fix building on MAC arm64 (M1) platform
+
 # FKF v0.2.1
 
 2021-09-28 Paul Smith
