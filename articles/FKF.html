@@ -147,11 +147,11 @@ a_{t} = \frac{-0.2}{1 - 0.6z^{-1} - 0.2z^{-1}}\eta_t
            lowerCI <span class="op">=</span> <span class="va">fit</span><span class="op">$</span><span class="va">par</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">qnorm</a></span><span class="op">(</span><span class="fl">0.975</span><span class="op">)</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/solve.html">solve</a></span><span class="op">(</span><span class="va">fit</span><span class="op">$</span><span class="va">hessian</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,
            upperCI <span class="op">=</span> <span class="va">fit</span><span class="op">$</span><span class="va">par</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">qnorm</a></span><span class="op">(</span><span class="fl">0.975</span><span class="op">)</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/solve.html">solve</a></span><span class="op">(</span><span class="va">fit</span><span class="op">$</span><span class="va">hessian</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
 <span class="va">p</span>
-<span class="co">#&gt;           actual   estimate    lowerCI   upperCI</span>
-<span class="co">#&gt; ar1    0.6000000  0.4216492  0.1703407 0.6729577</span>
-<span class="co">#&gt; ar2    0.2000000  0.3085338  0.1518033 0.4652642</span>
-<span class="co">#&gt; ma1   -0.2000000 -0.0254158 -0.2969177 0.2460861</span>
-<span class="co">#&gt; sigma  0.4472136  0.4614853  0.4412494 0.4817211</span></code></pre></div>
+<span class="co">#&gt;           actual   estimate     lowerCI     upperCI</span>
+<span class="co">#&gt; ar1    0.6000000  0.6268884  0.44840104  0.80537570</span>
+<span class="co">#&gt; ar2    0.2000000  0.1558329  0.03604228  0.27562351</span>
+<span class="co">#&gt; ma1   -0.2000000 -0.2556920 -0.43135355 -0.08003037</span>
+<span class="co">#&gt; sigma  0.4472136  0.4379256  0.41872233  0.45712878</span></code></pre></div>
 <p>showing the actual parameters fall within the 95% CI of the estimated values.</p>
 <p>The series can be filtered usinf the estimated parameter values</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
