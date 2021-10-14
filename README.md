@@ -2,7 +2,7 @@
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/waternumbers/FKF/workflows/R-CMD-check/badge.svg)](https://github.com/waternumbers/FKF/actions)
-[![codecov](https://codecov.io/gh/waternumbers/FKF/branch/master/graph/badge.svg?token=XzqU2C6K8i)](https://codecov.io/gh/waternumbers/FKF)
+[![codecov](https://app.codecov.io/gh/waternumbers/FKF/branch/master/graph/badge.svg?token=XzqU2C6K8i)](https://app.codecov.io/gh/waternumbers/FKF)
 [![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/waternumbers/FKF?branch=master&svg=true)](https://ci.appveyor.com/project/waternumbers/FKF)
 <!-- badges: end -->
 
