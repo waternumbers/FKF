@@ -1131,7 +1131,7 @@ void cfks(/* inputs */
   int d_x_d = d * d;
   int m_x_d = m * d;
 
-  int i = n-1; /* Test - Attempt to ASAN errors */
+  int i = n-1; /* remember indexing from 0 */
 
   /* integers and double precisions used in dcopy and dgemm */
   int intone = 1;
@@ -1143,7 +1143,7 @@ void cfks(/* inputs */
   double *tmpmxm = (double *) Calloc(m_x_m, double);
   double *tmpPt = (double *) Calloc(m_x_m, double);
   double *tmpN = (double *) Calloc(m_x_m, double);
-  // double *tmpL = (double *) Calloc(m_x_m, double);
+  //double *tmpL = (double *) Calloc(m_x_m, double);
 
   /* temporary vecs */
   double *tmpr = (double *) Calloc(m, double);
@@ -1152,6 +1152,8 @@ void cfks(/* inputs */
   double *N = (double *) Calloc(m_x_m,double);
   double *r = (double *) Calloc(m,double);
   double *L = (double *) Calloc(m_x_m, double);
+  
+
   
   /* NA detection */
   int NAsum;
@@ -1168,27 +1170,7 @@ void cfks(/* inputs */
   while(i>-1){
     //print_array(&tmpN[0], m, m, "N:");
 
-    /* at[,i] = at[,i] + Pt[,,i] %*% r[,i-1] */
-    F77_NAME(dgemm)(dont_transpose, dont_transpose, &m,
-		    &intone, &m, &dblone,
-		    &Pt[m_x_m * i], &m,
-		    r, &m,
-		    &dblone, &at[m*i], &m FCONE FCONE);
-
-    /* tmpmxm = Pt[,,i] %*% tmpN */
-    F77_NAME(dgemm)(dont_transpose, dont_transpose, &m,
-		    &m, &m, &dblone,
-		    &Pt[m_x_m * i], &m, N, &m,
-		    &dblzero, tmpmxm, &m FCONE FCONE);
-
-    /* Pt[,,i] = Pt[,,i] - tmpmxm%*% Pt[,,i] */
-    F77_NAME(dcopy)(&m_x_m, &Pt[m_x_m * i], &intone, tmpPt, &intone);
-    F77_NAME(dgemm)(dont_transpose, dont_transpose, &m, &m, &m, &dblminusone,
-		    tmpmxm, &m, tmpPt, &m,
-		    &dblone, &Pt[m_x_m *i], &m FCONE FCONE);
-
-
-    
+    // update r and N
     /************************/
     /* check for NA's in observation yt[,i] */
     /************************/
@@ -1200,12 +1182,12 @@ void cfks(/* inputs */
 	
 	/* In this case L = Tt[,,i] */
 	
-	/* r = t(L) %*% r */
+	/* r = L %*% r = t(T) %*% r*/
 	F77_NAME(dcopy)(&m, &r[0], &intone, &tmpr[0], &intone);
 	F77_NAME(dgemm)(transpose, dont_transpose, &m, &intone, &m,
 			  &dblone, &Tt[m_x_m * i * incTt], &m, tmpr, &m, &dblzero, r, &m FCONE FCONE);
 	
-	/* N[,,i-1] = t(L) %*% N[,,i] %*% L */
+	/* N[,,i-1] = t(L) %*% N[,,i] %*% L = t(T) %*% N[,,i] %*% (T) */
 	//print_array(&tmpN[0], m, m, "N at start:");
 	F77_NAME(dgemm)(transpose, dont_transpose, &m, &m, &m, &dblone,
 			&Tt[m_x_m * i * incTt], &m, N, &m, &dblzero, tmpN, &m FCONE FCONE);
@@ -1223,13 +1205,18 @@ void cfks(/* inputs */
 	  /* precompute L = T - K %*% Z */
 	  /*----------------*/
 
-	  /* L = Tt */
-	  F77_NAME(dcopy)(&m_x_m, &Tt[m_x_m * i * incTt], &intone, L, &intone);
-	  
-	  /* L = -1*K %*% Zt + L*/
+	  /* L = Tt - Tt %*% Kt %*% Zt) */
+	  // initialise L as Tt
+	  F77_NAME(dcopy)(&m_x_m, &Tt[m_x_m * i * incTt], &intone, L, &intone);	  
+	  // Compute Kt %*% Zt
 	  F77_NAME(dgemm)(dont_transpose, dont_transpose, &m,
-			  &m, &d, &dblminusone, &Kt[m_x_d * i ], &m,
-			  &Zt[m_x_d * i * incZt], &d, &dblone, L, &m FCONE FCONE);
+			  &m, &d, &dblone, &Kt[m_x_d * i ], &m,
+			  &Zt[m_x_d * i * incZt], &d, &dblzero, tmpmxm, &m FCONE FCONE);
+	  // Compute L
+	  F77_NAME(dgemm)(dont_transpose, dont_transpose, &m,
+			  &m, &m, &dblminusone, &Tt[m_x_m * i * incTt], &m,
+			  tmpmxm, &m, &dblone, L, &m FCONE FCONE);
+	  
 
 	  /* tmpmxd = t(Z[,,i]) %*% Ftinv[,,i] */
 	  F77_NAME(dgemm)(transpose, dont_transpose, &m, &d, &d, &dblone,
@@ -1289,10 +1276,16 @@ void cfks(/* inputs */
 	    /*----------------*/
 	    /* precompute L = T - K %*% Z */
 	    /*----------------*/
-	    F77_NAME(dcopy)(&m_x_m, &Tt[m_x_m * i * incTt], &intone, L, &intone);
+	    // initialise L as Tt
+	    F77_NAME(dcopy)(&m_x_m, &Tt[m_x_m * i * incTt], &intone, L, &intone);	  
+	    // Compute Kt %*% Zt
 	    F77_NAME(dgemm)(dont_transpose, dont_transpose, &m,
-	    		    &m, &d_reduced, &dblminusone, Kt_temp, &m,
-	    		    Zt_temp, &d_reduced, &dblone, L, &m FCONE FCONE);
+			  &m, &d_reduced, &dblone, Kt_temp, &m,
+			  Zt_temp, &d_reduced, &dblzero, tmpmxm, &m FCONE FCONE);
+	    // Compute L
+	    F77_NAME(dgemm)(dont_transpose, dont_transpose, &m,
+			    &m, &m, &dblminusone, &Tt[m_x_m * i * incTt], &m,
+			    tmpmxm, &m, &dblone, L, &m FCONE FCONE);
 
 	    /* compute tmpmxd = t(Z[,,i]) %*% Ftinv[,,i] */
 	    F77_NAME(dgemm)(transpose, dont_transpose, &m, &d_reduced, &d_reduced, &dblone,
@@ -1335,6 +1328,32 @@ void cfks(/* inputs */
 	/* N and r computations complete */
 	/*------------------*/
       }
+
+
+
+
+    // correct data estimates
+    /* at[,i] = at[,i] + Pt[,,i] %*% r[,i-1] */
+    F77_NAME(dgemm)(dont_transpose, dont_transpose, &m,
+		    &intone, &m, &dblone,
+		    &Pt[m_x_m * i], &m,
+		    r, &m,
+		    &dblone, &at[m*i], &m FCONE FCONE);
+
+    /* tmpmxm = Pt[,,i] %*% tmpN */
+    F77_NAME(dgemm)(dont_transpose, dont_transpose, &m,
+		    &m, &m, &dblone,
+		    &Pt[m_x_m * i], &m, N, &m,
+		    &dblzero, tmpmxm, &m FCONE FCONE);
+
+    /* Pt[,,i] = Pt[,,i] - tmpmxm%*% Pt[,,i] */
+    F77_NAME(dcopy)(&m_x_m, &Pt[m_x_m * i], &intone, tmpPt, &intone);
+    F77_NAME(dgemm)(dont_transpose, dont_transpose, &m, &m, &m, &dblminusone,
+		    tmpmxm, &m, tmpPt, &m,
+		    &dblone, &Pt[m_x_m *i], &m FCONE FCONE);
+
+
+    
     
     i--;
   }

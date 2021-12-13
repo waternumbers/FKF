@@ -81,9 +81,12 @@ plot.fks <- function(x,
             lines(xlim, x$ahatt[ahatt.idx[i],],
                   col = col.ahatt[i], lty = "dashed")
             if(is.finite(CI)){
-                lines(xlim, x$ahatt[ahatt.idx[i],] + qnorm(0.5 - CI / 2) * sqrt(x$Vt[ahatt.idx[i], ahatt.idx[i], ]),
+                vv <- x$Vt[ahatt.idx[i], ahatt.idx[i], ]
+                if( any(vv < -1e-10) ){ warning("Variane terms less then -1e-10") }
+                vv <- pmax(vv,0)
+                lines(xlim, x$ahatt[ahatt.idx[i],] + qnorm(0.5 - CI / 2) * vv,
                       col = col.ahatt[i], lty = "dotted")
-                lines(xlim, x$ahatt[ahatt.idx[i],] + qnorm(0.5 + CI / 2) * sqrt(x$Vt[ahatt.idx[i], ahatt.idx[i], ]),
+                lines(xlim, x$ahatt[ahatt.idx[i],] + qnorm(0.5 + CI / 2) * vv,
                       col = col.ahatt[i], lty = "dotted")
             }
         }

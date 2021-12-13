@@ -38,7 +38,7 @@ n <- 1000
 ar1 <- 0.6
 ar2 <- 0.2
 ma1 <- -0.2
-sigma <- sqrt(0.2)
+sigma <- sqrt(2)
 
 a <- arima.sim(model = list(ar = c(ar1, ar2), ma = ma1), n = n,
                innov = rnorm(n) * sigma)
@@ -100,7 +100,7 @@ p
 
 showing the actual parameters fall within the 95% CI of the estimated values.
 
-The series can be filtered usinf the estimated parameter values
+The series can be filtered using the estimated parameter values
 ```{r filter}
 sp <- arma21ss(fit$par["ar1"], fit$par["ar2"], fit$par["ma1"], fit$par["sigma"])
 ans <- fkf(a0 = sp$a0, P0 = sp$P0, dt = sp$dt, ct = sp$ct, Tt = sp$Tt,
@@ -137,5 +137,5 @@ The smoothed estiamte with confidence intervals can be plotted alongside the
 observed data
 ```{r fks_plot}
 plot(sm)
-lines(a,col="black")
+lines(a,col="black", lty="dotted")
 ```

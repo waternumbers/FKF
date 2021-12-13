@@ -1,3 +1,8 @@
+# FKF v0.2.3
+
+- Fix bug in Kalman Smoother
+- Tidy up Kalman Smoother documentation to correct notation
+
 # FKF v0.2.2
 
 - Fix memory leak in fks identified by CRAN valgrind tests

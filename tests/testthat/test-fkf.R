@@ -49,7 +49,7 @@ test_that("FKF matches simple implimentation", {
     
     ## Set up model - this is the true model
     dt <- ct <- array(0,c(2,1))
-    Zt <- array(c(0,1,1,0),c(2,2,1))
+    Zt <- array(c(1,0,1,0),c(2,2,1))
     Tt <- array(c(1,0,1,1),c(2,2,1))
     a0 <- Y[,1]            # Estimation of the first width
     P0 <- diag(2)*100     # Variance of 'a0'
