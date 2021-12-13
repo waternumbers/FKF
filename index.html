@@ -25,6 +25,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -37,18 +39,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">FKF</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.3</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="articles/FKF.html">Get started</a>
 </li>
@@ -61,7 +57,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/waternumbers/FKF/">
+  <a href="https://github.com/waternumbers/FKF/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -78,67 +74,77 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-<div id="the-fast-kalman-filer-toolbox" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#the-fast-kalman-filer-toolbox" class="anchor"></a>The Fast Kalman Filer Toolbox</h1></div>
+<div class="section level1">
+<div class="page-header"><h1 id="the-fast-kalman-filer-toolbox">The Fast Kalman Filer Toolbox<a class="anchor" aria-label="anchor" href="#the-fast-kalman-filer-toolbox"></a>
+</h1></div>
 <!-- badges: start -->
 
 <p>The Fast Kalman Fileter Toolbox for R allows the implimentation of multivariate time series filtering with external time varying inputs using the linear Kalman fileter in R.</p>
-<p>The canonical link to the package on CRAN which includes examples and documentation is <a href="https://CRAN.R-project.org/package=FKF">https://CRAN.R-project.org/package=FKF</a>.</p>
-<p>Development can be tracked via the <a href="https://github.com/waternumbers/FKF">github repository</a> which contains source code for the package starting with version 0.1.5.</p>
+<p>The canonical link to the package on CRAN which includes examples and documentation is <a href="https://CRAN.R-project.org/package=FKF" class="external-link">https://CRAN.R-project.org/package=FKF</a>.</p>
+<p>Development can be tracked via the <a href="https://github.com/waternumbers/FKF" class="external-link">github repository</a> which contains source code for the package starting with version 0.1.5.</p>
 <p>The latest developmental release canbe installed with</p>
-<pre><code>devtools::install_github("waternumbers/FKF")</code></pre>
-<p>Prebuild packages (usually including the latest development version) are available from the waternumbers drat repository <a href="https://waternumbers.github.io/drat/">here</a>.</p>
+<pre><code><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"waternumbers/FKF"</span><span class="op">)</span></code></pre>
+<p>Prebuild packages (usually including the latest development version) are available from the waternumbers drat repository <a href="https://waternumbers.github.io/drat/" class="external-link">here</a>.</p>
 </div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
-<h2>Links</h2>
+<h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=FKF">https://​cloud.r-project.org/​package=FKF</a>
-</li>
-<li>Browse source code at <br><a href="https://github.com/waternumbers/FKF/">https://​github.com/​waternumbers/​FKF/​</a>
-</li>
-<li>Report a bug at <br><a href="https://github.com/waternumbers/FKF/issues">https://​github.com/​waternumbers/​FKF/​issues</a>
-</li>
+<li><a href="https://cloud.r-project.org/package=FKF" class="external-link">View on CRAN</a></li>
+<li><a href="https://github.com/waternumbers/FKF/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/waternumbers/FKF/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
+
 <div class="license">
-<h2>License</h2>
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
 <li>GPL (&gt;= 2)</li>
 </ul>
 </div>
+
+
+<div class="citation">
+<h2 data-toc-skip>Citation</h2>
+<ul class="list-unstyled">
+<li><a href="authors.html#citation">Citing FKF</a></li>
+</ul>
+</div>
+
 <div class="developers">
-<h2>Developers</h2>
+<h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
 <li>David Luethi <br><small class="roles"> Author </small>  </li>
 <li>Philipp Erb <br><small class="roles"> Author </small>  </li>
 <li>Simon Otziger <br><small class="roles"> Author </small>  </li>
 <li>Daniel McDonald <br><small class="roles"> Author </small>  </li>
-<li>Paul Smith <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0002-0034-3412" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li>Paul Smith <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0002-0034-3412" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
 </ul>
 </div>
 
-  <div class="dev-status">
-<h2>Dev status</h2>
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://github.com/waternumbers/FKF/actions"><img src="https://github.com/waternumbers/FKF/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
-<li><a href="https://app.codecov.io/gh/waternumbers/FKF"><img src="https://app.codecov.io/gh/waternumbers/FKF/branch/master/graph/badge.svg?token=XzqU2C6K8i" alt="codecov"></a></li>
-<li><a href="https://ci.appveyor.com/project/waternumbers/FKF"><img src="https://ci.appveyor.com/api/projects/status/github/waternumbers/FKF?branch=master&amp;svg=true" alt="AppVeyor build status"></a></li>
+<li><a href="https://github.com/waternumbers/FKF/actions" class="external-link"><img src="https://github.com/waternumbers/FKF/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
+<li><a href="https://app.codecov.io/gh/waternumbers/FKF" class="external-link"><img src="https://app.codecov.io/gh/waternumbers/FKF/branch/master/graph/badge.svg?token=XzqU2C6K8i" alt="codecov"></a></li>
+<li><a href="https://ci.appveyor.com/project/waternumbers/FKF" class="external-link"><img src="https://ci.appveyor.com/api/projects/status/github/waternumbers/FKF?branch=master&amp;svg=true" alt="AppVeyor build status"></a></li>
 </ul>
 </div>
-</div>
+
+  </div>
 </div>
 
 
       <footer><div class="copyright">
-  <p>Developed by David Luethi, Philipp Erb, Simon Otziger, Daniel McDonald, Paul Smith.</p>
+  <p></p>
+<p>Developed by David Luethi, Philipp Erb, Simon Otziger, Daniel McDonald, Paul Smith.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
 </div>
 
       </footer>
@@ -146,6 +152,8 @@
 
   
 
+
+  
 
   </body>
 </html>
