@@ -40,16 +40,17 @@ If there are no missing values the iteration proceeds as follows:
 
 Initialisation: Set \eqn{t=n}{t=n}, with \eqn{r_t =0}{r(t)=0} and \eqn{N_t =0}{N(t)=0}.
 
-Updating equations:
-\deqn{a_{t|n} = a_{t|t} + P_{t|t}r_{t}}{a(t|n) = a(t|t) + P(t|t)r(t)}
-\deqn{P_{t|n} = P_{t|t} - P_{t|t}N_{t}P_{t|t}}{P(t|n) = P(t|t) - P(t|t)N(t)P(t|t)}
-
-Evolution:
-\deqn{L = T_{t} - K_{t}Z_{t}}{L = T(t) - K(t)Z(t)}
+Evolution equations:
+\deqn{L = T_{t} - T_{t}K_{t}Z_{t}}{L = T(t) - T(t)K(t)Z(t)}
 \deqn{r_{t-1} = Z_{t}^\prime F_{t}^{-1} v_{t} + L^\prime r_{t}}{r(t-1) = Z(t)' F(t)^{-1} v(t) + L'r(t)}
 \deqn{N_{t-1} = Z_{t}^\prime F_{t}^{-1} Z_{t} + L^\prime N_{t} L}{N(t-1) = Z(t)' F(t)^{-1} Z(t) + L' N(t) L}
 
-Next iteration: Set \eqn{t=t-1}{t=t-1} and goto \dQuote{Updating equations}.
+Updating equations:
+\deqn{a_{t|n} = a_{t|t-1} + P_{t|t-1}r_{t-1}}{a(t|n) = a(t|t-1) + P(t|t-1)r(t)}
+\deqn{P_{t|n} = P_{t|t-1} - P_{t|t-1}N_{t-1}P_{t|t-1}}{P(t|n) = P(t|t-1) - P(t|t-1)N(t-1)P(t|t-1)}
+
+
+Next iteration: Set \eqn{t=t-1}{t=t-1} and goto \dQuote{Evolution equations}.
 }
 \section{References}{
 
