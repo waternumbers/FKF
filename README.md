@@ -2,7 +2,7 @@
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/waternumbers/FKF/workflows/R-CMD-check/badge.svg)](https://github.com/waternumbers/FKF/actions)
-[![codecov](https://app.codecov.io/gh/waternumbers/FKF/branch/master/graph/badge.svg?token=XzqU2C6K8i)](https://app.codecov.io/gh/waternumbers/FKF)
+[![codecov](https://img.shields.io/codecov/c/gh/waternumbers/FKF/master)](https://app.codecov.io/gh/waternumbers/FKF)
 [![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/waternumbers/FKF?branch=master&svg=true)](https://ci.appveyor.com/project/waternumbers/FKF)
 <!-- badges: end -->
 
@@ -16,7 +16,7 @@ documentation is [https://CRAN.R-project.org/package=FKF](https://CRAN.R-project
 Development can be tracked via the [github repository](https://github.com/waternumbers/FKF) 
 which contains source code for the package starting with version 0.1.5.
 
-The latest developmental release canbe installed with 
+The latest developmental release can be installed with 
 
 ```
 devtools::install_github("waternumbers/FKF")
