@@ -15,7 +15,7 @@
 /*******************************************/
 /* Macros for debugging Kalman filter cfkf */
 /*******************************************/
-/* #define DEBUG_PRINT  */
+/* #define DEBUG_PRINT */
 /* #define NA_DETECTION_DEBUG_PRINT */
 /* #define NA_REDUCED_ARRAYS_DEBUG_PRINT */
 
@@ -106,10 +106,13 @@ int numberofNA(double *vec, int *NAindices, int *positions, int len)
 void reduce_array(double *array_full, int dim0, int dim1,
 		  double *array_reduced, int *pos, int len)
 {
-    for(int i=0; i < len; i++){
-	for(int j=0; j < dim1; j++)
-	    array_reduced[IDX(i,j,len)] = array_full[IDX(pos[i],j,dim0)];
+  //print_array( array_full,dim0,dim1,"reduce array start");
+  for(int i=0; i < len; i++){
+    for(int j=0; j < dim1; j++){
+      array_reduced[IDX(i,j,len)] = array_full[IDX(pos[i],j,dim0)];
     }
+  }
+  //print_array( array_reduced,len,dim1,"reduce array end");
 }
 
 void reduce_arrayT(double *array_full, int dim0, int dim1,
@@ -117,12 +120,15 @@ void reduce_arrayT(double *array_full, int dim0, int dim1,
 {
   /* assymmetric matrix */
   /* removes columns of the full */
+  //print_array( array_full,dim0,dim1,"reduce array T start");
   for(int i=0; i < dim0; i++){
-    for(int j=0; j < len; j++)
-      array_reduced[IDX(i,j,len)] = array_full[IDX(i,pos[j],dim0)];
+    for(int j=0; j < len; j++){
+      array_reduced[IDX(i,j,dim0)] = array_full[IDX(i,pos[j],dim0)]; 
+      // original code array_reduced[IDX(i,j,len)] = array_full[IDX(i,pos[j],dim0)];
+    }
   }
+  //print_array( array_reduced,dim0,len,"reduce array T end");
 }
-
 
 void reduce_GGt(double *array_full, int dim0,
 		double *array_reduced, int *pos, int len)
@@ -1125,8 +1131,6 @@ void cfks(/* inputs */
 
   /*  cfks uses 'dcopy', 'dgemm' and 'daxpy' from BLAS */
 
-
-
   int m_x_m = m * m;
   int d_x_d = d * d;
   int m_x_d = m * d;
@@ -1165,7 +1169,9 @@ void cfks(/* inputs */
   double *vt_temp = malloc(sizeof(double) * (d - 1));
   double *Ftinv_temp = malloc(sizeof(double) * (d - 1) * (d - 1));
   double *Kt_temp = malloc(sizeof(double) * (d - 1) * m);
-  
+#ifdef DEBUG_PRINT
+  Rprintf("\n\nStart interation:  %d\n", i);
+#endif
   /* ---------- Begin iterations --------------*/
   while(i>-1){
     //print_array(&tmpN[0], m, m, "N:");
@@ -1396,7 +1402,7 @@ SEXP FKS(SEXP yt, SEXP Zt, SEXP vt, SEXP Tt, SEXP Kt, SEXP Ftinv,
   SEXP ans, ans_names, class_name;
 
   SEXP dim_at, dim_Pt;
-
+  
   cfks(m, d, n,
        NUMERIC_POINTER(yt),
        NUMERIC_POINTER(Zt), INTEGER(GET_DIM(Zt))[2] == n,

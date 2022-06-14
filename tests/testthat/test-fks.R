@@ -66,3 +66,11 @@ test_that("FKS matches simple implimentation", {
     testthat::expect_equal( Vt[,,1:1000], fks.obj$Vt )
 
 })
+
+## Multiple missing inputs
+test_that("FKS handles multiple missing data in transpsed matrix", {
+
+    fk <- readRDS(testthat::test_path("data", "multi_missing_obs.rds"))
+    out <- fks(fk)
+    expect_s3_class(out, "fks")
+})

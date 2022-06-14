@@ -103,7 +103,7 @@ fks <- function (FKFobj) {
   Zt <- FKFobj$Zt
   Tt <- FKFobj$Tt
 
-
+  
   ans <- .Call("FKS", yt, Zt, vt, Tt, Kt, Ftinv, at, Pt, PACKAGE = "FKF")
   return(ans)
 }
