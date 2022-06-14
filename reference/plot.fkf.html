@@ -21,7 +21,7 @@ crosscorrelation function of the residuals."><!-- mathjax --><script src="https:
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">FKF</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.3.1</span>
       </span>
     </div>
 
@@ -79,24 +79,39 @@ crosscorrelation function of the residuals.</p>
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>The output of <code><a href="fkf.html">fkf</a></code>.</p></dd>
+
+
 <dt>type</dt>
 <dd><p>A string stating what shall be plotted (see <b>Details</b>).</p></dd>
+
+
 <dt>CI</dt>
 <dd><p>The confidence interval in case <code>type == "state"</code>. Set
 <code>CI</code> to <code>NA</code> if no confidence interval shall be plotted.</p></dd>
+
+
 <dt>at.idx</dt>
 <dd><p>An vector giving the indexes of the predicted state variables
 which shall be plotted if <code>type == "state"</code>.</p></dd>
+
+
 <dt>att.idx</dt>
 <dd><p>An vector giving the indexes of the filtered state variables
 which shall be plotted if <code>type == "state"</code>.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Arguments passed to either <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></code>,
 <code><a href="https://rdrr.io/r/stats/qqnorm.html" class="external-link">qqnorm</a></code>, <code><a href="https://rdrr.io/r/stats/qqnorm.html" class="external-link">qqplot</a></code> or <code><a href="https://rdrr.io/r/stats/acf.html" class="external-link">acf</a></code>.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>Invisibly returns an list with components:</p><table class="table table"><tr><td><code>distance</code></td><td>The Mahalanobis distance of the residuals as a
+    
+
+<p>Invisibly returns an list with components:</p>
+<p></p>
+<table class="table table"><tr><td><code>distance</code></td><td>The Mahalanobis distance of the residuals as a
   vector of length \(n\).</td></tr><tr><td><code>std.resid</code></td><td>The standardized residuals as an \(d \times
     n\)-matrix. It should hold that \(std.resid_{ij} \; iid \sim N_d(0, I)\),</td></tr></table><p>where \(d\) denotes the dimension of the data and \(n\) the number
 of observations.</p>
@@ -197,7 +212,7 @@ CI = 0.95, at.idx = 1:nrow(x$at), att.idx = 1:nrow(x$att), ...)</code></p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

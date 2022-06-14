@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">FKF</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.3.1</span>
       </span>
     </div>
 
@@ -83,9 +83,9 @@
 <p>Start by loading the package:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://waternumbers.github.io/FKF/" class="external-link">'FKF'</a></span><span class="op">)</span></code></pre></div>
-<div class="section level1">
-<h1 id="generating-synthetic-data">Generating synthetic data<a class="anchor" aria-label="anchor" href="#generating-synthetic-data"></a>
-</h1>
+<div class="section level2">
+<h2 id="generating-synthetic-data">Generating synthetic data<a class="anchor" aria-label="anchor" href="#generating-synthetic-data"></a>
+</h2>
 <p>A data set of 1000 points is generated from the model <span class="math display">\[
 a_{t} = \frac{-0.2}{1 - 0.6z^{-1} - 0.2z^{-1}}\eta_t
 \]</span> where <span class="math inline">\(\eta_{t} \sim N\left(0,0.2\right)\)</span></p>
@@ -101,9 +101,9 @@ a_{t} = \frac{-0.2}{1 - 0.6z^{-1} - 0.2z^{-1}}\eta_t
 <span class="va">a</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/arima.sim.html" class="external-link">arima.sim</a></span><span class="op">(</span>model <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>ar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">ar1</span>, <span class="va">ar2</span><span class="op">)</span>, ma <span class="op">=</span> <span class="va">ma1</span><span class="op">)</span>, n <span class="op">=</span> <span class="va">n</span>,
                innov <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span> <span class="op">*</span> <span class="va">sigma</span><span class="op">)</span></code></pre></div>
 </div>
-<div class="section level1">
-<h1 id="estimation">Estimation<a class="anchor" aria-label="anchor" href="#estimation"></a>
-</h1>
+<div class="section level2">
+<h2 id="estimation">Estimation<a class="anchor" aria-label="anchor" href="#estimation"></a>
+</h2>
 <p>To estimate the parameters using numerical optimisation two functions are specified. The first creates a state space representation out of the four ARMA parameters</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">arma21ss</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">ar1</span>, <span class="va">ar2</span>, <span class="va">ma1</span>, <span class="va">sigma</span><span class="op">)</span> <span class="op">{</span>
@@ -132,9 +132,9 @@ a_{t} = \frac{-0.2}{1 - 0.6z^{-1} - 0.2z^{-1}}\eta_t
 <code class="sourceCode R"><span class="va">theta</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>ar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span>, ma1 <span class="op">=</span> <span class="fl">0</span>, sigma <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
 <span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/optim.html" class="external-link">optim</a></span><span class="op">(</span><span class="va">theta</span>, <span class="va">objective</span>, yt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">a</span><span class="op">)</span>, hessian <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 </div>
-<div class="section level1">
-<h1 id="results">Results<a class="anchor" aria-label="anchor" href="#results"></a>
-</h1>
+<div class="section level2">
+<h2 id="results">Results<a class="anchor" aria-label="anchor" href="#results"></a>
+</h2>
 <p>First consider the 95% CI for the parameter estimate which can be constructed using the hessian of the fit:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Confidence intervals</span>
@@ -144,10 +144,10 @@ a_{t} = \frac{-0.2}{1 - 0.6z^{-1} - 0.2z^{-1}}\eta_t
            upperCI <span class="op">=</span> <span class="va">fit</span><span class="op">$</span><span class="va">par</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">qnorm</a></span><span class="op">(</span><span class="fl">0.975</span><span class="op">)</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/diag.html" class="external-link">diag</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/solve.html" class="external-link">solve</a></span><span class="op">(</span><span class="va">fit</span><span class="op">$</span><span class="va">hessian</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
 <span class="va">p</span>
 <span class="co">#&gt;          actual   estimate     lowerCI    upperCI</span>
-<span class="co">#&gt; ar1    0.600000  0.7069154  0.53594445  0.8778864</span>
-<span class="co">#&gt; ar2    0.200000  0.1418279  0.01783493  0.2658208</span>
-<span class="co">#&gt; ma1   -0.200000 -0.3172825 -0.48897801 -0.1455870</span>
-<span class="co">#&gt; sigma  1.414214  1.4026263  1.34112342  1.4641293</span></code></pre></div>
+<span class="co">#&gt; ar1    0.600000  0.6725308  0.50451855  0.8405431</span>
+<span class="co">#&gt; ar2    0.200000  0.1584799  0.03671916  0.2802406</span>
+<span class="co">#&gt; ma1   -0.200000 -0.2767983 -0.44217464 -0.1114220</span>
+<span class="co">#&gt; sigma  1.414214  1.4283860  1.36573856  1.4910333</span></code></pre></div>
 <p>showing the actual parameters fall within the 95% CI of the estimated values.</p>
 <p>The series can be filtered using the estimated parameter values</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
@@ -176,9 +176,6 @@ a_{t} = \frac{-0.2}{1 - 0.6z^{-1} - 0.2z^{-1}}\eta_t
 <p>The smoothed estiamte with confidence intervals can be plotted alongside the observed data</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sm</span><span class="op">)</span>
-<span class="co">#&gt; Warning in plot.fks(sm): Variane terms less then -1e-10</span>
-
-<span class="co">#&gt; Warning in plot.fks(sm): Variane terms less then -1e-10</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="va">a</span>,col<span class="op">=</span><span class="st">"black"</span>, lty<span class="op">=</span><span class="st">"dotted"</span><span class="op">)</span></code></pre></div>
 <p><img src="FKF_files/figure-html/fks_plot-1.png" width="700"></p>
 </div>
@@ -201,7 +198,7 @@ a_{t} = \frac{-0.2}{1 - 0.6z^{-1} - 0.2z^{-1}}\eta_t
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer>
