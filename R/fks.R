@@ -89,7 +89,7 @@
 #'
 #' @export
 fks <- function (FKFobj) {
-  if (class(FKFobj) != 'fkf') stop('Input must be an object of class FKF')
+  if ( !inherits(FKFobj,'fkf') ) stop('Input must be an object of class FKF')
   if (FKFobj$status[1] != 0 || FKFobj$status[2] != 0) {
     stop('Smoothing requires successful inversion of Ft for all t')
   }
