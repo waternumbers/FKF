@@ -25,6 +25,5 @@ devtools::install_github("waternumbers/FKF")
 ```
 
 Prebuild packages (usually the latest development
-version) are available from the [r-universe](https://waternumbers.r-universe.dev/ui#package:FKF).
-
+version) are available from the [r-universe](https://waternumbers.r-universe.dev/#package:FKF).
 
