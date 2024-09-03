@@ -269,11 +269,11 @@ void cfkf(/* inputs */
   strcpy(dpotri_uplo, "U");
 
   /* temporary arrays */
-  double *tmpdxm = (double *) Calloc(m_x_d, double);
-  double *tmpmxm = (double *) Calloc(m_x_m, double);
-  double *tmptmpmxm = (double *) Calloc(m_x_m, double);
-  double *tmpdxd = (double *) Calloc(d_x_d, double);
-  double *tmpFt_inv = (double *) Calloc(d_x_d, double);
+  double *tmpdxm = (double *) R_Calloc(m_x_d, double);
+  double *tmpmxm = (double *) R_Calloc(m_x_m, double);
+  double *tmptmpmxm = (double *) R_Calloc(m_x_m, double);
+  double *tmpdxd = (double *) R_Calloc(d_x_d, double);
+  double *tmpFt_inv = (double *) R_Calloc(d_x_d, double);
 
   /* NA detection */
   int *NAindices = malloc(sizeof(int) * d);
@@ -892,11 +892,11 @@ void cfkf(/* inputs */
   status[0] = potri_info;
   status[1] = potrf_info;
 
-  Free(tmpdxm);
-  Free(tmpmxm);
-  Free(tmptmpmxm);
-  Free(tmpdxd);
-  Free(tmpFt_inv);
+  R_Free(tmpdxm);
+  R_Free(tmpmxm);
+  R_Free(tmptmpmxm);
+  R_Free(tmpdxd);
+  R_Free(tmpFt_inv);
 
 
   free(NAindices);
@@ -1143,19 +1143,19 @@ void cfks(/* inputs */
   char *transpose = "T", *dont_transpose = "N";
 
   /* temporary arrays */
-  double *tmpmxd = (double *) Calloc(m_x_d, double);
-  double *tmpmxm = (double *) Calloc(m_x_m, double);
-  double *tmpPt = (double *) Calloc(m_x_m, double);
-  double *tmpN = (double *) Calloc(m_x_m, double);
-  //double *tmpL = (double *) Calloc(m_x_m, double);
+  double *tmpmxd = (double *) R_Calloc(m_x_d, double);
+  double *tmpmxm = (double *) R_Calloc(m_x_m, double);
+  double *tmpPt = (double *) R_Calloc(m_x_m, double);
+  double *tmpN = (double *) R_Calloc(m_x_m, double);
+  //double *tmpL = (double *) R_Calloc(m_x_m, double);
 
   /* temporary vecs */
-  double *tmpr = (double *) Calloc(m, double);
+  double *tmpr = (double *) R_Calloc(m, double);
 
   /* recursion parameters */
-  double *N = (double *) Calloc(m_x_m,double);
-  double *r = (double *) Calloc(m,double);
-  double *L = (double *) Calloc(m_x_m, double);
+  double *N = (double *) R_Calloc(m_x_m,double);
+  double *r = (double *) R_Calloc(m,double);
+  double *L = (double *) R_Calloc(m_x_m, double);
   
 
   
@@ -1368,15 +1368,15 @@ void cfks(/* inputs */
   /* ---------- ---------- end recursions ---------- ---------- */
   /**************************************************************/
 
-  Free(tmpmxd);
-  Free(tmpmxm);
-  Free(tmpPt);
-  Free(tmpN);
-  Free(tmpr);
+  R_Free(tmpmxd);
+  R_Free(tmpmxm);
+  R_Free(tmpPt);
+  R_Free(tmpN);
+  R_Free(tmpr);
 
-  Free(N);
-  Free(r);
-  Free(L);
+  R_Free(N);
+  R_Free(r);
+  R_Free(L);
 
   free(NAindices);
   free(positions);
