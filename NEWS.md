@@ -1,3 +1,9 @@
+# FKF v0.2.6
+
+- Fix further export bug
+- Change url in README (again)
+- Change to strict header definitions R_Calloc and R_Free
+
 # FKF v0.2.5
 
 - Fix to class export issues on R-devel
