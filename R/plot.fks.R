@@ -53,7 +53,7 @@
 #'
 #' fks.obj <- fks(fkf.obj)
 #' plot(fks.obj)
-#' lines(as.numeric(y),col="blue")
+#' ##lines(as.numeric(y),col="blue")
 #' 
 #'
 #' @keywords plot

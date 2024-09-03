@@ -58,7 +58,7 @@ fkf.obj <- fkf(a0, P0, dt, ct, Tt, Zt, HHt = array(fit.fkf$par[1],c(1,1,1)),
 
 fks.obj <- fks(fkf.obj)
 plot(fks.obj)
-lines(as.numeric(y),col="blue")
+##lines(as.numeric(y),col="blue")
 
 
 }

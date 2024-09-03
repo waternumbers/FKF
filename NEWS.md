@@ -1,3 +1,8 @@
+# FKF v0.2.5
+
+- Fix to class export issues on R-devel
+- Change url in README
+
 # FKF v0.2.3
 
 - Fix bug in Kalman Smoother
